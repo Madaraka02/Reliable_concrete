@@ -96,3 +96,4 @@ class Production(models.Model):
         
     def __str__(self):
         return f'production for {self.product} on {self.date}'
+
