@@ -15,3 +15,9 @@ class ProductionForm(ModelForm):
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }
+
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'

@@ -1,22 +1,41 @@
 from django.db import models
+from production.models import Product
 
 # Create your models here.
 
-CATEGORY_CHOICES = (
-    ("Ready", "Ready"),
-    ("Curring", "Curring")
-)
+
 class Stock(models.Model):
-    name = models.CharField(max_length=300, null=True)    
-    stage = models.CharField(max_length = 50,choices = CATEGORY_CHOICES,default = 'Ready')
-    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,null=True)
+    Ready = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    Curing = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    damages = models.IntegerField(null=True)
     price_per_unit = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    date = models.DateField()
+    date = models.DateField(null=True)
 
     @property
-    def total(self):
-        total = self.quantity * self.price_per_unit
-        return total
+    def total_price(self):
+        total_units = self.Ready + self.Curing
+        total_price = total_units * self.price_per_unit
+        return total_price
+
+
+    @property
+    def total_in_stock(self):
+        total_in_stock = self.Ready + self.Curing
+        return total_in_stock
 
     def __str__(self):
-        return f'{self.name} in {self.stage} stage'
+        return self.name
+
+
+class Damage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    packing = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    production = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    arranging = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    # quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return f'Damages for {self.item.name}'       

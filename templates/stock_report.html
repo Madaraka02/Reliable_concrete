@@ -1,4 +1,6 @@
 {% load crispy_forms_tags %}
+{% load mathfilters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,16 +28,25 @@
 </head>
 <body>
     <div class="container mt-2 mb-2">
-        <div class="row mt-2 mb-2">
+        <div class="row mt-2 mb-2 align-items-center">
             <div class="col-md-2 mt-2 mb-2"></div>
+            <a href="{% url 'export_users_csv' %}">Export all stocks</a>
             {% if stocks %}
-            <div class="col-md-8 mt-2 mb-2 shadow-lg p-3">
-                <ul class="list-unstyled">
-                    {% for stocks in stocks %}
-                    
-                    <li></li>
+            <div class="col-md-8 mt-2 mb-2  p-3">
+                
+                    {% for stock in stocks %}
+                    <div class="card shadow-lg mt-2 mb-2">
+                        <div class="card-body">
+                            <p class="tex">{{stock.product.name}} stock Record on <i class="text-muted">{{stock.date}}</i>
+                                <span class="ms-auto">Total Units in stock {{stock.total_in_stock}}</span>
+                             </p>
+                                <p class="card-text">Ready Units :{{stock.Ready}}</p>
+                                <p class="card-text">Curing Units :{{stock.Curing}}</p>
+                       
+                        </div>
+                    </div>
+
                     {% endfor %}
-                </ul>
               
 
             </div>
@@ -56,3 +67,13 @@
 ></script>    
 </body>
 </html>
+
+python manage.py dumpdata > datadumb.json
+
+connect django to postgress
+
+python manage.py migrate --run-syncdb
+python manage.py loaddata datadumb.json
+
+
+

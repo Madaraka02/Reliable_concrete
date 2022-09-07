@@ -1,8 +1,15 @@
 from django.db import models
 
 # Create your models here.
+class Product(models.Model):
+    name = models.CharField(max_length=400,null=True)
+    description = models.TextField(null=True)
+
+    def __str__(self):
+        return self.name
+
 class Production(models.Model):
-    product = models.CharField(max_length=400,null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     target_production = models.IntegerField(null=True)
     actual_production = models.IntegerField(null=True)
     number_of_labourers = models.IntegerField(null=True)
@@ -17,7 +24,7 @@ class Production(models.Model):
     half_ballast_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     dust_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     damages = models.IntegerField(null=True)
-    date = models.DateField()
+    date = models.DateField(null=True)
     
     @property
     def sand_kgs(self):
@@ -95,5 +102,5 @@ class Production(models.Model):
         pass
         
     def __str__(self):
-        return f'production for {self.product} on {self.date}'
+        return f'production for {self.product.name} on {self.date}'
 
