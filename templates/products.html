@@ -1,0 +1,90 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products |Report</title>
+
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+    rel="stylesheet"
+    />
+</head>
+<body>
+    <div class="container mt-2 mb-2">
+        <div class="row mt-2 mb-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+            {% if products %}
+            <!-- <form action="">
+                <input type="text" name="month_num">
+                </form> -->
+                <a href="{% url 'export_products_xls' %}">Generate Products report for this month
+                </a>
+                <!-- <div class="table-responsive table-bordered"> -->
+
+
+                    <div class="table-responsive table sm">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Update</th>
+                                <th scope="col">Delete</th>
+
+                                
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for production in products %}
+                            <tr>
+                                <td>{{production.name}}</td>
+                                <td>{{production.description}}</td>
+                                <td>
+                                  <a class="btn btn-outline-primary btn-sm" href="{% url 'update_product' production.id %}">Update</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'delete_product' production.id %}">Delete</a>
+                                  </td>
+
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                <!-- </div> -->
+
+            {% endif %}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    
+
+
+    
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script> 
+</body>
+</html>
+
+
+

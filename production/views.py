@@ -33,11 +33,18 @@ def production_post(request):
     return render(request, 'form.html',context)    
 
 def production_report(request):
-    productions = Production.objects.all()       
+    productions = Production.objects.all().order_by('-date')       
     context = {
         'productions':productions
     }
     return render(request, 'production_report.html', context)
+
+def products_report(request):
+    products = Product.objects.all().order_by('-id')       
+    context = {
+        'products':products
+    }
+    return render(request, 'products.html', context)    
 
 def update_production(request, id):
     production = get_object_or_404(Production, id=id)
@@ -55,6 +62,10 @@ def update_production(request, id):
     }        
     return render(request, 'form.html',context)  
 
+def delete_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    product.delete()
+    return redirect('products_report')
 
 def add_product(request):
     form = ProductForm()
@@ -81,7 +92,7 @@ def update_product(request, id):
         if form.is_valid():
             form.save()
 
-            return redirect('add_product')
+            return redirect('products_report')
     context = {
         'form':form,
         'product':product
@@ -108,12 +119,6 @@ def export_production_xls(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
     
-
-
-
-
-
-
     columns = ['Product', 'Target', 'Actual', 'Damages', 'Date',]
 
     for col_num in range(len(columns)):
@@ -130,3 +135,34 @@ def export_production_xls(request):
 
     wb.save(response)
     return response    
+
+
+def export_products_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="products.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Stocks')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    
+    columns = ['Name', 'Description',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Product.objects.all().values_list('name', 'description',)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response        
