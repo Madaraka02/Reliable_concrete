@@ -50,6 +50,8 @@
                         <th scope="col">Diesel (ltrs)</th>
                         <th scope="col">Date</th>
                         <th scope="col">Production Cost</th>
+                        <th scope="col">Update</th>
+
                         <!-- <th scope="col">Costs</th> -->
                       </tr>
                     </thead>
@@ -74,6 +76,9 @@
                         <td>{{production.fuel_used_in_litres}}</td>
                         <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                         <td>{{production.production_cost|floatformat:2}}</td>
+                         <td>
+                            <a class="btn btn-outline-primary btn-sm" href="{% url 'update_production' production.id %}">Update</a>
+                          </td>
                         <!-- <td>oil{{production.oil_cost|stringformat:"f"}},ceme{{production.cement_cost|stringformat:"f"}},sand{{production.sand_cost|stringformat:"f"}},ball{{production.half_ballast_cost|stringformat:"f"}},diesel{{production.diesel_cost|stringformat:"f"}}</td> -->
                       
                       </tr>

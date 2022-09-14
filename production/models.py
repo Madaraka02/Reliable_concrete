@@ -1,5 +1,6 @@
 from django.db import models
 from decimal import *
+from materials.models import RawMaterial
 
 # Create your models here.
 

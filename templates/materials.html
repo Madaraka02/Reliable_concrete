@@ -1,0 +1,92 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materials |Report</title>
+
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+    rel="stylesheet"
+    />
+</head>
+<body>
+    <div class="container mt-2 mb-2">
+        <div class="row mt-2 mb-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+            {% if materials %}
+            <!-- <form action="">
+                <input type="text" name="month_num">
+                </form> -->
+                <a href="{% url 'export_materials_xls' %}">Generate Materials report for this month
+                </a>
+                <!-- <div class="table-responsive table-bordered"> -->
+
+
+                    <div class="table-responsive table sm">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Update</th>
+
+                                
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for production in materials %}
+                            <tr>
+                                <td>{{production.name}}</td>
+                                <td>{{production.quantity}}</td>
+                                <td>{{production.amount|floatformat:2}}</td>
+                                <td>{{production.price_per_unit|floatformat:2}}</td>
+                                <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
+                                <td>
+                                  <a class="btn btn-outline-primary btn-sm" href="{% url 'update_material' production.id %}">Update</a>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                <!-- </div> -->
+
+            {% endif %}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    
+
+
+    
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script> 
+</body>
+</html>
+
+
+

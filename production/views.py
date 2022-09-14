@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 
@@ -39,6 +39,23 @@ def production_report(request):
     }
     return render(request, 'production_report.html', context)
 
+def update_production(request, id):
+    production = get_object_or_404(Production, id=id)
+    form = ProductionForm(instance=production)
+    if request.method == 'POST':
+        form = ProductionForm(request.POST, instance=production)
+        if form.is_valid():
+            form.save()
+
+            return redirect('production_report')
+    context = {
+        'form':form,
+        'production':production
+        
+    }        
+    return render(request, 'form.html',context)  
+
+
 def add_product(request):
     form = ProductForm()
     if request.method == 'POST':
@@ -53,6 +70,24 @@ def add_product(request):
     }        
     return render(request, 'form.html',context)  
     #  productions = Production.objects.filter(date__month='9')   
+
+
+
+def update_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    form = ProductForm(instance=product)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+
+            return redirect('add_product')
+    context = {
+        'form':form,
+        'product':product
+        
+    }        
+    return render(request, 'form.html',context) 
 
 import xlwt
 
