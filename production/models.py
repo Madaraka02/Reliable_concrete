@@ -1,6 +1,19 @@
 from django.db import models
+from decimal import *
 
 # Create your models here.
+
+oil_price = Decimal(45)
+diesel_price = Decimal(139.8)
+half_ballast_price_per_kg = Decimal(1.25)
+quarter_ballast_price_per_kg = 0
+sand_price_per_kg = Decimal(0.4)
+cement_price_per_kg = Decimal(13)
+cement_price_bag = Decimal(650)
+white_cement_price_per_kg = Decimal(13)
+white_cement_price_bag = Decimal(650)
+river_sand_price_per_kg = 0
+dust_price_per_kg= 0
 class Product(models.Model):
     name = models.CharField(max_length=400,null=True)
     description = models.TextField(null=True)
@@ -9,6 +22,7 @@ class Product(models.Model):
         return self.name
 
 class Production(models.Model):
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     target_production = models.IntegerField(null=True)
     actual_production = models.IntegerField(null=True)
@@ -25,6 +39,7 @@ class Production(models.Model):
     dust_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     damages = models.IntegerField(null=True)
     date = models.DateField(null=True)
+
     
     @property
     def sand_kgs(self):
@@ -71,34 +86,85 @@ class Production(models.Model):
         total_wages = self.number_of_labourers * self.wage_per_labourer
         return total_wages  
 
-    @property
-    def total_wages(self):
-        total_wages = self.number_of_labourers * self.wage_per_labourer
-        return total_wages 
 
     @property
     def production_defeicit(self):
+        production_defeicit=0  
         if self.target_production > self.actual_production:
-            production_defeicit = self.target_production * self.actual_production
-        production_defeicit=0    
+            production_defeicit = self.target_production - self.actual_production
+          
         return production_defeicit  
+
+
 
     @property
     def oil_cost(self):
         oil_cost = self.oil_used_in_litres * oil_price
         return oil_cost
-        pass
+        
+
+    @property
+    def cement_cost(self):
+        cement_cost = self.cement_kgs * cement_price_per_kg
+        return cement_cost
+        
+
+    @property
+    def white_cement_cost(self):
+        white_cement_cost = self.white_cement_kgs * white_cement_price_per_kg
+        return white_cement_cost
+        
+
+    @property
+    def sand_cost(self):
+
+        sand_cost = self.sand_kgs * sand_price_per_kg
+        return sand_cost
+        
+
+
+    @property
+    def river_sand_cost(self):
+        river_sand_cost = self.river_sand_kgs * river_sand_price_per_kg
+        return river_sand_cost
+        
+
+
+    @property
+    def quarter_ballast_cost(self):
+        quarter_ballast_cost = self.quarter_ballast_kgs * quarter_ballast_price_per_kg
+        return quarter_ballast_cost
+        
+
+
+    @property
+    def half_ballast_cost(self):
+        half_ballast_cost = self.half_ballast_kgs * half_ballast_price_per_kg
+        return half_ballast_cost
+        
+
+    @property
+    def dust_cost(self):
+        dust_cost = self.dust_kgs * dust_price_per_kg
+        return dust_cost
+        
 
     @property
     def diesel_cost(self):
-        diesel_cost = self.fuel_used_in_litres * fuel_price
+        diesel_cost = self.fuel_used_in_litres * diesel_price
         return diesel_cost
-        pass
+        
 
     @property
-    def day_total_production_cost(self):
-        day_total_production_cost 
-        return day_total_production_cost
+    def production_cost(self):
+        production_cost = self.total_wages + self.oil_cost + self.cement_cost + self.white_cement_cost + self.sand_cost + self.river_sand_cost + self.quarter_ballast_cost + self.half_ballast_cost + self.dust_cost + self.diesel_cost
+        return production_cost
+        
+
+    @property
+    def day_total_production_income(self):
+        day_total_production_income 
+        return day_total_production_income
         pass
         
     def __str__(self):

@@ -4,13 +4,11 @@ from .forms import *
 
 import csv
 import xlwt
-
-
 from django.http import HttpResponse
 
-def export_users_csv(request):
+def export_stocks_csv(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    response['Content-Disposition'] = 'attachment; filename="stocks.csv"'
 
     writer = csv.writer(response)
     writer.writerow(['Product', 'Ready', 'Curing', 'price per unit','Damages','Date'])
