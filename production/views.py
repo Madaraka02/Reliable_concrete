@@ -42,7 +42,7 @@ def curing_report(request):
 
 def production_report(request):
     curring = CuringStock.objects.all()
-    productions = Production.objects.all().order_by('-date')       
+    productions = Production.objects.all().order_by('-id')       
     context = {
         'productions':productions,
         'curring':curring
@@ -111,7 +111,7 @@ def add_production_target(request):
             production_target.half_ballast_buckets_used = 0
             production_target.dust_buckets_used = 0
             production_target.damages = 0
-            
+
             production_target.save()
 
             return redirect('production_report')
@@ -256,3 +256,31 @@ def transfer_stock_to_ready(request,id):
     #         CuringStock.save()
 
     return redirect('curing_report')    
+
+
+
+def ready_stock_report(request):
+    ready_for_sale = ReadyStock.objects.all().order_by('-id')      
+    context = {
+        'ready_for_sale':ready_for_sale
+    }
+    return render(request, 'ready.html', context)
+
+
+def sale_stock(request, id):
+    ready = get_object_or_404(ReadyStock, id=id)
+    form = SaleForm(instance=ready)
+    if request.method == 'POST':
+        form = SaleForm(request.POST, instance=ready)
+        if form.is_valid():
+            sale = form.save(commit=False)
+            sale.date_sold = current_date
+            sale.save()
+
+            return redirect('ready_stock_report')
+    context = {
+        'form':form,
+        'ready':ready
+        
+    }        
+    return render(request, 'form.html',context) 

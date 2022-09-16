@@ -79,8 +79,9 @@
                         <td>{{production.production_cost|floatformat:2}}</td>
                          <td>
                           {% if production.transfered_to_curing == False %}
+                          <a class="btn btn-outline-primary btn-sm" href="{% url 'update_production' production.id %}">Update</a>
+
                             <a class="btn btn-outline-primary btn-sm m-1" href="{% url 'transfer_to_curnig' production.id %}">Transfer</a>
-                            <a class="btn btn-outline-primary btn-sm" href="{% url 'update_production' production.id %}">Update</a>
 
                           {% else %}
                             <p class="text-sm text-success">Transfered to curing</p>

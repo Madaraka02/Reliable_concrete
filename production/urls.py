@@ -8,6 +8,7 @@ urlpatterns = [
     path('products/', products_report, name='products_report'),
     path('report/', production_report, name='production_report'),
     path('curing/report/', curing_report, name='curing_report'),
+    path('ready/report/', ready_stock_report, name='ready_stock_report'),
     path('production/export/excel/', export_production_xls, name='export_production_xls'),
     path('products/export/excel/', export_products_xls, name='export_products_xls'),
     path('products/<int:id>/update/', update_product, name='update_product'),
@@ -15,6 +16,7 @@ urlpatterns = [
     path('<int:id>/delete/', delete_product, name='delete_product'),
     path('<int:id>/transfer-to-curnig/', transfer_to_curnig, name='transfer_to_curnig'),
     path('<int:id>/transfer-to-ready/', transfer_stock_to_ready, name='transfer_stock_to_ready'),
+    path('<int:id>/sale/', sale_stock, name='sale_stock'),
     path('plan/', add_production_target, name='add_production_target'),
 
 ]

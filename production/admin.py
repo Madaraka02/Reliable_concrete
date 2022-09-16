@@ -5,4 +5,4 @@ from .models import *
 
 admin.site.register(Product)
 admin.site.register(CuringStock)
-# admin.site.register(Production)
+admin.site.register(ReadyStock)
