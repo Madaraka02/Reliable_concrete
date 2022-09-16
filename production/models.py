@@ -1,8 +1,10 @@
 from django.db import models
 from decimal import *
 from materials.models import RawMaterial
-
+from datetime import datetime, date, timedelta
 # Create your models here.
+
+current_date = datetime.today()
 
 oil_price = Decimal(45)
 diesel_price = Decimal(139.8)
@@ -25,23 +27,36 @@ class Product(models.Model):
 class Production(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    target_production = models.IntegerField(null=True)
-    actual_production = models.IntegerField(null=True)
-    number_of_labourers = models.IntegerField(null=True)
-    wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    oil_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    fuel_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    white_cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    sand_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    river_sand_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    quarter_ballast_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    half_ballast_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    dust_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True)
-    damages = models.IntegerField(null=True)
-    date = models.DateField(null=True)
+    target_production = models.IntegerField(null=True, blank=True)
+    actual_production = models.IntegerField(null=True, blank=True)
+    number_of_labourers = models.IntegerField(null=True, blank=True)
+    wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    oil_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    fuel_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    white_cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    sand_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    river_sand_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    quarter_ballast_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    half_ballast_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    dust_buckets_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    damages = models.IntegerField(null=True, blank=True)
+    transfered_to_curing = models.BooleanField(default=False)
+    date = models.DateField(null=True, blank=True)
 
-    
+    # def transfer(self):
+    #     if self.transfered_to_curing==False:
+
+    #         date_1 = datetime.strptime(self.date, '%m-%d-%Y')
+    #         date_2 = date_1 + timedelta(days=1)
+    #         if current_date == date_2:
+    #             self.transfered_to_curing == True
+    #             CuringStock.objects.create(product=self, enter_date=current_date,curing_days=3,transfered_to_ready=False)
+                
+
+
+
+
     @property
     def sand_kgs(self):
         sand_kgs = self.sand_buckets_used * 28
@@ -171,3 +186,29 @@ class Production(models.Model):
     def __str__(self):
         return f'production for {self.product.name} on {self.date}'
 
+class CuringStock(models.Model):
+    product = models.ForeignKey(Production, on_delete=models.SET_NULL,null=True)
+    enter_date = models.DateTimeField(auto_now_add=True)
+    curing_days = models.PositiveIntegerField(default=10)
+    transfered_to_ready = models.BooleanField(default=False)
+
+
+    # def transfer():
+    #     current_date = datetime.today()
+    #     date_1 = datetime.strptime(self.date, '%m-%d-%Y')
+    #     date_2 = date_1 + timedelta(days=3)
+    #     if current_date == date_2:
+    #         self.transfered_to_ready == True
+
+
+    def __str__(self):
+        return self.product.product.name
+
+class ReadyStock(models.Model):
+    stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
+    sold = models.BooleanField(default=False) 
+    date_received = models.DateTimeField(auto_now_add=True, null=True)
+
+
+    def __str__(self):
+        return sefl.stock.product.name      

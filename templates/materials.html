@@ -76,6 +76,55 @@
         </div>
     </div>
 
+    <div class="container mt-2 mb-2">
+      <div class="row mt-2 mb-2">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+          {% if raw_materials %}
+          <!-- <form action="">
+              <input type="text" name="month_num">
+              </form> -->
+              <a href="{% url 'export_material_usage_xls' %}">Generate Material usage report for this month
+              </a>
+              <!-- <div class="table-responsive table-bordered"> -->
+
+
+                  <div class="table-responsive table sm">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">Remaining</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Update</th>
+
+                              
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for production in raw_materials %}
+                          <tr>
+                              <td>{{production.material.name}}</td>
+                              <td>{{production.quantity}}</td>
+                              <td>{{production.remaining_quantity}}</td>
+                              <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
+                              <td>
+                                <a class="btn btn-outline-primary btn-sm" href="{% url 'update_material_use' production.id %}">Update</a>
+                              </td>
+
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+              <!-- </div> -->
+
+          {% endif %}
+          </div>
+          <div class="col-md-2"></div>
+      </div>
+  </div>
     
 
 

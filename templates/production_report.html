@@ -21,42 +21,43 @@
         </style>
 </head>
 <body>
-    <div class="container mt-2 mb-2">
+    <div class="container-fluid mt-2 mb-2">
         <div class="row mt-2 mb-2">
             {% if productions %}
             <!-- <form action="">
                 <input type="text" name="month_num">
                 </form> -->
-                <a href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %}
+                <a class="ml-2 mt-2" href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %}
                 </a>
                 <!-- <div class="table-responsive table-bordered"> -->
-                <table class="table table-responsive table-sm table-bordered">
+                <table class="ml-2 mr-2 table table-responsive table-sm ">
                     <thead>
                       <tr>
-                        <th scope="col">Product</th>
-                        <th scope="col">Qty manuf</th>
-                        <th scope="col">No. Men</th>
-                        <th scope="col">Sand (kgs)</th>
-                        <th scope="col">River sand (kgs)</th>
-                        <th scope="col">1/4 ballast (kgs)</th>
-                        <th scope="col">1/2 ballast (kgs)</th>
-                        <th scope="col">Dust (kgs)</th>
-                        <th scope="col">Cement (kgs)</th>
-                        <th scope="col">White cement (kgs)</th>
-                        <th scope="col">Total wages</th>
-                        <th scope="col">Prod defeicit</th>
-                        <th scope="col">Damages</th>
-                        <th scope="col">Oil (ltrs)</th>
-                        <th scope="col">Diesel (ltrs)</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Production Cost</th>
-                        <th scope="col">Update</th>
+                        <th scope="col"><p class="text-sm text-muted">Product</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Qty manuf</p></th>
+                        <th scope="col"><p class="text-sm text-muted">No. Men</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Sand (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">River sand (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">1/4 ballast (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">1/2 ballast (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Dust (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Cement (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">White cement (kgs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Total wages</p></th>
+                        <!-- <th scope="col">Prod defeicit</th> -->
+                        <!-- <th scope="col">Damages</th> -->
+                        <th scope="col"><p class="text-sm text-muted">Oil (ltrs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Diesel (ltrs)</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Date</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Production Cost</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Update</p></th>
 
                         <!-- <th scope="col">Costs</th> -->
                       </tr>
                     </thead>
                     <tbody>
                         {% for production in productions %}
+                        
                       <tr>
                         <!-- <th scope="row">Default</th> -->
                         <td>{{production.product.name}}</td>
@@ -70,24 +71,33 @@
                         <td>{{production.cement_kgs}}</td>
                         <td>{{production.white_cement_kgs}}</td>
                         <td>{{production.total_wages}}</td>
-                        <td>{{production.production_defeicit}}</td>
-                        <td>{{production.damages}}</td>
+                        <!-- <td>{{production.production_defeicit}}</td> -->
+                        <!-- <td>{{production.damages}}</td> -->
                         <td>{{production.oil_used_in_litres}}</td>
                         <td>{{production.fuel_used_in_litres}}</td>
                         <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                         <td>{{production.production_cost|floatformat:2}}</td>
                          <td>
+                          {% if production.transfered_to_curing == False %}
+                            <a class="btn btn-outline-primary btn-sm m-1" href="{% url 'transfer_to_curnig' production.id %}">Transfer</a>
                             <a class="btn btn-outline-primary btn-sm" href="{% url 'update_production' production.id %}">Update</a>
+
+                          {% else %}
+                            <p class="text-sm text-success">Transfered to curing</p>
+                            {% endif %}
                           </td>
                         <!-- <td>oil{{production.oil_cost|stringformat:"f"}},ceme{{production.cement_cost|stringformat:"f"}},sand{{production.sand_cost|stringformat:"f"}},ball{{production.half_ballast_cost|stringformat:"f"}},diesel{{production.diesel_cost|stringformat:"f"}}</td> -->
                       
                       </tr>
+                      
+
                       {% endfor %}
                     </tbody>
                   </table>
                 <!-- </div> -->
 
             {% endif %}
+     
         </div>
     </div>
 

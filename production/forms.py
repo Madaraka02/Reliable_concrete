@@ -8,10 +8,19 @@ today = date.today()
 class DatePickerInput(forms.DateInput):
     input_type = 'date'
 
+
+class ProductionTargetForm(ModelForm):
+    class Meta:
+        model = Production
+        fields = ['product','target_production','date']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        }
 class ProductionForm(ModelForm):
     class Meta:
         model = Production
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('transfered_to_curing',)
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }

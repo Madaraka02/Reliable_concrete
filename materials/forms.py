@@ -16,3 +16,12 @@ class MaterialForm(ModelForm):
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }    
+
+
+class MaterialUseForm(ModelForm):
+    class Meta:
+        model = RawMaterialUsage
+        fields = '__all__'
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 

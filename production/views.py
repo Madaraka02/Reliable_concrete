@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 
-from datetime import datetime
-
+# from datetime import datetime
+from datetime import datetime, date, timedelta
 
 month = datetime.now().month
 
@@ -32,10 +32,20 @@ def production_post(request):
     }        
     return render(request, 'form.html',context)    
 
+def curing_report(request):
+    curring = CuringStock.objects.all().order_by('-id')      
+    context = {
+        'curring':curring
+    }
+    return render(request, 'curing.html', context)
+
+
 def production_report(request):
+    curring = CuringStock.objects.all()
     productions = Production.objects.all().order_by('-date')       
     context = {
-        'productions':productions
+        'productions':productions,
+        'curring':curring
     }
     return render(request, 'production_report.html', context)
 
@@ -82,6 +92,34 @@ def add_product(request):
     return render(request, 'form.html',context)  
     #  productions = Production.objects.filter(date__month='9')   
 
+def add_production_target(request):
+    form = ProductionTargetForm()
+    if request.method == 'POST':
+        form = ProductionTargetForm(request.POST)
+        if form.is_valid():
+            production_target = form.save(commit=False)
+            production_target.actual_production = 0
+            production_target.number_of_labourers = 0
+            production_target.wage_per_labourer = 0
+            production_target.oil_used_in_litres = 0
+            production_target.fuel_used_in_litres = 0
+            production_target.cement_bags_used = 0
+            production_target.white_cement_bags_used = 0
+            production_target.sand_buckets_used = 0
+            production_target.river_sand_buckets_used = 0
+            production_target.quarter_ballast_buckets_used = 0
+            production_target.half_ballast_buckets_used = 0
+            production_target.dust_buckets_used = 0
+            production_target.damages = 0
+            
+            production_target.save()
+
+            return redirect('production_report')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
 
 
 def update_product(request, id):
@@ -166,3 +204,55 @@ def export_products_xls(request):
 
     wb.save(response)
     return response        
+
+
+def transfer_to_curnig(request,id):
+    # produced = Production.objects.all().count()
+    productio = get_object_or_404(Production, id=id)
+    # stock_to_transfer = Production.objects.filter(productio=productio, transfered_to_curing=False)
+    # transfered = produced - stocks_to_transfer
+    current_date = datetime.today()
+    if productio.transfered_to_curing == False:
+
+        curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,curing_days=3,transfered_to_ready=False)
+        curing_stock.save()
+        productio.transfered_to_curing = True
+        productio.save()
+
+ 
+    # for stock in stocks_to_transfer:
+    #     # date_1 = datetime.strptime(stock.date, '%m-%d-%Y')
+    #     date_2 = stock.date + timedelta(days=1)
+    #     if current_date == date_2:
+    #         stock.transfered_to_curing = True
+    #         print(stock)
+    #         CuringStock.objects.create(product=stock,enter_date=current_date,curing_days=3,transfered_to_ready=False)
+    #         CuringStock.save()
+
+    return redirect('production_report')
+            
+    
+
+def transfer_stock_to_ready(request,id):
+    productio = get_object_or_404(CuringStock, id=id)
+    # stock_to_transfer = Production.objects.filter(productio=productio, transfered_to_curing=False)
+    # transfered = produced - stocks_to_transfer
+    current_date = datetime.today()
+    if productio.transfered_to_ready == False:
+
+        ready_stock = ReadyStock.objects.create(stock=productio, sold=False, date_received=current_date)
+        ready_stock.save()
+        productio.transfered_to_ready = True
+        productio.save()
+
+ 
+    # for stock in stocks_to_transfer:
+    #     # date_1 = datetime.strptime(stock.date, '%m-%d-%Y')
+    #     date_2 = stock.date + timedelta(days=1)
+    #     if current_date == date_2:
+    #         stock.transfered_to_curing = True
+    #         print(stock)
+    #         CuringStock.objects.create(product=stock,enter_date=current_date,curing_days=3,transfered_to_ready=False)
+    #         CuringStock.save()
+
+    return redirect('curing_report')    

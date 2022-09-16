@@ -11,8 +11,22 @@ class RawMaterial(models.Model):
     def price_per_unit(self):
         price_per_unit = self.amount /self.quantity
         return price_per_unit
-        pass
+        
 
     def __str__(self):
         return self.name
+class RawMaterialUsage(models.Model):
+    material = models.ForeignKey(RawMaterial, on_delete=models.SET_NULL, null=True)
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    @property
+    def remaining_quantity(self):
+        remaining_quantity = self.material.quantity - self.quantity
+        return remaining_quantity
+        
+
+    def __str__(self):
+        return self.material.name
 

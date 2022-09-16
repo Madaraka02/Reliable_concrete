@@ -39,3 +39,6 @@ class Damage(models.Model):
 
     def __str__(self):
         return f'Damages for {self.item.name}'       
+
+
+# class History(models.models):
