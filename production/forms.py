@@ -12,7 +12,7 @@ class DatePickerInput(forms.DateInput):
 class SaleForm(ModelForm):
     class Meta:
         model = ReadyStock
-        fields = ['sold']
+        fields = ['sold','quantity_sold']
         # widgets = {
         #     'date' : DatePickerInput(attrs={'max': today}),
         # }
