@@ -206,7 +206,9 @@ class CuringStock(models.Model):
 
 class ReadyStock(models.Model):
     stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
-    sold = models.BooleanField(default=False) 
+    sold = models.BooleanField(default=False)
+    selling = models.BooleanField(default=False) 
+
     quantity_sold = models.IntegerField(default=0, null=True, blank=True)
     date_received = models.DateTimeField(auto_now_add=True, null=True)
     date_sold = models.DateField(null=True, blank=True)

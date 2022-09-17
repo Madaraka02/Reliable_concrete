@@ -38,7 +38,9 @@
                     <thead>
                       <tr>
                         <th scope="col"><p class="text-sm text-muted">Product</p></th>
-                        <th scope="col"><p class="text-sm text-muted">QTY</p></th>
+                        <th scope="col"><p class="text-sm text-muted">QTY Received</p></th>
+                        <th scope="col"><p class="text-sm text-muted">QTY Sold</p></th>
+
                         <th scope="col"><p class="text-sm text-muted">Date Received</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date Sold</p></th>
                         <th scope="col"><p class="text-sm text-muted">Update</p></th>
@@ -52,6 +54,8 @@
                       <tr>
                         <td>{{production.stock.product.product.name}}</td>
                         <td>{{production.stock.product.actual_production}}</td>
+                        <td>{{production.quantity_sold}}</td>
+
                         <td>{{production.date_received|date:"SHORT_DATE_FORMAT"}}</td>
                         <td>
                             {% if production.date_sold %}
@@ -63,9 +67,12 @@
                         </td>
 
                          <td>
-                          {% if production.sold == False %}
+                          {% if production.quantity_sold == 0 %}
                             <a class="btn btn-outline-primary btn-sm" href="{% url 'sale_stock' production.id %}">Sale</a>
-                          {% else %}
+                            {% elif production.quantity_sold < production.stock.product.actual_production %}
+                            <a class="btn btn-outline-warning btn-sm" href="{% url 'sale_stock' production.id %}">Continue selling</a>
+
+                          {% elif production.quantity_sold == production.stock.product.actual_production %}
                             <p class="text-success">Sold</p>
                             {% endif %}
                           </td>

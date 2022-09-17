@@ -240,7 +240,7 @@ def transfer_stock_to_ready(request,id):
     current_date = datetime.today()
     if productio.transfered_to_ready == False:
 
-        ready_stock = ReadyStock.objects.create(stock=productio, sold=False, date_received=current_date)
+        ready_stock = ReadyStock.objects.create(stock=productio, sold=False, date_received=current_date, quantity_sold=0)
         ready_stock.save()
         productio.transfered_to_ready = True
         productio.save()
@@ -269,11 +269,39 @@ def ready_stock_report(request):
 
 def sale_stock(request, id):
     ready = get_object_or_404(ReadyStock, id=id)
+    avail_qty = ready.stock.product.actual_production - ready.quantity_sold
+    curr_in_db = ready.quantity_sold
+    # 50-10= 40
     form = SaleForm(instance=ready)
     if request.method == 'POST':
         form = SaleForm(request.POST, instance=ready)
         if form.is_valid():
+            user_qty = int(form.data['quantity_sold'])
+            # 10
+            if user_qty > avail_qty:
+                return redirect('ready_stock_report')
+
             sale = form.save(commit=False)
+            # new_qty = sale.quantity_sold + curr_in_db
+            # print(f'Available for sale {avail_qty}') #30
+            # print(f'current in db {curr_in_db}')#20
+            # print(f'user {user_qty}')#10
+            # print(f'form {sale.quantity_sold}')#10
+            # print(f'updated {new_qty}')# 30
+            # 10 + 10
+
+            # if new_qty > avail_qty:
+            #     print(f'Sorry thats to much you can only sale products less or equal {avail_qty}')
+            #     return redirect('ready_stock_report')
+
+            if new_qty < avail_qty:
+                sale.quantity_sold=new_qty
+                print(f'send to db {sale.quantity_sold}')
+
+
+            sale.quantity_sold=new_qty
+            sale.selling = True 
+            sale.sold = True    
             sale.date_sold = current_date
             sale.save()
 
