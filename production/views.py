@@ -336,6 +336,7 @@ def material_product_rship(request, id):
     rsand = productconsumption.rsand_kgs
     qballast = productconsumption.quarter_ballast_kgs
     dust = productconsumption.dust_kgs
+    pumice = productconsumption.pumice_kgs
     
     for material in materials:
         
@@ -450,7 +451,20 @@ def moulding(request):
         form = MouldingForm(request.POST)
         if form.is_valid():
             user_prd = form.data['product']
-            # print(user_prd)
+            user_qty = form.data['qty_produced']
+
+            product = get_object_or_404(ProductMaterialConsumption, id=user_prd)
+            estimated_oil = product.oil * user_qty
+            estimated_diesel = product.diesel * user_qty
+            estimated_cement = product.cement * user_qty
+            estimated_white_cement = product.white_cement * user_qty
+            estimated_sand = product.sand * user_qty
+            estimated_river_sand = product.river_sand * user_qty
+            estimated_quarter_ballast = product.quarter_ballast * user_qty
+            estimated_half_ballast = product.half_ballast * user_qty
+            estimated_pumice = product.pumice * user_qty
+            estimated_dust = product.dust * user_qty
+            print(estimated_oil)
             form.save()
 
             return redirect('products_report')

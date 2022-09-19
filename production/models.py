@@ -29,16 +29,16 @@ class Product(models.Model):
 # eg kabro 1sqM
 class ProductMaterialConsumption(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    oil = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    diesel = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    cement = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    white_cement = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    sand = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    river_sand = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    quarter_ballast = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    half_ballast = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    pumice = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    dust = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    oil = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    diesel = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    cement = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    white_cement = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    sand = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    river_sand = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    quarter_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    half_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    pumice = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    dust = models.DecimalField(max_digits=20,decimal_places=2,default=0)
         
     
     def __str__(self):
@@ -82,7 +82,10 @@ class Moulding(models.Model):
     def cement_kgs(self):
         cement_kgs = self.product.cement * 50 * self.qty_produced
         return cement_kgs
-
+    @property
+    def pumice_kgs(self):
+        pumice_kgs = self.product.pumice * self.qty_produced
+        return pumice_kgs
     @property
     def white_cement_kgs(self):
         white_cement_kgs = self.product.white_cement * self.qty_produced
