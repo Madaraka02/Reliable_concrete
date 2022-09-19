@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
+from production.models import *
 
 from datetime import datetime
 
@@ -19,7 +20,7 @@ year = datetime.now().year
 
 def material_report(request):
     materials = RawMaterial.objects.all()    
-    raw_materials = RawMaterialUsage.objects.all()    
+    raw_materials = Moulding.objects.all()    
     context = {
         'materials':materials,
         'raw_materials':raw_materials

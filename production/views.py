@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
-
+from materials.models import *
 # from datetime import datetime
 from datetime import datetime, date, timedelta
 
@@ -42,10 +42,14 @@ def curing_report(request):
 
 def production_report(request):
     curring = CuringStock.objects.all()
-    productions = Production.objects.all().order_by('-id')       
+    productions = Production.objects.all().order_by('-id')   
+    productionss = Moulding.objects.all() 
+    mouldimgs = Moulding.objects.all()   
     context = {
         'productions':productions,
-        'curring':curring
+        'productionss':productionss,
+        'curring':curring,
+        'mouldimgs':mouldimgs
     }
     return render(request, 'production_report.html', context)
 
@@ -282,7 +286,7 @@ def sale_stock(request, id):
                 return redirect('ready_stock_report')
 
             sale = form.save(commit=False)
-            # new_qty = sale.quantity_sold + curr_in_db
+            new_qty = sale.quantity_sold + curr_in_db
             # print(f'Available for sale {avail_qty}') #30
             # print(f'current in db {curr_in_db}')#20
             # print(f'user {user_qty}')#10
@@ -309,6 +313,149 @@ def sale_stock(request, id):
     context = {
         'form':form,
         'ready':ready
+        
+    }        
+    return render(request, 'form.html',context) 
+
+
+def material_product_rship(request, id):
+    productconsumption = get_object_or_404(Moulding, id=id)
+    materials = RawMaterial.objects.all()
+
+    # productions = ProductMaterialConsumption.objects.all()
+
+
+
+
+    hballast = productconsumption.half_ballast_kgs
+    sand = productconsumption.sand_kgs
+    oil = productconsumption.oil_ltrs
+    diesel = productconsumption.diesel_ltrs
+    cement = productconsumption.cement_kgs
+    wcement = productconsumption.white_cement_kgs
+    rsand = productconsumption.rsand_kgs
+    qballast = productconsumption.quarter_ballast_kgs
+    dust = productconsumption.dust_kgs
+    
+    for material in materials:
+        
+        # print(productconsumption)
+        mname = material.name
+        mqty = material.quantity
+        print(f'psand {sand}')
+        # print(f'phballast {phballast}')
+        # print(mname)
+        # print(mqty)
+        # sandstock = 0
+
+
+
+        if mname == 'Sand':
+            remainder = mqty - sand
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=sand, date=current_date)
+            rm.save()
+
+        if mname == 'Half_ballast':
+            # hballaststock = material.quantity
+            remainder = mqty - hballast
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=hballast, date=current_date)
+            rm.save()
+        
+        if mname == 'Oil':
+            remainder = mqty - oil
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=oil, date=current_date)
+            rm.save()
+
+        if mname == 'Diesel':
+            remainder = mqty - diesel
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=diesel, date=current_date)
+            rm.save()
+
+        if mname == 'Cement':
+            remainder = mqty - cement
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=cement, date=current_date)
+            rm.save()     
+        
+        if mname == 'White_cement':
+            remainder = mqty - wcement
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=wcement, date=current_date)
+            rm.save() 
+
+
+        if mname == 'Quarter_ballast':
+            remainder = mqty - qballast
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=qballast, date=current_date)
+            rm.save() 
+
+        if mname == 'Dust':
+            remainder = mqty - dust
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=dust, date=current_date)
+            rm.save()
+
+        if mname == 'Pumice':
+            remainder = mqty - pumice
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=pumice, date=current_date)
+            rm.save()    
+
+        if mname == 'River_sand':
+            remainder = mqty - rsand
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=rsand, date=current_date)
+            rm.save()
+
+
+
+    context = {
+        'material':material,
+        'productconsumption':productconsumption,
+        
+
+
+    }
+    return render(request, 'production_report.html', context)    
+
+def moulding(request):
+    # product = get_object_or_404(Product, id=id)
+    form = MouldingForm()
+    if request.method == 'POST':
+        form = MouldingForm(request.POST)
+        if form.is_valid():
+            user_prd = form.data['product']
+            # print(user_prd)
+            form.save()
+
+            return redirect('products_report')
+    context = {
+        'form':form,
         
     }        
     return render(request, 'form.html',context) 

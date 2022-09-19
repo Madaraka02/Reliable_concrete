@@ -1,4 +1,5 @@
 from django.db import models
+from production.models import ProductMaterialConsumption
 
 # Create your models here.
 class RawMaterial(models.Model):
@@ -6,6 +7,13 @@ class RawMaterial(models.Model):
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True) #1000
     amount = models.DecimalField(max_digits=20,decimal_places=2, null=True) #400
     date = models.DateField(null=True)
+
+    available_qty = models.IntegerField(default=0, null=True, blank=True)
+
+    # date_sold = models.DateField(null=True, blank=True)
+    # quantity_used = models.IntegerField(default=0, null=True, blank=True)
+
+
 
     @property
     def price_per_unit(self):
@@ -17,6 +25,7 @@ class RawMaterial(models.Model):
         return self.name
 class RawMaterialUsage(models.Model):
     material = models.ForeignKey(RawMaterial, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     date = models.DateField(null=True)
 

@@ -42,15 +42,16 @@
                           <thead>
                             <tr>
                                 <th scope="col">Name</th>
-                                <th scope="col">Quantity</th>
+                                <th scope="col">Quantity Bought</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Unit Price</th>
+                                <th scope="col">Quantity In store</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Update</th>
 
                                 
                             </tr>
-                          </thead>
+                          </thead>available_qty
                           <tbody>
                             {% for production in materials %}
                             <tr>
@@ -58,6 +59,7 @@
                                 <td>{{production.quantity}}</td>
                                 <td>{{production.amount|floatformat:2}}</td>
                                 <td>{{production.price_per_unit|floatformat:2}}</td>
+                                <td>{{production.available_qty}}</td>
                                 <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                                 <td>
                                   <a class="btn btn-outline-primary btn-sm" href="{% url 'update_material' production.id %}">Update</a>
@@ -93,11 +95,18 @@
                       <table class="table">
                         <thead>
                           <tr>
-                              <th scope="col">Name</th>
-                              <th scope="col">Quantity</th>
-                              <th scope="col">Remaining</th>
+                              <th scope="col">Product</th>
+                              <th scope="col">Quantity Produced</th>
+                              <th scope="col">Cement</th>
+                              <th scope="col">Oil</th>
+                              <th scope="col">Diesel</th>
+                              <th scope="col">Wcement</th>
+                              <th scope="col">Sand</th>
+                              <th scope="col">Rsand</th>
+                              <th scope="col">1/4Ballast</th>
+                              <th scope="col">1/2Ballast</th>
+                              <th scope="col">Dust</th>
                               <th scope="col">Date</th>
-                              <th scope="col">Update</th>
 
                               
                           </tr>
@@ -105,13 +114,26 @@
                         <tbody>
                           {% for production in raw_materials %}
                           <tr>
-                              <td>{{production.material.name}}</td>
-                              <td>{{production.quantity}}</td>
-                              <td>{{production.remaining_quantity}}</td>
+                              <td>{{production.product.product.name}}</td>
+                              <td>{{production.qty_produced}}</td>
+                              <td>{{production.cement_kgs}}</td>
+                              <td>{{production.oil_ltrs}}</td>
+                              <td>{{production.diesel_ltrs}}</td>
+                              <td>{{production.white_cement_kgs}}</td>
+                              <td>{{production.sand_kgs}}</td>
+                              <td>{{production.rsand_kgs}}</td>
+                              <td>{{production.quarter_ballast_kgs}}</td>
+                              <td>{{production.half_ballast_kgs}}</td>
+                              <td>{{production.dust_kgs}}</td>
                               <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
-                              <td>
-                                <a class="btn btn-outline-primary btn-sm" href="{% url 'update_material_use' production.id %}">Update</a>
-                              </td>
+                              
+
+
+
+
+
+
+
 
                           </tr>
                           {% endfor %}

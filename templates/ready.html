@@ -1,4 +1,6 @@
 {% load crispy_forms_tags %}
+{% load mathfilters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +42,7 @@
                         <th scope="col"><p class="text-sm text-muted">Product</p></th>
                         <th scope="col"><p class="text-sm text-muted">QTY Received</p></th>
                         <th scope="col"><p class="text-sm text-muted">QTY Sold</p></th>
-
+                        <th scope="col"><p class="text-sm text-muted">QTY In stock</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date Received</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date Sold</p></th>
                         <th scope="col"><p class="text-sm text-muted">Update</p></th>
@@ -55,6 +57,18 @@
                         <td>{{production.stock.product.product.name}}</td>
                         <td>{{production.stock.product.actual_production}}</td>
                         <td>{{production.quantity_sold}}</td>
+                        
+                        <td>
+                          {% if production.remaining_stock == 0 %}
+                          <h5 class="text-danger"><span class="badge py-1 px-5 badge-danger">{{production.remaining_stock}}</span></h5>
+                          
+                          {% elif production.remaining_stock < production.stock.product.actual_production|div:2  %}
+                          <h5 class="text-warning"><span class="badge py-1 px-5 badge-warning">{{production.remaining_stock}}</span></h5>
+                          {% else %}
+                          <h5 class="text-success"><span class="badge py-1 px-5 badge-success">{{production.remaining_stock}}</span></h5>
+                          {% endif %}
+
+                        </td>
 
                         <td>{{production.date_received|date:"SHORT_DATE_FORMAT"}}</td>
                         <td>

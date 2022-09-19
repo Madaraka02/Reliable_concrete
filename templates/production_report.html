@@ -29,7 +29,7 @@
                 </form> -->
                 <a class="ml-2 mt-2" href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %}
                 </a>
-                <!-- <div class="table-responsive table-bordered"> -->
+                <div class="table-responsive table-bordered">
                 <table class="ml-2 mr-2 table table-responsive table-sm ">
                     <thead>
                       <tr>
@@ -56,7 +56,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {% for production in productions %}
+                        {% for production in productionsss %}
                         
                       <tr>
                         <!-- <th scope="row">Default</th> -->
@@ -95,9 +95,25 @@
                       {% endfor %}
                     </tbody>
                   </table>
-                <!-- </div> -->
+                </div>
 
             {% endif %}
+            <div class="row">
+            {% for p in productionss %}
+            <a href="{% url 'material_product_rship' p.id %}">{{p.product.name}} oil {{p.oil}} sand {{p.sand}} 1/4ballast{{p.quarter_ballast}}</a>
+            {% endfor %}
+          </div>
+            <div class="">
+            {% for m in mouldimgs %}
+            <p>{{m.qty_produced}}</p>
+            <p>{{m.oil_ltrs}}</p>
+            <p>{{m.cement_kgs}}</p>
+            <p>{{m.sand_kgs}}</p>
+            <p>{{m.quarter_ballast_kgs}}</p>
+
+
+            {% endfor %}
+          </div>
      
         </div>
     </div>

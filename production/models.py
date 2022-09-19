@@ -1,6 +1,6 @@
 from django.db import models
 from decimal import *
-from materials.models import RawMaterial
+# from materials.models import RawMaterial
 from datetime import datetime, date, timedelta
 # Create your models here.
 
@@ -24,6 +24,99 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+# what are you producing? Kabro Nyota quantity - the system checks how many
+# per unit
+# eg kabro 1sqM
+class ProductMaterialConsumption(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    oil = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    diesel = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    cement = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    white_cement = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    sand = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    river_sand = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    quarter_ballast = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    half_ballast = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    pumice = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    dust = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+        
+    
+    def __str__(self):
+        return self.product.name
+
+
+
+# say 100sqM was produced : multiply for each material and then deduct from materials
+
+class Moulding(models.Model):
+
+    product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)
+    # target_production = models.IntegerField(null=True, blank=True)
+    qty_produced = models.IntegerField(null=True, blank=True)
+    number_of_labourers = models.IntegerField(null=True, blank=True)
+    wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    transfered_to_curing = models.BooleanField(default=False)
+    date = models.DateField(null=True, blank=True)
+
+    # @property
+    # def oil_cost(self):
+    #     oil_cost = self.oil_used_in_litres * oil_price
+    #     return oil_cost
+
+    # @property
+    # def production_cost(self):
+    #     production_cost = self.total_wages + self.oil_cost + self.cement_cost + self.white_cement_cost + self.sand_cost + self.river_sand_cost + self.quarter_ballast_cost + self.half_ballast_cost + self.dust_cost + self.diesel_cost
+    #     return production_cost
+        
+    @property
+    def oil_ltrs(self):
+        oil_ltrs = self.product.oil * self.qty_produced
+        return oil_ltrs
+
+    @property
+    def diesel_ltrs(self):
+        diesel_ltrs = self.product.diesel * self.qty_produced
+        return diesel_ltrs
+
+    @property
+    def cement_kgs(self):
+        cement_kgs = self.product.cement * 50 * self.qty_produced
+        return cement_kgs
+
+    @property
+    def white_cement_kgs(self):
+        white_cement_kgs = self.product.white_cement * self.qty_produced
+        return white_cement_kgs
+
+    @property
+    def sand_kgs(self):
+        sand_kgs = self.product.sand * self.qty_produced
+        return sand_kgs
+    
+    @property
+    def rsand_kgs(self):
+        rsand_kgs = self.product.river_sand * self.qty_produced
+        return rsand_kgs
+
+    @property
+    def quarter_ballast_kgs(self):
+        quarter_ballast_kgs = self.product.quarter_ballast * self.qty_produced
+        return quarter_ballast_kgs
+
+    @property
+    def half_ballast_kgs(self):
+        half_ballast_kgs = self.product.half_ballast * self.qty_produced
+        return half_ballast_kgs
+
+    @property
+    def dust_kgs(self):
+        dust_kgs = self.product.dust * self.qty_produced
+        return dust_kgs
+
+    def __str__(self):
+        return self.product.product.name
+
+
 class Production(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
@@ -31,6 +124,7 @@ class Production(models.Model):
     actual_production = models.IntegerField(null=True, blank=True)
     number_of_labourers = models.IntegerField(null=True, blank=True)
     wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    
     oil_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     fuel_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
