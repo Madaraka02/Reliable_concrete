@@ -49,7 +49,9 @@ def add_material(request):
     if request.method == 'POST':
         form = MaterialForm(request.POST)
         if form.is_valid():
-            form.save()
+            material = form.save(commit=False)
+            material.available_qty = material.quantity
+            material.save() 
 
             return redirect('add_material')
     context = {

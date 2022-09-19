@@ -12,7 +12,8 @@ class DatePickerInput(forms.DateInput):
 class MaterialForm(ModelForm):
     class Meta:
         model = RawMaterial
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('available_qty',)
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }    
