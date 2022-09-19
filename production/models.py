@@ -52,10 +52,11 @@ class Moulding(models.Model):
 
     product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)
     # target_production = models.IntegerField(null=True, blank=True)
-    qty_produced = models.IntegerField(null=True, blank=True)
+    qty_to_be_produced = models.IntegerField(null=True, blank=True)
     number_of_labourers = models.IntegerField(null=True, blank=True)
     wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     transfered_to_curing = models.BooleanField(default=False)
+    production_confirmed = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)
 
     # @property
@@ -70,50 +71,50 @@ class Moulding(models.Model):
         
     @property
     def oil_ltrs(self):
-        oil_ltrs = self.product.oil * self.qty_produced
+        oil_ltrs = self.product.oil * self.qty_to_be_produced
         return oil_ltrs
 
     @property
     def diesel_ltrs(self):
-        diesel_ltrs = self.product.diesel * self.qty_produced
+        diesel_ltrs = self.product.diesel * self.qty_to_be_produced
         return diesel_ltrs
 
     @property
     def cement_kgs(self):
-        cement_kgs = self.product.cement * 50 * self.qty_produced
+        cement_kgs = self.product.cement * 50 * self.qty_to_be_produced
         return cement_kgs
     @property
     def pumice_kgs(self):
-        pumice_kgs = self.product.pumice * self.qty_produced
+        pumice_kgs = self.product.pumice * self.qty_to_be_produced
         return pumice_kgs
     @property
     def white_cement_kgs(self):
-        white_cement_kgs = self.product.white_cement * self.qty_produced
+        white_cement_kgs = self.product.white_cement * self.qty_to_be_produced
         return white_cement_kgs
 
     @property
     def sand_kgs(self):
-        sand_kgs = self.product.sand * self.qty_produced
+        sand_kgs = self.product.sand * self.qty_to_be_produced
         return sand_kgs
     
     @property
     def rsand_kgs(self):
-        rsand_kgs = self.product.river_sand * self.qty_produced
+        rsand_kgs = self.product.river_sand * self.qty_to_be_produced
         return rsand_kgs
 
     @property
     def quarter_ballast_kgs(self):
-        quarter_ballast_kgs = self.product.quarter_ballast * self.qty_produced
+        quarter_ballast_kgs = self.product.quarter_ballast * self.qty_to_be_produced
         return quarter_ballast_kgs
 
     @property
     def half_ballast_kgs(self):
-        half_ballast_kgs = self.product.half_ballast * self.qty_produced
+        half_ballast_kgs = self.product.half_ballast * self.qty_to_be_produced
         return half_ballast_kgs
 
     @property
     def dust_kgs(self):
-        dust_kgs = self.product.dust * self.qty_produced
+        dust_kgs = self.product.dust * self.qty_to_be_produced
         return dust_kgs
 
     def __str__(self):
@@ -284,7 +285,7 @@ class Production(models.Model):
         return f'production for {self.product.name} on {self.date}'
 
 class CuringStock(models.Model):
-    product = models.ForeignKey(Production, on_delete=models.SET_NULL,null=True)
+    product = models.ForeignKey(Moulding, on_delete=models.SET_NULL,null=True)
     enter_date = models.DateTimeField(auto_now_add=True)
     curing_days = models.PositiveIntegerField(default=10)
     transfered_to_ready = models.BooleanField(default=False)
@@ -299,7 +300,7 @@ class CuringStock(models.Model):
 
 
     def __str__(self):
-        return self.product.product.name
+        return self.product.product.product.name
 
 class ReadyStock(models.Model):
     stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
@@ -312,8 +313,8 @@ class ReadyStock(models.Model):
 
     @property
     def remaining_stock(self):
-        remaining_stock = self.stock.product.actual_production - self.quantity_sold
+        remaining_stock = self.stock.product.qty_to_be_produced - self.quantity_sold
         return remaining_stock
 
     def __str__(self):
-        return self.stock.product.product.name      
+        return self.sold  

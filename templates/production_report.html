@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Production |Report</title>
-    <!-- Font Awesome -->
     <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     rel="stylesheet"
@@ -16,12 +15,14 @@
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
     rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <style>
-        </style>
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+    rel="stylesheet"
+    />
 </head>
 <body>
-    <div class="container-fluid mt-2 mb-2">
+    <div class="container mt-2 mb-2">
       {% if messages %}
       {% for message in messages %}
       <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="margin-top: 5rem;">
@@ -37,65 +38,40 @@
             <!-- <form action="">
                 <input type="text" name="month_num">
                 </form> -->
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
                 <a class="ml-2 mt-2" href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %}
                 </a>
-                <div class="table-responsive table-bordered">
+                
                 <table class="ml-2 mr-2 table table-responsive table-sm ">
                     <thead>
                       <tr>
                         <th scope="col"><p class="text-sm text-muted">Product</p></th>
                         <th scope="col"><p class="text-sm text-muted">Qty manuf</p></th>
-                        <th scope="col"><p class="text-sm text-muted">No. Men</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Sand (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">River sand (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">1/4 ballast (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">1/2 ballast (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Dust (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Cement (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">White cement (kgs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Total wages</p></th>
-                        <!-- <th scope="col">Prod defeicit</th> -->
-                        <!-- <th scope="col">Damages</th> -->
-                        <th scope="col"><p class="text-sm text-muted">Oil (ltrs)</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Diesel (ltrs)</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Production Cost</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Update</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Action</p></th>
+
 
                         <!-- <th scope="col">Costs</th> -->
                       </tr>
                     </thead>
                     <tbody>
-                        {% for production in productionsss %}
+                        {% for production in mouldimgs %}
                         
                       <tr>
                         <!-- <th scope="row">Default</th> -->
-                        <td>{{production.product.name}}</td>
-                        <td>{{production.actual_production}}</td>
-                        <td>{{production.number_of_labourers}}</td>
-                        <td>{{production.sand_kgs}}</td>
-                        <td>{{production.river_sand_kgs}}</td>
-                        <td>{{production.quarter_ballast_kgs}}</td>
-                        <td>{{production.half_ballast_kgs}}</td>
-                        <td>{{production.dust_kgs}}</td>
-                        <td>{{production.cement_kgs}}</td>
-                        <td>{{production.white_cement_kgs}}</td>
-                        <td>{{production.total_wages}}</td>
-                        <!-- <td>{{production.production_defeicit}}</td> -->
-                        <!-- <td>{{production.damages}}</td> -->
-                        <td>{{production.oil_used_in_litres}}</td>
-                        <td>{{production.fuel_used_in_litres}}</td>
+                        <td>{{production.product.product.name}}</td>
+                        <td>{{production.qty_to_be_produced}}</td>
                         <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
-                        <td>{{production.production_cost|floatformat:2}}</td>
                          <td>
-                          {% if production.transfered_to_curing == False %}
-                          <a class="btn btn-outline-primary btn-sm" href="{% url 'update_production' production.id %}">Update</a>
-
-                            <a class="btn btn-outline-primary btn-sm m-1" href="{% url 'transfer_to_curnig' production.id %}">Transfer</a>
-
+                          {% if production.production_confirmed == False %}
+                          
+                          <a class="btn btn-outline-primary btn-sm" href="{% url  'material_product_rship' production.id %}">Confirm</a>
+                          {% elif production.transfered_to_curing == False %}
+                          <a class="btn btn-outline-success btn-sm" href="{% url  'transfer_to_curnig' production.id %}">Transfer</a>
                           {% else %}
-                            <p class="text-sm text-success">Transfered to curing</p>
-                            {% endif %}
+                          <p class="text-success">Production confirmed</p>
+                          {% endif %}
                           </td>
                         <!-- <td>oil{{production.oil_cost|stringformat:"f"}},ceme{{production.cement_cost|stringformat:"f"}},sand{{production.sand_cost|stringformat:"f"}},ball{{production.half_ballast_cost|stringformat:"f"}},diesel{{production.diesel_cost|stringformat:"f"}}</td> -->
                       
@@ -105,23 +81,13 @@
                       {% endfor %}
                     </tbody>
                   </table>
+               
                 </div>
-
+                <div class="col-md-2"></div>
             {% endif %}
             <div class="row">
             {% for p in productionss %}
-            <a href="{% url 'material_product_rship' p.id %}">{{p.product.name}} oil {{p.oil}} sand {{p.sand}} 1/4ballast{{p.quarter_ballast}}</a>
-            {% endfor %}
-          </div>
-            <div class="">
-            {% for m in mouldimgs %}
-            <p>{{m.qty_produced}}</p>
-            <p>{{m.oil_ltrs}}</p>
-            <p>{{m.cement_kgs}}</p>
-            <p>{{m.sand_kgs}}</p>
-            <p>{{m.quarter_ballast_kgs}}</p>
-
-
+            <a href="{% url 'material_product_rship' p.id %}">{{p.product.name}} </a>
             {% endfor %}
           </div>
      
@@ -133,9 +99,11 @@
 
     
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>   
+   <!-- MDB -->
+   <script
+   type="text/javascript"
+   src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+   ></script>     
 </body>
 </html>
 

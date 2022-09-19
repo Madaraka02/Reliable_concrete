@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from materials.models import *
+from stocks.models import *
 # from datetime import datetime
 from django.contrib import messages
 from datetime import datetime, date, timedelta
@@ -213,7 +214,7 @@ def export_products_xls(request):
 
 def transfer_to_curnig(request,id):
     # produced = Production.objects.all().count()
-    productio = get_object_or_404(Production, id=id)
+    productio = get_object_or_404(Moulding, id=id)
     # stock_to_transfer = Production.objects.filter(productio=productio, transfered_to_curing=False)
     # transfered = produced - stocks_to_transfer
     current_date = datetime.today()
@@ -434,16 +435,18 @@ def material_product_rship(request, id):
             product=productconsumption.product,quantity=rsand, date=current_date)
             rm.save()
 
+    productconsumption.production_confirmed=True
+    productconsumption.save()
+    return redirect('production_report')
 
-
-    context = {
-        'material':material,
-        'productconsumption':productconsumption,
+    # context = {
+    #     'material':material,
+    #     'productconsumption':productconsumption,
         
 
 
-    }
-    return render(request, 'production_report.html', context)    
+    # }
+    # return render(request, 'production_report.html', context)    
 
 def moulding(request):
     # product = get_object_or_404(Product, id=id)
@@ -453,7 +456,7 @@ def moulding(request):
         form = MouldingForm(request.POST)
         if form.is_valid():
             user_prd = form.data['product']
-            user_qty = form.data['qty_produced']
+            user_qty = form.data['qty_to_be_produced']
 
             product = get_object_or_404(ProductMaterialConsumption, id=user_prd)
             estimated_oil = product.oil * int(user_qty)
@@ -467,6 +470,12 @@ def moulding(request):
             estimated_pumice = product.pumice * int(user_qty)
             estimated_dust = product.dust * int(user_qty)
             print(estimated_oil)
+            
+
+
+
+
+
 
             for material in materials:
                 mname = material.name
@@ -474,58 +483,72 @@ def moulding(request):
 
                 if mname == 'Sand':
                     if mqty < estimated_sand:
-                        messages.success(request, f"No enough sand")
+                        messages.warning(request, f"No enough sand")
                         return redirect('production_report')
 
                 if mname == 'Half_ballast':
                     if mqty < estimated_half_ballast:
-                        messages.success(request, f"No enough Half ballast")
+                        messages.warning(request, f"No enough Half ballast")
                         return redirect('production_report')
                 
                 if mname == 'Oil':
                     if mqty < estimated_oil:
-                        messages.success(request, f"No enough Oil")
+                        messages.warning(request, f"No enough Oil")
                         return redirect('production_report')
 
                 if mname == 'Diesel':
                     if mqty < estimated_diesel:
-                        messages.success(request, f"No enough Diesel")
+                        messages.warning(request, f"No enough Diesel")
                         return redirect('production_report')
 
                 if mname == 'Cement':
                     if mqty < estimated_cement:
-                        messages.success(request, f"No enough Cement")
+                        messages.warning(request, f"No enough Cement")
                         return redirect('production_report')  
                 
                 if mname == 'White_cement':
                     if mqty < estimated_white_cement:
-                        messages.success(request, f"No enough White Cement")
+                        messages.warning(request, f"No enough White Cement")
                         return redirect('production_report')  
 
 
                 if mname == 'Quarter_ballast':
                     if mqty < estimated_quarter_ballast:
-                        messages.success(request, f"No enough Quarter Ballast")
+                        messages.warning(request, f"No enough Quarter Ballast")
                         return redirect('production_report') 
 
                 if mname == 'Dust':
                     if mqty < estimated_dust:
-                        messages.success(request, f"No enough Dust")
+                        messages.warning(request, f"No enough Dust")
                         return redirect('production_report')
 
                 if mname == 'Pumice':
                     if mqty < estimated_pumice:
-                        messages.success(request, f"No enough Pumice")
+                        messages.warning(request, f"No enough Pumice")
                         return redirect('production_report')
 
                 if mname == 'River_sand':
                     if mqty < estimated_river_sand:
-                        messages.success(request, f"No enough River Sand")
+                        messages.warning(request, f"No enough River Sand")
                         return redirect('production_report')
 
                     form.save()
-
-            return redirect('products_report')
+            material_receipt = ReleaseQty.objects.create(
+            product =product,
+            oil=estimated_oil,
+            diesel=estimated_diesel,
+            cement=estimated_cement,
+            white_cement=estimated_white_cement,
+            sand=estimated_sand,
+            river_sand=estimated_river_sand,
+            quarter_ballast=estimated_quarter_ballast,
+            half_ballast=estimated_half_ballast,
+            pumice=estimated_pumice,
+            dust=estimated_dust,
+            date=current_date
+            )
+            material_receipt.save()
+            return redirect('production_report')
     context = {
         'form':form,
         

@@ -55,7 +55,7 @@
                         
                       <tr>
                         <td>{{production.stock.product.product.name}}</td>
-                        <td>{{production.stock.product.actual_production}}</td>
+                        <td>{{production.stock.product.qty_to_be_produced}}</td>
                         <td>{{production.quantity_sold}}</td>
                         
                         <td>
@@ -83,10 +83,10 @@
                          <td>
                           {% if production.quantity_sold == 0 %}
                             <a class="btn btn-outline-primary btn-sm" href="{% url 'sale_stock' production.id %}">Sale</a>
-                            {% elif production.quantity_sold < production.stock.product.actual_production %}
+                            {% elif production.quantity_sold < production.stock.product.qty_to_be_produced %}
                             <a class="btn btn-outline-warning btn-sm" href="{% url 'sale_stock' production.id %}">Continue selling</a>
 
-                          {% elif production.quantity_sold == production.stock.product.actual_production %}
+                          {% elif production.quantity_sold == production.stock.product.qty_to_be_produced %}
                             <p class="text-success">Sold</p>
                             {% endif %}
                           </td>
