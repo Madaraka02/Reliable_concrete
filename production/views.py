@@ -246,7 +246,7 @@ def transfer_stock_to_ready(request,id):
     current_date = datetime.today()
     if productio.transfered_to_ready == False:
 
-        ready_stock = ReadyStock.objects.create(stock=productio, sold=False, date_received=current_date, quantity_sold=0)
+        ready_stock = ReadyForSaleStock.objects.create(stock=productio, sold=False, date_received=current_date, quantity_sold=0)
         ready_stock.save()
         productio.transfered_to_ready = True
         productio.save()
@@ -266,7 +266,15 @@ def transfer_stock_to_ready(request,id):
 
 
 def ready_stock_report(request):
-    ready_for_sale = ReadyStock.objects.all().order_by('-id')      
+    # .filter(stuff).values("ip_address").distinct().count()
+    # Visit.objects.filter(stuff).values("ip_address").annotate(n=models.Count("pk"))
+
+    # id_list = Log.objects.order_by('-date').values_list('project_id').distinct()[:4]
+    # entries = Log.objects.filter(id__in=id_list)
+
+    # image_list = Image.objects.order_by('collection__id').distinct('collection__id')
+
+    ready_for_sale = ReadyForSaleStock.objects.order_by('stock__product').distinct()     
     context = {
         'ready_for_sale':ready_for_sale
     }
@@ -274,8 +282,8 @@ def ready_stock_report(request):
 
 
 def sale_stock(request, id):
-    ready = get_object_or_404(ReadyStock, id=id)
-    avail_qty = ready.stock.product.actual_production - ready.quantity_sold
+    ready = get_object_or_404(ReadyForSaleStock, id=id)
+    avail_qty = ready.stock.product.qty_to_be_produced - ready.quantity_sold
     curr_in_db = ready.quantity_sold
     # 50-10= 40
     form = SaleForm(instance=ready)
@@ -475,8 +483,6 @@ def moulding(request):
 
 
 
-
-
             for material in materials:
                 mname = material.name
                 mqty = material.available_qty
@@ -554,3 +560,72 @@ def moulding(request):
         
     }        
     return render(request, 'form.html',context) 
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+
+from datetime import datetime
+
+
+
+
+def materials_receipt(request, id):
+    # Create a file-like buffer to receive PDF data.
+    
+    production = get_object_or_404(Moulding, id=id)
+    target_product = production.product
+    client = get_object_or_404(ReleaseQty, product=target_product)
+    prd_name = client.product.product.name
+    prd_namee = prd_name.upper()
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+    p.setFont("Helvetica", 10)
+    p.drawString(200,805, "RELIABLE CONCRETE WORKS PRODUCTION MATERIALS RECEIPT")
+    p.drawString(200,790, f"FOR {prd_namee}")
+    
+
+    p.drawString(20,785, f"Receipt No: R{client.id}C{production.id}W{target_product.id}")
+
+    # p.drawString(25,765, f"PRODUCT")
+    p.drawString(50,765, f"OIL")
+    p.drawString(100,765, f"DIESEL")
+    p.drawString(150,765, f"CEMENT")
+    p.drawString(200,765, f"W.CEMENT")
+    p.drawString(260,765, f"SAND")
+    p.drawString(300,765, f"R.SAND")
+    p.drawString(350,765, f"1/4BALLAST")
+    p.drawString(425,765, f"1/2BALLAST")
+    p.drawString(500,765, f"PUMICE")
+    p.drawString(550,765, f"DUST")
+
+    p.line(10,760,580,760)
+
+
+  
+    p.drawString(50,740, f"{client.oil}")
+    p.drawString(100,740, f"{client.diesel}")
+    p.drawString(150,740, f"{client.cement}")
+
+    p.drawString(200,740, f"{client.white_cement}")
+    p.drawString(260,740, f"{client.sand}")
+    p.drawString(300,740, f"{client.river_sand}")
+    p.drawString(350,740, f"{client.quarter_ballast}")
+    p.drawString(425,740, f"{client.half_ballast}")
+    p.drawString(500,740, f"{client.pumice}")
+    p.drawString(550,740, f"{client.dust}")
+    p.drawString(500,720, f"Date: {client.date.strftime('%Y-%m-%d')}")
+
+
+    # date_time = now.
+
+
+
+    # Close the PDF object cleanly, and we're done.
+    # p.showPage()
+
+    # p.setPageSize((500, 300))
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='Receipt.pdf') 

@@ -39,6 +39,8 @@ class ProductMaterialConsumption(models.Model):
     half_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     pumice = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     dust = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    curing_days = models.PositiveIntegerField(default=10)
+
         
     
     def __str__(self):
@@ -287,7 +289,6 @@ class Production(models.Model):
 class CuringStock(models.Model):
     product = models.ForeignKey(Moulding, on_delete=models.SET_NULL,null=True)
     enter_date = models.DateTimeField(auto_now_add=True)
-    curing_days = models.PositiveIntegerField(default=10)
     transfered_to_ready = models.BooleanField(default=False)
 
 
@@ -318,3 +319,20 @@ class ReadyStock(models.Model):
 
     def __str__(self):
         return self.sold  
+
+class ReadyForSaleStock(models.Model):
+    stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
+    sold = models.BooleanField(default=False)
+    selling = models.BooleanField(default=False) 
+
+    quantity_sold = models.IntegerField(default=0, null=True, blank=True)
+    date_received = models.DateTimeField(auto_now_add=True, null=True)
+    date_sold = models.DateField(null=True, blank=True)
+
+    @property
+    def remaining_stock(self):
+        remaining_stock = self.stock.product.qty_to_be_produced - self.quantity_sold
+        return remaining_stock
+
+    def __str__(self):
+        return self.stock.product.product.product.name 

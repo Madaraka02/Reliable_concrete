@@ -54,7 +54,7 @@
                         {% for production in ready_for_sale %}
                         
                       <tr>
-                        <td>{{production.stock.product.product.name}}</td>
+                        <td>{{production.stock.product.product.product.name}}</td>
                         <td>{{production.stock.product.qty_to_be_produced}}</td>
                         <td>{{production.quantity_sold}}</td>
                         
@@ -62,7 +62,7 @@
                           {% if production.remaining_stock == 0 %}
                           <h5 class="text-danger"><span class="badge py-1 px-5 badge-danger">{{production.remaining_stock}}</span></h5>
                           
-                          {% elif production.remaining_stock < production.stock.product.actual_production|div:2  %}
+                          {% elif production.remaining_stock < production.stock.product.qty_to_be_produced|div:2  %}
                           <h5 class="text-warning"><span class="badge py-1 px-5 badge-warning">{{production.remaining_stock}}</span></h5>
                           {% else %}
                           <h5 class="text-success"><span class="badge py-1 px-5 badge-success">{{production.remaining_stock}}</span></h5>

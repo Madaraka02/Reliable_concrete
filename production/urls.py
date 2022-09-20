@@ -20,6 +20,7 @@ urlpatterns = [
     path('plan/', add_production_target, name='add_production_target'),
     path('moulding/', moulding, name='moulding'),
 
+    path('<int:id>/material-receipt/', materials_receipt, name='materials_receipt'),
     path('<int:id>/material/consumption/', material_product_rship, name='material_product_rship'),
 
 ]

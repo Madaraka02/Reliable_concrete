@@ -5,7 +5,7 @@ from .models import *
 
 admin.site.register(Product)
 admin.site.register(CuringStock)
-admin.site.register(ReadyStock)
+admin.site.register(ReadyForSaleStock)
 admin.site.register(ProductMaterialConsumption)
 admin.site.register(Moulding)
 

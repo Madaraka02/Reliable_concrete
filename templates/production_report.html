@@ -50,6 +50,8 @@
                         <th scope="col"><p class="text-sm text-muted">Qty manuf</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date</p></th>
                         <th scope="col"><p class="text-sm text-muted">Action</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Materials Receipt</p></th>
+
 
 
                         <!-- <th scope="col">Costs</th> -->
@@ -73,7 +75,15 @@
                           <p class="text-success">Production confirmed</p>
                           {% endif %}
                           </td>
-                        <!-- <td>oil{{production.oil_cost|stringformat:"f"}},ceme{{production.cement_cost|stringformat:"f"}},sand{{production.sand_cost|stringformat:"f"}},ball{{production.half_ballast_cost|stringformat:"f"}},diesel{{production.diesel_cost|stringformat:"f"}}</td> -->
+                        <td>
+                          {% if production.production_confirmed == True %}
+                          <a class="btn btn-outline-success btn-sm" href="{% url  'materials_receipt' production.id %}"> 
+                            <!-- <i class="fa fa-download"></i> -->
+                            Download</a>
+
+                          {% else %}
+                          {% endif %}
+                        </td>
                       
                       </tr>
                       
