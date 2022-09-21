@@ -28,7 +28,6 @@ class Stock(models.Model):
         return self.name
 
 DAMAGES_CHOICES = (
-    ("1", "1"),
     ('PRODUCTION','PRODUCTION'),
     ('PACKING','PACKING'),
     ('CURING','CURING'),
@@ -41,8 +40,9 @@ DAMAGES_CHOICES = (
 class Damage(models.Model):
     product = models.ForeignKey(Moulding, on_delete=models.CASCADE)
     quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    category = models.CharField(null=True, max_length=20, choices=DAMAGES_CHOICES)
+    category = models.CharField(null=True, max_length=20, blank=True)
     date = models.DateField(null=True)
+    image =  models.FileField(upload_to='damages', default='')
 
 
     def __str__(self):

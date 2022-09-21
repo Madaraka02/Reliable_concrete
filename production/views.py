@@ -3,6 +3,8 @@ from .models import *
 from .forms import *
 from materials.models import *
 from stocks.models import *
+from stocks.forms import *
+from sales.forms import *
 # from datetime import datetime
 from django.contrib import messages
 from datetime import datetime, date, timedelta
@@ -37,7 +39,9 @@ def production_post(request):
 def curing_report(request):
     curring = CuringStock.objects.all().order_by('-id')      
     context = {
-        'curring':curring
+        'curring':curring,
+        'current_date':current_date
+
     }
     return render(request, 'curing.html', context)
 
@@ -215,12 +219,13 @@ def export_products_xls(request):
 def transfer_to_curnig(request,id):
     # produced = Production.objects.all().count()
     productio = get_object_or_404(Moulding, id=id)
-    # stock_to_transfer = Production.objects.filter(productio=productio, transfered_to_curing=False)
+    # stock_to_transfer = Moulding.objects.filter(product=productio, damages_confirmed=True)
     # transfered = produced - stocks_to_transfer
+
     current_date = datetime.today()
     if productio.transfered_to_curing == False:
 
-        curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,curing_days=3,transfered_to_ready=False)
+        curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,transfered_to_ready=False)
         curing_stock.save()
         productio.transfered_to_curing = True
         productio.save()
@@ -260,7 +265,7 @@ def transfer_to_ready(request):
 
 def transfer_stock_to_ready(request,id):
     productio = get_object_or_404(CuringStock, id=id)
-    stock_to_transfer = CuringStock.objects.filter(transfered_to_curing=False)
+    # stock_to_transfer = CuringStock.objects.filter(transfered_to_curing=False)
     # transfered = produced - stocks_to_transfer
     current_date = datetime.today()
     if productio.transfered_to_ready == False:
@@ -311,18 +316,20 @@ def sale_stock(request, id):
     ready = get_object_or_404(ReadyForSaleStock, id=id)
     avail_qty = ready.stock.product.qty_to_be_produced - ready.quantity_sold
     curr_in_db = ready.quantity_sold
-    # 50-10= 40
-    form = SaleForm(instance=ready)
+    # 50-10= 40 SaleStockForm
+    form = SaleStockForm(instance=ready)
     if request.method == 'POST':
-        form = SaleForm(request.POST, instance=ready)
+        form = SaleStockForm(request.POST,request.FILES, instance=ready)
         if form.is_valid():
-            user_qty = int(form.data['quantity_sold'])
+            user_qty = int(form.data['quantity'])
             # 10
             if user_qty > avail_qty:
+                messages.warning(request, f'Your have only {avail_qty} units to sale {user_qty} is too much')
                 return redirect('ready_stock_report')
 
             sale = form.save(commit=False)
-            new_qty = sale.quantity_sold + curr_in_db
+            sale.product = ready
+            new_qty = user_qty + curr_in_db
             # print(f'Available for sale {avail_qty}') #30
             # print(f'current in db {curr_in_db}')#20
             # print(f'user {user_qty}')#10
@@ -335,14 +342,14 @@ def sale_stock(request, id):
             #     return redirect('ready_stock_report')
 
             if new_qty < avail_qty:
-                sale.quantity_sold=new_qty
-                print(f'send to db {sale.quantity_sold}')
+                sale.product.quantity_sold=new_qty
+                print(f'send to db {sale.product.quantity_sold}')
 
 
-            sale.quantity_sold=new_qty
-            sale.selling = True 
-            sale.sold = True    
-            sale.date_sold = current_date
+            sale.product.quantity_sold=new_qty
+            sale.product.selling = True 
+            sale.product.sold = True    
+            sale.product.date_sold = current_date
             sale.save()
 
             return redirect('ready_stock_report')
@@ -655,3 +662,88 @@ def materials_receipt(request, id):
 
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='Receipt.pdf') 
+
+
+
+def production_damage(request):
+    form = ProductionDamageForm()
+    if request.method == 'POST':
+        form = ProductionDamageForm(request.POST)
+        if form.is_valid():
+            proddamage = form.save(commit=False)
+            proddamage.category = "PRODUCTION"
+            proddamage.save()
+
+            return redirect('production_report')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
+
+def curing_damage(request):
+    product = get_object_or_404(CuringStock, id=id)
+    form = curingDamageForm(instance=product)
+    if request.method == 'POST':
+        form = curingDamageForm(request.POST,instance=product)
+        if form.is_valid():
+            proddamage = form.save(commit=False)
+            proddamage.product = product
+            proddamage.category = "CURING"
+            proddamage.save()
+
+            return redirect('curing_report')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
+
+
+def packing_damage(request):
+    form = PackingDamageForm()
+    if request.method == 'POST':
+        form = PackingDamageForm(request.POST)
+        if form.is_valid():
+            proddamage = form.save(commit=False)
+            proddamage.category = "PACKING"
+            proddamage.save()
+            messages.success(request, f"Damages recorded")
+            return redirect('packing_damage')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
+
+def transit_damage(request):
+    form = TransitDamageForm()
+    if request.method == 'POST':
+        form = TransitDamageForm(request.POST)
+        if form.is_valid():
+            proddamage = form.save(commit=False)
+            proddamage.category = "TRANSIT"
+            proddamage.save()
+            messages.success(request, f"Damages recorded")
+            return redirect('transit_damage')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)     
+
+def offloading_damage(request):
+    form = OffloadingDamageForm()
+    if request.method == 'POST':
+        form = OffloadingDamageForm(request.POST)
+        if form.is_valid():
+            proddamage = form.save(commit=False)
+            proddamage.category = "OFFLOADING"
+            proddamage.save()
+            messages.success(request, f"Damages recorded")
+            return redirect('offloading_damage')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)    

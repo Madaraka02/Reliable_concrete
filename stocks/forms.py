@@ -15,3 +15,44 @@ class StockForm(ModelForm):
         widgets = {
             'date' : DatePickerInput(attrs={'max': today, 'min': today}),
         }
+
+class ProductionDamageForm(ModelForm):
+    class Meta:
+        model = Damage
+        fields = ['product','quantity_damaged','date', 'image']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        }
+
+
+class curingDamageForm(ModelForm):
+    class Meta:
+        model = Damage
+        fields = ['product','quantity_damaged','date','image']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        }
+
+class PackingDamageForm(ModelForm):
+    class Meta:
+        model = Damage
+        fields = ['product','quantity_damaged','date','image']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        }
+
+class TransitDamageForm(ModelForm):
+    class Meta:
+        model = Damage
+        fields = ['product','quantity_damaged','date','image']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        }
+
+class OffloadingDamageForm(ModelForm):
+    class Meta:
+        model = Damage
+        fields = ['product','quantity_damaged','date','image']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        }

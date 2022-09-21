@@ -54,6 +54,8 @@
                          <td>
                           {% if production.transfered_to_ready == False %}
                             <a class="btn btn-outline-warning btn-sm" href="{% url 'transfer_stock_to_ready' production.id %}">Waiting transfer</a>
+                            {% elif production.out_date == current_date %}
+                            <p class="text-success">Transfered </p>
                           {% else %}
                             <p class="text-success">Transfered to ready stock</p>
                             {% endif %}

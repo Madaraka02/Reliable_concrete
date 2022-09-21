@@ -6,3 +6,5 @@ admin.site.register(Stock)
 admin.site.register(ReleaseQty)
 
 admin.site.register(Production)
+admin.site.register(Damage)
+

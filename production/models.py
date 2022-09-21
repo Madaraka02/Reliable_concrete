@@ -59,6 +59,7 @@ class Moulding(models.Model):
     wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     transfered_to_curing = models.BooleanField(default=False)
     production_confirmed = models.BooleanField(default=False)
+    damages_confirmed = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)
 
     # @property
@@ -290,9 +291,15 @@ class CuringStock(models.Model):
     product = models.ForeignKey(Moulding, on_delete=models.SET_NULL,null=True)
     enter_date = models.DateTimeField(auto_now_add=True)
     transfered_to_ready = models.BooleanField(default=False)
+    damages_confirmed = models.BooleanField(default=False)
 
-
-    
+    @property
+    def out_date(self):
+        enterdate = self.enter_date
+        days_cure = self.product.product.curing_days
+        date_enter = enterdate.date()
+        date_out = date_enter + timedelta(days=days_cure)
+        return date_out
     #     current_date = datetime.today()
     #     date_1 = datetime.strptime(self.date, '%m-%d-%Y')
     #     date_2 = date_1 + timedelta(days=3)
@@ -334,6 +341,8 @@ class ReadyForSaleStock(models.Model):
     stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
     sold = models.BooleanField(default=False)
     selling = models.BooleanField(default=False) 
+    damages_confirmed = models.BooleanField(default=False)
+
 
     quantity_sold = models.IntegerField(default=0, null=True, blank=True)
     date_received = models.DateTimeField(auto_now_add=True, null=True)

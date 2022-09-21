@@ -20,9 +20,13 @@ urlpatterns = [
     path('plan/', add_production_target, name='add_production_target'),
     path('moulding/', moulding, name='moulding'),
     path('transfer-ready/', transfer_to_ready, name='transfer_to_ready'),
-
-
+    path('damage/', production_damage, name='production_damage'),
+    path('curing/damage/', curing_damage, name='curing_damage'),
+    path('packing/damage/', packing_damage, name='packing_damage'),
+    path('transit/damage/', transit_damage, name='transit_damage'),
+    path('offloading/damage/', offloading_damage, name='offloading_damage'),
     path('<int:id>/material-receipt/', materials_receipt, name='materials_receipt'),
     path('<int:id>/material/consumption/', material_product_rship, name='material_product_rship'),
 
 ]
+
