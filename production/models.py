@@ -292,14 +292,24 @@ class CuringStock(models.Model):
     transfered_to_ready = models.BooleanField(default=False)
 
 
-    # def transfer():
+    
     #     current_date = datetime.today()
     #     date_1 = datetime.strptime(self.date, '%m-%d-%Y')
     #     date_2 = date_1 + timedelta(days=3)
     #     if current_date == date_2:
     #         self.transfered_to_ready == True
+    def transfer(self):
+        enterdate = self.enter_date
+        days_cure = self.product.product.curing_days
+        date_enter = enterdate.date()
+        date_out = date_enter + timedelta(days=days_cure)
 
-
+        if current_date == date_out:
+            ready_stock = ReadyForSaleStock.objects.create(stock=self, selling=False, sold=False, date_received=current_date, quantity_sold=0)
+            ready_stock.save()
+            self.transfered_to_ready = True
+            stock.save()
+# KCS trevor 
     def __str__(self):
         return self.product.product.product.name
 

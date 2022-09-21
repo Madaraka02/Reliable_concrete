@@ -27,13 +27,21 @@ class Stock(models.Model):
     def __str__(self):
         return self.name
 
+DAMAGES_CHOICES = (
+    ("1", "1"),
+    ('PRODUCTION','PRODUCTION'),
+    ('PACKING','PACKING'),
+    ('CURING','CURING'),
+    ('TRANSPORTING','TRANSPORTING'),
+    ("OFFLOADING",'OFFLOADING'),
+    )
+
+
 
 class Damage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    packing = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    production = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    arranging = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
-    # quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    product = models.ForeignKey(Moulding, on_delete=models.CASCADE)
+    quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    category = models.CharField(null=True, max_length=20, choices=DAMAGES_CHOICES)
     date = models.DateField(null=True)
 
 

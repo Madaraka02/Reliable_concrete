@@ -237,19 +237,45 @@ def transfer_to_curnig(request,id):
 
     return redirect('production_report')
             
+def transfer_to_ready(request):
+    stock_to_transfer = CuringStock.objects.filter(transfered_to_ready=False)
+
+    print(stock_to_transfer)
+    current_date = datetime.today()
+
+    for stock in stocks_to_transfer:
+        enterdate = stock.enter_date
+        days_cure = stock.product.product.curing_days
+        date_enter = enterdate.date()
+        date_out = date_enter + timedelta(days=days_cure)
+
+        if current_date == date_out:
+            ready_stock = ReadyForSaleStock.objects.create(stock=stock, sold=False, date_received=current_date, quantity_sold=0)
+            ready_stock.save()
+            stock.transfered_to_ready = True
+            stock.save()
+
+    return redirect('curing_report')            
     
 
 def transfer_stock_to_ready(request,id):
     productio = get_object_or_404(CuringStock, id=id)
-    # stock_to_transfer = Production.objects.filter(productio=productio, transfered_to_curing=False)
+    stock_to_transfer = CuringStock.objects.filter(transfered_to_curing=False)
     # transfered = produced - stocks_to_transfer
     current_date = datetime.today()
     if productio.transfered_to_ready == False:
+        enterdate = productio.enter_date
+        days_cure = productio.product.product.curing_days
+        
+        date_enter = enterdate.date()
+        date_out = date_enter + timedelta(days=days_cure)
+      
+       
 
         ready_stock = ReadyForSaleStock.objects.create(stock=productio, sold=False, date_received=current_date, quantity_sold=0)
-        ready_stock.save()
+        # ready_stock.save()
         productio.transfered_to_ready = True
-        productio.save()
+        # productio.save()
 
  
     # for stock in stocks_to_transfer:

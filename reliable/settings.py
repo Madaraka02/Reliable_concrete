@@ -82,6 +82,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'reliable.wsgi.application'
 
 
+# Celery
+# CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
+# CELERY_TIMEZONE = env.str("CELERY_TIMEZONE", "America/Montevideo")
+# CELERY_RESULT_BACKEND = "django-db"
+# CELERY_CACHE_BACKEND = "django-cache"
+
+# CELERY_BROKER_URL = 'redis://localhost:6379'  
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'  
+# CELERY_ACCEPT_CONTENT = ['application/json']  
+# CELERY_TASK_SERIALIZER = 'json'  
+# CELERY_RESULT_SERIALIZER = 'json'  
+# CELERY_TIMEZONE = "Asia/New_York"
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 

@@ -19,6 +19,8 @@ urlpatterns = [
     path('<int:id>/sale/', sale_stock, name='sale_stock'),
     path('plan/', add_production_target, name='add_production_target'),
     path('moulding/', moulding, name='moulding'),
+    path('transfer-ready/', transfer_to_ready, name='transfer_to_ready'),
+
 
     path('<int:id>/material-receipt/', materials_receipt, name='materials_receipt'),
     path('<int:id>/material/consumption/', material_product_rship, name='material_product_rship'),
