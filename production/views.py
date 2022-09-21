@@ -49,8 +49,8 @@ def curing_report(request):
 def production_report(request):
     curring = CuringStock.objects.all()
     productions = Production.objects.all().order_by('-id')   
-    productionss = Moulding.objects.all() 
-    mouldimgs = Moulding.objects.all()   
+    productionss = Moulding.objects.all().order_by('-id')  
+    mouldimgs = Moulding.objects.all().order_by('-id')     
     context = {
         'productions':productions,
         'productionss':productionss,
@@ -133,14 +133,53 @@ def add_production_target(request):
 
 
 def update_product(request, id):
-    product = get_object_or_404(Product, id=id)
-    form = ProductForm(instance=product)
+    materials = RawMaterial.objects.all()
+    product = get_object_or_404(Moulding, id=id)
+    form = MouldingUpdateForm(instance=product)
     if request.method == 'POST':
-        form = ProductForm(request.POST, instance=product)
+        form = MouldingUpdateForm(request.POST, instance=product)
         if form.is_valid():
-            form.save()
+            user_qty = form.data['qty_to_be_produced']
+            pp = form.save(commit=False)
+            
+            pp.production_ended = True
+            pp.save()
 
-            return redirect('products_report')
+
+            prod = product.product
+            estimated_oil = prod.oil * int(user_qty)
+            estimated_diesel = prod.diesel * int(user_qty)
+            estimated_cement = prod.cement * int(user_qty)
+            estimated_white_cement = prod.white_cement * int(user_qty)
+            estimated_sand = prod.sand * int(user_qty)
+            estimated_river_sand = prod.river_sand * int(user_qty)
+            estimated_quarter_ballast = prod.quarter_ballast * int(user_qty)
+            estimated_half_ballast = prod.half_ballast * int(user_qty)
+            estimated_pumice = prod.pumice * int(user_qty)
+            estimated_dust = prod.dust * int(user_qty)
+            print(estimated_oil)
+            
+
+
+
+
+            material_receipt = ReleaseQty.objects.create(
+            product =product,
+            oil=estimated_oil,
+            diesel=estimated_diesel,
+            cement=estimated_cement,
+            white_cement=estimated_white_cement,
+            sand=estimated_sand,
+            river_sand=estimated_river_sand,
+            quarter_ballast=estimated_quarter_ballast,
+            half_ballast=estimated_half_ballast,
+            pumice=estimated_pumice,
+            dust=estimated_dust,
+            date=current_date
+            )
+            material_receipt.save()
+
+            return redirect('production_report')
     context = {
         'form':form,
         'product':product
@@ -328,10 +367,6 @@ def sale_stock(request, id):
                 return redirect('ready_stock_report')
 
             sale = form.save(commit=False)
-            print(sale.quantity)
-            print(sale.amount)
-            print(sale.order_type)
-
             sale.product = ready
             new_qty = user_qty + curr_in_db
             # print(f'Available for sale {avail_qty}') #30
@@ -514,7 +549,7 @@ def moulding(request):
             estimated_half_ballast = product.half_ballast * int(user_qty)
             estimated_pumice = product.pumice * int(user_qty)
             estimated_dust = product.dust * int(user_qty)
-            print(estimated_oil)
+            print(estimated_cement)
             
 
 
@@ -529,55 +564,56 @@ def moulding(request):
                         messages.warning(request, f"No enough sand")
                         return redirect('production_report')
 
-                if mname == 'Half_ballast':
+                elif mname == 'Half_ballast':
                     if mqty < estimated_half_ballast:
                         messages.warning(request, f"No enough Half ballast")
                         return redirect('production_report')
                 
-                if mname == 'Oil':
+                elif mname == 'Oil':
                     if mqty < estimated_oil:
                         messages.warning(request, f"No enough Oil")
                         return redirect('production_report')
 
-                if mname == 'Diesel':
+                elif mname == 'Diesel':
                     if mqty < estimated_diesel:
                         messages.warning(request, f"No enough Diesel")
                         return redirect('production_report')
 
-                if mname == 'Cement':
+                elif mname == 'Cement':
                     if mqty < estimated_cement:
                         messages.warning(request, f"No enough Cement")
                         return redirect('production_report')  
                 
-                if mname == 'White_cement':
+                elif mname == 'White_cement':
                     if mqty < estimated_white_cement:
                         messages.warning(request, f"No enough White Cement")
                         return redirect('production_report')  
 
 
-                if mname == 'Quarter_ballast':
+                elif mname == 'Quarter_ballast':
                     if mqty < estimated_quarter_ballast:
                         messages.warning(request, f"No enough Quarter Ballast")
                         return redirect('production_report') 
 
-                if mname == 'Dust':
+                elif mname == 'Dust':
                     if mqty < estimated_dust:
                         messages.warning(request, f"No enough Dust")
                         return redirect('production_report')
 
-                if mname == 'Pumice':
+                elif mname == 'Pumice':
                     if mqty < estimated_pumice:
                         messages.warning(request, f"No enough Pumice")
                         return redirect('production_report')
 
-                if mname == 'River_sand':
+                elif mname == 'River_sand':
                     if mqty < estimated_river_sand:
                         messages.warning(request, f"No enough River Sand")
                         return redirect('production_report')
 
-                    form.save()
-            material_receipt = ReleaseQty.objects.create(
-            product =product,
+                mould = form.save()
+
+            semi_material_receipt = SemiReleaseQty.objects.create(
+            product =mould,
             oil=estimated_oil,
             diesel=estimated_diesel,
             cement=estimated_cement,
@@ -590,7 +626,24 @@ def moulding(request):
             dust=estimated_dust,
             date=current_date
             )
-            material_receipt.save()
+            semi_material_receipt.save()    
+
+
+            # material_receipt = ReleaseQty.objects.create(
+            # product =product,
+            # oil=estimated_oil,
+            # diesel=estimated_diesel,
+            # cement=estimated_cement,
+            # white_cement=estimated_white_cement,
+            # sand=estimated_sand,
+            # river_sand=estimated_river_sand,
+            # quarter_ballast=estimated_quarter_ballast,
+            # half_ballast=estimated_half_ballast,
+            # pumice=estimated_pumice,
+            # dust=estimated_dust,
+            # date=current_date
+            # )
+            # material_receipt.save()
             return redirect('production_report')
     context = {
         'form':form,
@@ -603,6 +656,67 @@ from reportlab.pdfgen import canvas
 
 from datetime import datetime
 
+def semi_materials_receipt(request, id):
+    # Create a file-like buffer to receive PDF data.
+    
+    production = get_object_or_404(Moulding, id=id)
+    target_product = production.product
+    client = get_object_or_404(SemiReleaseQty, product=production)
+    # client = SemiReleaseQty.objects.filter(product=target_product)
+    prd_name = client.product.product.product.name
+    prd_namee = prd_name.upper()
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+    p.setFont("Helvetica", 10)
+    p.drawString(200,805, "RELIABLE CONCRETE WORKS PRODUCTION MATERIALS RECEIPT")
+    p.drawString(200,790, f"FOR {prd_namee}")
+    
+
+    p.drawString(20,785, f"Receipt No: R{client.id}C{production.id}W{target_product.id}")
+
+    # p.drawString(25,765, f"PRODUCT")
+    p.drawString(50,765, f"OIL")
+    p.drawString(100,765, f"DIESEL")
+    p.drawString(150,765, f"CEMENT")
+    p.drawString(200,765, f"W.CEMENT")
+    p.drawString(260,765, f"SAND")
+    p.drawString(300,765, f"R.SAND")
+    p.drawString(350,765, f"1/4BALLAST")
+    p.drawString(425,765, f"1/2BALLAST")
+    p.drawString(500,765, f"PUMICE")
+    p.drawString(550,765, f"DUST")
+
+    p.line(10,760,580,760)
+
+
+  
+    p.drawString(50,740, f"{client.oil}")
+    p.drawString(100,740, f"{client.diesel}")
+    p.drawString(150,740, f"{client.cement}")
+
+    p.drawString(200,740, f"{client.white_cement}")
+    p.drawString(260,740, f"{client.sand}")
+    p.drawString(300,740, f"{client.river_sand}")
+    p.drawString(350,740, f"{client.quarter_ballast}")
+    p.drawString(425,740, f"{client.half_ballast}")
+    p.drawString(500,740, f"{client.pumice}")
+    p.drawString(550,740, f"{client.dust}")
+    p.drawString(500,720, f"Date: {client.date.strftime('%Y-%m-%d')}")
+
+
+    # date_time = now.
+
+
+
+    # Close the PDF object cleanly, and we're done.
+    # p.showPage()
+
+    # p.setPageSize((500, 300))
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='SemiReceipt.pdf') 
 
 
 
@@ -611,8 +725,9 @@ def materials_receipt(request, id):
     
     production = get_object_or_404(Moulding, id=id)
     target_product = production.product
-    client = get_object_or_404(ReleaseQty, product=target_product)
-    prd_name = client.product.product.name
+    client = get_object_or_404(ReleaseQty, product=production)
+    # client = ReleaseQty.objects.filter(product=target_product).first()
+    prd_name = client.product.product.product.name
     prd_namee = prd_name.upper()
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer)

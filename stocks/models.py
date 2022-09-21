@@ -51,7 +51,7 @@ class Damage(models.Model):
 
 # class History(models.models):
 class ReleaseQty(models.Model):
-    product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE,null=True)
+    product = models.ForeignKey(Moulding, on_delete=models.CASCADE,null=True)
     oil = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     diesel = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     cement = models.DecimalField(max_digits=20,decimal_places=2,default=0)
@@ -66,3 +66,21 @@ class ReleaseQty(models.Model):
 
     def __str__(self):
         return self.product.product.name
+
+
+class SemiReleaseQty(models.Model):
+    product = models.ForeignKey(Moulding, on_delete=models.CASCADE,null=True)
+    oil = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    diesel = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    cement = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    white_cement = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    sand = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    river_sand = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    quarter_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    half_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    pumice = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    dust = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    date = models.DateField(null=True)
+
+    def __str__(self):
+        return self.product.product.product.name        

@@ -26,6 +26,9 @@ urlpatterns = [
     path('transit/damage/', transit_damage, name='transit_damage'),
     path('offloading/damage/', offloading_damage, name='offloading_damage'),
     path('<int:id>/material-receipt/', materials_receipt, name='materials_receipt'),
+
+    path('<int:id>/semi-material-receipt/', semi_materials_receipt, name='semi_materials_receipt'),
+
     path('<int:id>/material/consumption/', material_product_rship, name='material_product_rship'),
 
 ]

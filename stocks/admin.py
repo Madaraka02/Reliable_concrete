@@ -7,4 +7,6 @@ admin.site.register(ReleaseQty)
 
 admin.site.register(Production)
 admin.site.register(Damage)
+admin.site.register(SemiReleaseQty)
+
 

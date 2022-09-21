@@ -53,13 +53,15 @@ class ProductMaterialConsumption(models.Model):
 class Moulding(models.Model):
 
     product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)
-    # target_production = models.IntegerField(null=True, blank=True)
+    # qty_produced = models.IntegerField(null=True, blank=True)
     qty_to_be_produced = models.IntegerField(null=True, blank=True)
     number_of_labourers = models.IntegerField(null=True, blank=True)
     wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     transfered_to_curing = models.BooleanField(default=False)
     production_confirmed = models.BooleanField(default=False)
     damages_confirmed = models.BooleanField(default=False)
+    production_ended = models.BooleanField(default=False)
+
     date = models.DateField(null=True, blank=True)
 
     # @property

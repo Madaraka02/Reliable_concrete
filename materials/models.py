@@ -37,5 +37,5 @@ class RawMaterialUsage(models.Model):
         
 
     def __str__(self):
-        return self.material.name
+        return self.material
 

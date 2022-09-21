@@ -34,7 +34,7 @@
       {% endfor %}
 {% endif %}
         <div class="row mt-2 mb-2">
-            {% if productions %}
+            {% if mouldimgs %}
             <!-- <form action="">
                 <input type="text" name="month_num">
                 </form> -->
@@ -50,6 +50,8 @@
                         <th scope="col"><p class="text-sm text-muted">Qty manuf</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date</p></th>
                         <th scope="col"><p class="text-sm text-muted">Action</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Confirm Production</p></th>
+
                         <th scope="col"><p class="text-sm text-muted">Materials Receipt</p></th>
 
 
@@ -66,25 +68,38 @@
                         <td>{{production.qty_to_be_produced}}</td>
                         <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                          <td>
-                          {% if production.production_confirmed == False %}
-                          
-                          <a class="btn btn-outline-primary btn-sm" href="{% url  'material_product_rship' production.id %}">Confirm</a>
-                          {% elif production.transfered_to_curing == False %}
-                          <a class="btn btn-outline-success btn-sm" href="{% url  'transfer_to_curnig' production.id %}">Transfer</a>
+
+                          {% if production.production_ended == False %}
+                          <a class="btn btn-outline-primary btn-sm" href="{% url  'update_product' production.id %}">Update</a>
                           {% else %}
-                          <p class="text-success">Production confirmed</p>
+                          
+                          <p class="text-success">Production Completed</p>
                           {% endif %}
                           </td>
+
+
+                          <td>
+                            {% if production.production_confirmed == False %}
+                    
+                            <a class="btn btn-outline-primary btn-sm" href="{% url  'material_product_rship' production.id %}">Confirm</a>
+                            {% elif production.transfered_to_curing == False %}
+                            <a class="btn btn-outline-success btn-sm" href="{% url  'transfer_to_curnig' production.id %}">Transfer</a>
+                            {% else %}
+                            <p class="text-success">Transfered to curing</p>
+                            {% endif %}
+                            </td>
                         <td>
-                          {% if production.production_confirmed == True %}
+                          {% if production.production_ended == True and production.production_confirmed == True %}
                           <a class="btn btn-outline-success btn-sm" href="{% url  'materials_receipt' production.id %}"> 
                             <!-- <i class="fa fa-download"></i> -->
                             Download</a>
 
                           {% else %}
+                          <a class="btn btn-outline-success btn-sm" href="{% url  'semi_materials_receipt' production.id %}">Download Provisional </a>
+
                           {% endif %}
                         </td>
-                      
+                        
                       </tr>
                       
 
@@ -95,10 +110,6 @@
                 </div>
                 <div class="col-md-2"></div>
             {% endif %}
-            <div class="row">
-            {% for p in productionss %}
-            <a href="{% url 'material_product_rship' p.id %}">{{p.product.name}} </a>
-            {% endfor %}
           </div>
      
         </div>
