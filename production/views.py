@@ -328,6 +328,10 @@ def sale_stock(request, id):
                 return redirect('ready_stock_report')
 
             sale = form.save(commit=False)
+            print(sale.quantity)
+            print(sale.amount)
+            print(sale.order_type)
+
             sale.product = ready
             new_qty = user_qty + curr_in_db
             # print(f'Available for sale {avail_qty}') #30
