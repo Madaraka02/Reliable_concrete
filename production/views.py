@@ -787,7 +787,7 @@ def materials_receipt(request, id):
 def production_damage(request):
     form = ProductionDamageForm()
     if request.method == 'POST':
-        form = ProductionDamageForm(request.POST)
+        form = ProductionDamageForm(request.POST,request.FILES)
         if form.is_valid():
             proddamage = form.save(commit=False)
             proddamage.category = "PRODUCTION"
@@ -802,9 +802,9 @@ def production_damage(request):
 
 def curing_damage(request):
     product = get_object_or_404(CuringStock, id=id)
-    form = curingDamageForm(instance=product)
+    form = curingDamageForm()
     if request.method == 'POST':
-        form = curingDamageForm(request.POST,instance=product)
+        form = curingDamageForm(request.POST,request.FILES)
         if form.is_valid():
             proddamage = form.save(commit=False)
             proddamage.product = product
@@ -822,7 +822,7 @@ def curing_damage(request):
 def packing_damage(request):
     form = PackingDamageForm()
     if request.method == 'POST':
-        form = PackingDamageForm(request.POST)
+        form = PackingDamageForm(request.POST,request.FILES)
         if form.is_valid():
             proddamage = form.save(commit=False)
             proddamage.category = "PACKING"
@@ -838,7 +838,7 @@ def packing_damage(request):
 def transit_damage(request):
     form = TransitDamageForm()
     if request.method == 'POST':
-        form = TransitDamageForm(request.POST)
+        form = TransitDamageForm(request.POST,request.FILES)
         if form.is_valid():
             proddamage = form.save(commit=False)
             proddamage.category = "TRANSIT"
@@ -854,7 +854,7 @@ def transit_damage(request):
 def offloading_damage(request):
     form = OffloadingDamageForm()
     if request.method == 'POST':
-        form = OffloadingDamageForm(request.POST)
+        form = OffloadingDamageForm(request.POST,request.FILES)
         if form.is_valid():
             proddamage = form.save(commit=False)
             proddamage.category = "OFFLOADING"
