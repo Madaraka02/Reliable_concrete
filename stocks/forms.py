@@ -28,7 +28,7 @@ class ProductionDamageForm(ModelForm):
 class curingDamageForm(ModelForm):
     class Meta:
         model = Damage
-        fields = ['product','quantity_damaged','date','image']
+        fields = ['quantity_damaged','image']
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }

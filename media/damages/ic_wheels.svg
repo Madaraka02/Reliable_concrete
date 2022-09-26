@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g id="ic_wheels" transform="translate(1 0.305)" opacity="0.75">
+    <rect id="Rectangle_406" data-name="Rectangle 406" width="64" height="64" transform="translate(-1 -0.305)" fill="none" opacity="0"/>
+    <g id="Group_1864" data-name="Group 1864" transform="translate(3.692 4.387)">
+      <path id="Path_661" data-name="Path 661" d="M-1780.692,2143A27.307,27.307,0,0,0-1808,2170.308a27.306,27.306,0,0,0,27.308,27.308,27.306,27.306,0,0,0,27.308-27.308A27.307,27.307,0,0,0-1780.692,2143Zm0,41.509a14.2,14.2,0,0,1-14.2-14.2,14.2,14.2,0,0,1,14.2-14.2,14.2,14.2,0,0,1,14.2,14.2A14.2,14.2,0,0,1-1780.692,2184.509Z" transform="translate(1808 -2143)" fill="#021436" stroke="rgba(0,0,0,0)" stroke-width="1"/>
+      <g id="Group_1400" data-name="Group 1400" transform="translate(18.647 19.902)">
+        <g id="Group_1395" data-name="Group 1395" transform="translate(0 8.063)">
+          <circle id="Ellipse_205" data-name="Ellipse 205" cx="1.802" cy="1.802" r="1.802" fill="#021436"/>
+        </g>
+        <g id="Group_1396" data-name="Group 1396" transform="translate(2.619)">
+          <circle id="Ellipse_206" data-name="Ellipse 206" cx="1.803" cy="1.803" r="1.803" fill="#021436"/>
+        </g>
+        <g id="Group_1397" data-name="Group 1397" transform="translate(11.097)">
+          <circle id="Ellipse_207" data-name="Ellipse 207" cx="1.803" cy="1.803" r="1.803" fill="#021436"/>
+        </g>
+        <g id="Group_1398" data-name="Group 1398" transform="translate(13.717 8.063)">
+          <circle id="Ellipse_208" data-name="Ellipse 208" cx="1.802" cy="1.802" r="1.802" fill="#021436"/>
+        </g>
+        <g id="Group_1399" data-name="Group 1399" transform="translate(6.858 13.045)">
+          <circle id="Ellipse_209" data-name="Ellipse 209" cx="1.803" cy="1.803" r="1.803" fill="#021436"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

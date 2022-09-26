@@ -57,6 +57,10 @@
                         <th scope="col"><p class="text-sm text-muted">QTY</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date Received</p></th>
                         <th scope="col"><p class="text-sm text-muted">Tranfer Date</p></th>
+                        <th scope="col"><p class="text-sm text-muted">QTY Transfered</p></th>
+                        <th scope="col"><p class="text-sm text-muted">QTY damaged</p></th>
+
+
                         <th scope="col"><p class="text-sm text-muted">Status</p></th>
 
                         <!-- <th scope="col">Costs</th> -->
@@ -70,9 +74,13 @@
                         <td>{{production.product.qty_to_be_produced }}</td>
                         <td>{{production.enter_date|date:"SHORT_DATE_FORMAT"}}</td>
                         <td>{{production.out_date|date:"SHORT_DATE_FORMAT"}}</td>
+                        <td>{{production.quantity_transfered }}</td>
+                        <td>{{production.damaged }}</td>
+
+
                          <td>
                           {% if production.transfered_to_ready == False %}
-                            <a class="btn btn-outline-warning btn-sm" href="{% url 'transfer_stock_to_ready' production.id %}">Waiting transfer</a>
+                            <a class="btn btn-outline-warning btn-sm" href="{% url 'curing_damage' production.id %}">Waiting transfer</a>
                             {% elif production.out_date == current_date %}
                             <p class="text-success">Transfered </p>
                           {% else %}

@@ -276,7 +276,7 @@ def transfer_to_curnig(request,id):
     if productio.transfered_to_curing == False:
 
         curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,transfered_to_ready=False)
-        productio.qty_to_be_produced = qty_good
+        # productio.qty_to_be_produced = qty_good
         productio.transfered_to_curing = True
         productio.save()
         curing_stock.save()
@@ -330,9 +330,11 @@ def transfer_stock_to_ready(request,id):
        
 
         ready_stock = ReadyForSaleStock.objects.create(stock=productio, sold=False, date_received=current_date, quantity_sold=0)
-        # ready_stock.save()
+        ready_stock.save()
         productio.transfered_to_ready = True
-        # productio.save()
+       
+        productio.save()
+        messages.success(request, 'transfered to ready')
 
  
     # for stock in stocks_to_transfer:
@@ -343,8 +345,8 @@ def transfer_stock_to_ready(request,id):
     #         print(stock)
     #         CuringStock.objects.create(product=stock,enter_date=current_date,curing_days=3,transfered_to_ready=False)
     #         CuringStock.save()
-
-    return redirect('curing_report')    
+   
+        return redirect('curing_report')    
 
 
 
@@ -366,7 +368,7 @@ def ready_stock_report(request):
 
 def sale_stock(request, id):
     ready = get_object_or_404(ReadyForSaleStock, id=id)
-    avail_qty = ready.stock.product.qty_to_be_produced - ready.quantity_sold
+    avail_qty = ready.stock.quantity_transfered - ready.quantity_sold
     curr_in_db = ready.quantity_sold
     # 50-10= 40 SaleStockForm
     form = SaleStockForm(instance=ready)
@@ -797,34 +799,52 @@ def materials_receipt(request, id):
 
 
 
-def production_damage(request):
+def production_damage(request,id):
+    product = get_object_or_404(Moulding, id=id)
+    available_qty = product.qty_to_be_produced
+    
+    
     form = ProductionDamageForm()
     if request.method == 'POST':
         form = ProductionDamageForm(request.POST,request.FILES)
         if form.is_valid():
+            dam = int(form.data['quantity_damaged'])
             proddamage = form.save(commit=False)
+            transfered = available_qty-dam
             proddamage.category = "PRODUCTION"
+            proddamage.damgess = dam
+            proddamage.qty_transfered = transfered
+            proddamage.damages_confirmed = True
             proddamage.save()
 
-            return redirect('production_report')
+            return redirect('transfer_to_curnig', id=id)
     context = {
         'form':form,
         
     }        
     return render(request, 'form.html',context) 
 
-def curing_damage(request):
+def curing_damage(request,id):
     product = get_object_or_404(CuringStock, id=id)
+    available_qty = product.product.qty_to_be_produced
+
     form = curingDamageForm()
     if request.method == 'POST':
         form = curingDamageForm(request.POST,request.FILES)
         if form.is_valid():
+            dam = int(form.data['quantity_damaged'])
             proddamage = form.save(commit=False)
-            proddamage.product = product
+            transfered = available_qty-dam
+            proddamage.product = product.product
             proddamage.category = "CURING"
+            proddamage.date = current_date
+            product.damages_confirmed = True
+            product.damaged = dam
+            product.quantity_transfered = transfered
+            product.save()
             proddamage.save()
 
-            return redirect('curing_report')
+            return redirect('transfer_stock_to_ready', id=id)
     context = {
         'form':form,
         

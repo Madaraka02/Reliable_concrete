@@ -1,3 +1,4 @@
+from __future__ import absolute_import, unicode_literals
 import os
 
 from celery import Celery
@@ -17,7 +18,7 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
 
-@app.task(bind=True)
-def debug_task(self):
-    """A debug celery task"""
-    print(f"Request: {self.request!r}")
+# @app.task(bind=True)
+# def debug_task(self):
+#     """A debug celery task"""
+#     print(f"Request: {self.request!r}")

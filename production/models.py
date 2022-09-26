@@ -55,6 +55,10 @@ class Moulding(models.Model):
     product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)
     # qty_produced = models.IntegerField(null=True, blank=True)
     qty_to_be_produced = models.IntegerField(null=True, blank=True)
+    qty_transfered = models.IntegerField(default=0, null=True, blank=True)
+    damgess = models.IntegerField(default=0, null=True, blank=True)
+
+
     number_of_labourers = models.IntegerField(null=True, blank=True)
     wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     transfered_to_curing = models.BooleanField(default=False)
@@ -293,6 +297,10 @@ class CuringStock(models.Model):
     product = models.ForeignKey(Moulding, on_delete=models.SET_NULL,null=True)
     enter_date = models.DateTimeField(auto_now_add=True)
     transfered_to_ready = models.BooleanField(default=False)
+    quantity_transfered = models.IntegerField(default=0, null=True, blank=True)
+    damaged = models.IntegerField(default=0, null=True, blank=True)
+
+    
     damages_confirmed = models.BooleanField(default=False)
 
     @property
@@ -352,8 +360,8 @@ class ReadyForSaleStock(models.Model):
 
     @property
     def remaining_stock(self):
-        remaining_stock = self.stock.product.qty_to_be_produced - self.quantity_sold
+        remaining_stock = self.stock.quantity_transfered - self.quantity_sold
         return remaining_stock
 
     def __str__(self):
-        return self.stock.product.product.product.name 
+        return self.id
