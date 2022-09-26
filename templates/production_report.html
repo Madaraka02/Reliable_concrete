@@ -21,8 +21,28 @@
     rel="stylesheet"
     />
 </head>
+<style>
+      body{
+        background-color:  #F2E34C;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color:#68BBE3 ;
+    }
+    .parap{
+      color: #F2E34C;
+    }
+   
+</style>
 <body>
     <div class="container mt-2 mb-2">
+      <nav class="navbar navbar-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+        </div>
+      </nav>
       {% if messages %}
       {% for message in messages %}
       <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="margin-top: 5rem;">
@@ -46,13 +66,13 @@
                 <table class="ml-2 mr-2 table table-responsive table-sm ">
                     <thead>
                       <tr>
-                        <th scope="col"><p class="text-sm text-muted">Product</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Qty manuf</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Date</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Action</p></th>
-                        <th scope="col"><p class="text-sm text-muted">Confirm Production</p></th>
+                        <th scope="col"><p class=" text-muted">Product</p></th>
+                        <th scope="col"><p class=" text-muted">Qty manuf</p></th>
+                        <th scope="col"><p class=" text-muted">Date</p></th>
+                        <th scope="col"><p class=" text-muted">Action</p></th>
+                        <th scope="col"><p class=" text-muted">Confirm Production</p></th>
 
-                        <th scope="col"><p class="text-sm text-muted">Materials Receipt</p></th>
+                        <th scope="col"><p class=" text-muted">Materials Receipt</p></th>
 
 
 

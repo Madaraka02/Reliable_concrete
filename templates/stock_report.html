@@ -23,11 +23,27 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
     rel="stylesheet"
     />
-    <style>
-        </style>
+  
 </head>
+<style>
+        body{
+        background-color: #68BBE3;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color: #F2E34C;
+    }
+   
+</style>
 <body>
     <div class="container mt-2 mb-2">
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+            </div>
+          </nav>
         <div class="row mt-2 mb-2 align-items-center">
             <div class="col-md-2 mt-2 mb-2"></div>
             <a href="{% url 'export_users_csv' %}">

@@ -23,6 +23,7 @@ urlpatterns = [
     path('production/', include('production.urls')),
     path('stocks/', include('stocks.urls')),
     path('materials/', include('materials.urls')),
+    path('', include('sales.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

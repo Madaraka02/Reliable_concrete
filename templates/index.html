@@ -1,0 +1,156 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reliable Concrete Works</title>
+        <!-- Font Awesome -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        rel="stylesheet"
+        />
+        <!-- Google Fonts -->
+        <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        rel="stylesheet"
+        />
+        <!-- MDB -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+        rel="stylesheet"
+        />
+</head>
+<style>
+    body{
+        background-color: #68BBE3;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color: #F2E34C;
+    }
+   
+    </style>
+<body>
+
+  
+<div class="container mt-4 mb-4">
+        <!-- As a link -->
+<nav class="navbar navbar-light"  >
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+    </div>
+  </nav>
+    <div class="row mt-4 mb-4">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 mt-4 mb-4">
+            <div class="container mt-4 mb-4">
+                <div class="row mt-4 mb-4">
+                    <div class="col-md-4">
+                        <a href="{% url 'production_report' %}">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">View production report</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'curing_report' %}">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">View curing products</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'ready_stock_report' %}">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">View ready report</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mt-4 mb-4">
+                    <div class="col-md-4">
+                        <a href="">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">View damages report</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">View  materials report</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">Add raw materials</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mt-4 mb-4">
+                    <div class="col-md-4">
+                        <a href="{% url 'moulding' %}">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">Record production</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- <a href="">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">View  materials report</p>
+                                </div>
+                            </div>
+                        </a> -->
+                    </div>
+                    <div class="col-md-4">
+                        <!-- <a href="">
+                            <div class="card shadow-lg p-3">
+                                <div class="card-body">
+                                    <p class="card-text text-uppercase">Add materials report</p>
+                                </div>
+                            </div>
+                        </a> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+    
+
+
+
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script>      
+</body>
+</html>

@@ -260,14 +260,27 @@ def transfer_to_curnig(request,id):
     productio = get_object_or_404(Moulding, id=id)
     # stock_to_transfer = Moulding.objects.filter(product=productio, damages_confirmed=True)
     # transfered = produced - stocks_to_transfer
+    available_qty = productio.qty_to_be_produced
+    # damaged =get_object_or_404(Damage, product=productio)
+    damaged = Damage.objects.filter(product=productio).filter(category='PRODUCTION')
+    qty_dam = 0
+    for d in damaged:
+        qty_dam = d.quantity_damaged
+    # print(damaged)
+    
+    # print(qty_dam)
+
+    qty_good = available_qty - qty_dam
 
     current_date = datetime.today()
     if productio.transfered_to_curing == False:
 
         curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,transfered_to_ready=False)
-        curing_stock.save()
+        productio.qty_to_be_produced = qty_good
         productio.transfered_to_curing = True
         productio.save()
+        curing_stock.save()
+
 
  
     # for stock in stocks_to_transfer:

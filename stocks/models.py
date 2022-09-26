@@ -39,14 +39,15 @@ DAMAGES_CHOICES = (
 
 class Damage(models.Model):
     product = models.ForeignKey(Moulding, on_delete=models.CASCADE)
+    image =  models.FileField(upload_to='damages', null=True)
     quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     category = models.CharField(null=True, max_length=20, blank=True)
     date = models.DateField(null=True)
-    image =  models.FileField(upload_to='damages', default='')
+    
 
 
     def __str__(self):
-        return f'Damages for {self.item.name}'       
+        return f'Damages for {self.product.product.product.name}{self.product.qty_to_be_produced}'       
 
 
 # class History(models.models):

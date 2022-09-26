@@ -22,8 +22,25 @@
     rel="stylesheet"
     />
 </head>
+<style>
+      body{
+        background-color: #68BBE3;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color: #F2E34C;
+    }
+   
+</style>
 <body>
     <div class="container mt-2 mb-2">
+      <nav class="navbar navbar-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+        </div>
+      </nav>
         <div class="row mt-2 mb-2">
             
             {% if curring %}
@@ -39,6 +56,7 @@
                         <th scope="col"><p class="text-sm text-muted">Product</p></th>
                         <th scope="col"><p class="text-sm text-muted">QTY</p></th>
                         <th scope="col"><p class="text-sm text-muted">Date Received</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Tranfer Date</p></th>
                         <th scope="col"><p class="text-sm text-muted">Status</p></th>
 
                         <!-- <th scope="col">Costs</th> -->
@@ -51,6 +69,7 @@
                         <td>{{production.product.product.product.name}}</td>
                         <td>{{production.product.qty_to_be_produced }}</td>
                         <td>{{production.enter_date|date:"SHORT_DATE_FORMAT"}}</td>
+                        <td>{{production.out_date|date:"SHORT_DATE_FORMAT"}}</td>
                          <td>
                           {% if production.transfered_to_ready == False %}
                             <a class="btn btn-outline-warning btn-sm" href="{% url 'transfer_stock_to_ready' production.id %}">Waiting transfer</a>

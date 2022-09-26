@@ -28,19 +28,40 @@
         .btn{
             border-radius: 0;
         }
+        body{
+        background-color: #68BBE3;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color: #F2E34C;
+    }
+    .btn{
+        background: #F2E34C;
+    }
+    .form-control{
+        
+        outline: #F2E34C;
+    }
     </style>
 </head>
 <body>
     <div class="container mt-2 mb-2">
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+            </div>
+          </nav>
         <div class="row mt-2 mb-2">
             <div class="col-md-2 mt-2 mb-2"></div>
             <div class="col-md-8 mt-2 mb-2 shadow-lg p-3">
-                <form method="post" class="text-uppercsase">
+                <form method="post" class="form-control text-uppercsase" enctype="multipart/form-data">
                     {% csrf_token %}
                     
                       {{form|crispy}}  
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-outline-primary mt-2 mb-2 btn-block">Submit</button>
+                    <button type="submit" class="btn mt-2 mb-2 btn-block">Submit</button>
                   </form>
             </div>
             <div class="col-md-2 mt-2 mb-2"></div>
