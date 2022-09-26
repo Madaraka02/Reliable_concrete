@@ -68,9 +68,12 @@
                       <tr>
                         <th scope="col"><p class=" text-muted">Product</p></th>
                         <th scope="col"><p class=" text-muted">Qty manuf</p></th>
+                        <th scope="col"><p class=" text-muted">Qty Transfered</p></th>
+                        <th scope="col"><p class=" text-muted">Damages</p></th>
+
                         <th scope="col"><p class=" text-muted">Date</p></th>
                         <th scope="col"><p class=" text-muted">Action</p></th>
-                        <th scope="col"><p class=" text-muted">Confirm Production</p></th>
+                        <th scope="col"><p class=" text-muted">Confirm</p></th>
 
                         <th scope="col"><p class=" text-muted">Materials Receipt</p></th>
 
@@ -83,9 +86,14 @@
                         {% for production in mouldimgs %}
                         
                       <tr>
+                        
+
                         <!-- <th scope="row">Default</th> -->
                         <td>{{production.product.product.name}}</td>
                         <td>{{production.qty_to_be_produced}}</td>
+                        <td>{{production.qty_transfered}}</td>
+                        <td>{{production.damgess}}</td>
+
                         <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                          <td>
 
@@ -103,7 +111,7 @@
                     
                             <a class="btn btn-outline-primary btn-sm" href="{% url  'material_product_rship' production.id %}">Confirm</a>
                             {% elif production.transfered_to_curing == False %}
-                            <a class="btn btn-outline-success btn-sm" href="{% url  'transfer_to_curnig' production.id %}">Transfer</a>
+                            <a class="btn btn-outline-success btn-sm" href="{% url  'production_damage' production.id %}">Transfer</a>
                             {% else %}
                             <p class="text-success">Transfered to curing</p>
                             {% endif %}

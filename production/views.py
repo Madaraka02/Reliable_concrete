@@ -273,13 +273,15 @@ def transfer_to_curnig(request,id):
     qty_good = available_qty - qty_dam
 
     current_date = datetime.today()
-    if productio.transfered_to_curing == False:
+    if productio.transfered_to_curing == False and productio.damgess < available_qty:
 
         curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,transfered_to_ready=False)
         # productio.qty_to_be_produced = qty_good
         productio.transfered_to_curing = True
         productio.save()
         curing_stock.save()
+        messages.success(request, 'Transfered to curing')
+        return redirect('production_report')
 
 
  
@@ -291,6 +293,7 @@ def transfer_to_curnig(request,id):
     #         print(stock)
     #         CuringStock.objects.create(product=stock,enter_date=current_date,curing_days=3,transfered_to_ready=False)
     #         CuringStock.save()
+    messages.success(request, 'Nothing to transfer all products were damaged')
 
     return redirect('production_report')
             
@@ -811,10 +814,14 @@ def production_damage(request,id):
             dam = int(form.data['quantity_damaged'])
             proddamage = form.save(commit=False)
             transfered = available_qty-dam
+            proddamage.product = product
             proddamage.category = "PRODUCTION"
-            proddamage.damgess = dam
-            proddamage.qty_transfered = transfered
-            proddamage.damages_confirmed = True
+            product.damgess = dam
+            product.qty_transfered = transfered
+            product.damages_confirmed = True
+            proddamage.date = current_date
+            product.save()
+
             proddamage.save()
 
             return redirect('transfer_to_curnig', id=id)

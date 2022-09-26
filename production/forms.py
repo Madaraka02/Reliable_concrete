@@ -12,7 +12,7 @@ class DatePickerInput(forms.DateInput):
 class MouldingForm(ModelForm):
     class Meta:
         model = Moulding
-        exclude = ('transfered_to_curing','production_confirmed','production_ended', 'damages_confirmed')
+        exclude = ('transfered_to_curing','production_confirmed','production_ended', 'damages_confirmed','qty_transfered','damgess')
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }
