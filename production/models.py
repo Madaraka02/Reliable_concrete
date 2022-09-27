@@ -374,4 +374,4 @@ class SalesTimestamp(models.Model):
     date_sold = models.DateField(null=True, blank=True)  
 
     def __str__(self):
-        return self.id      
+        return self.sale.stock.product.product.product.name      
