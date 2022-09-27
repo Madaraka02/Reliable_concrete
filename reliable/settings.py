@@ -46,11 +46,18 @@ INSTALLED_APPS = [
     'users',
     'materials',
     'sales',
+    'accounts',
     
     'crispy_forms',
     'crispy_bootstrap5',
     'mathfilters',
+    'phonenumber_field',
+    'rest_framework'
 ]
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
