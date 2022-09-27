@@ -49,8 +49,8 @@
             <!-- <form action="">
                 <input type="text" name="month_num">
                 </form> -->
-                <a href="{% url 'export_materials_xls' %}">Generate Materials report for this month
-                </a>
+                <!-- <a href="{% url 'export_materials_xls' %}">Generate Materials report for this month
+                </a> -->
                 <!-- <div class="table-responsive table-bordered"> -->
 
 
@@ -60,22 +60,22 @@
                             <tr>
                                 <th scope="col">Name</th>
                                 <th scope="col">Quantity Bought</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Unit Price</th>
+                                <!-- <th scope="col">Amount</th>
+                                <th scope="col">Unit Price</th> -->
                                 <th scope="col">Quantity In store</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Update</th>
 
                                 
                             </tr>
-                          </thead>available_qty
+                          </thead>
                           <tbody>
                             {% for production in materials %}
                             <tr>
                                 <td>{{production.name}}</td>
                                 <td>{{production.quantity}}</td>
-                                <td>{{production.amount|floatformat:2}}</td>
-                                <td>{{production.price_per_unit|floatformat:2}}</td>
+                                <!-- <td>{{production.amount|floatformat:2}}</td>
+                                <td>{{production.price_per_unit|floatformat:2}}</td> -->
                                 <td>{{production.available_qty}}</td>
                                 <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                                 <td>
@@ -99,7 +99,7 @@
       <div class="row mt-2 mb-2">
           <div class="col-md-2"></div>
           <div class="col-md-8">
-          {% if raw_materials %}
+          {% if raw_maerials %}
           <!-- <form action="">
               <input type="text" name="month_num">
               </form> -->

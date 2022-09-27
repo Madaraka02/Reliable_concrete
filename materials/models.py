@@ -23,6 +23,17 @@ class RawMaterial(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TimeStampedMaterialUpdate(models.Model):
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    amount_paid = models.DecimalField(max_digits=20,decimal_places=2, null=True, default=0)
+    date = models.DateField(null=True)
+
+    def __str__(self):
+        return self.material.name
+
 class RawMaterialUsage(models.Model):
     material = models.ForeignKey(RawMaterial, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)

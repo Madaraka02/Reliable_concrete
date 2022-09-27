@@ -3,7 +3,7 @@ from .models import *
 from .forms import *
 from production.models import *
 
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 # from datetime import date
 
@@ -17,7 +17,7 @@ month = datetime.now().month
 year = datetime.now().year
 
 # Create your views here.
-
+current_date = datetime.today()
 def material_report(request):
     materials = RawMaterial.objects.all()    
     raw_materials = Moulding.objects.all()    
@@ -29,11 +29,25 @@ def material_report(request):
 
 def update_material(request, id):
     material = get_object_or_404(RawMaterial, id=id)
+    qty_in_stock= material.available_qty
+    bought_earlier = material.quantity
     form = MaterialForm(instance=material)
     if request.method == 'POST':
         form = MaterialForm(request.POST, instance=material)
         if form.is_valid():
-            form.save()
+            bought = int(form.data['quantity'])
+            amt_paid = int(form.data['amount'])
+            material = form.save(commit=False)
+            updated = qty_in_stock + bought
+            qty_bought= bought + bought_earlier
+            material.available_qty = updated
+            material.quantity = qty_bought
+
+            timestamped = TimeStampedMaterialUpdate.objects.create(material=material,quantity=bought,amount_paid=amt_paid,date=current_date)
+            timestamped.save()
+            material.save()
+            # print(f'instock {updated}')
+            # print(f'Boughtupdates {qty_bought}')
 
             return redirect('material_report')
     context = {
