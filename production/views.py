@@ -5,7 +5,8 @@ from materials.models import *
 from stocks.models import *
 from stocks.forms import *
 from sales.forms import *
-# from datetime import datetime
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from datetime import datetime, date, timedelta
 
@@ -36,8 +37,19 @@ def production_post(request):
     }        
     return render(request, 'form.html',context)    
 
-def curing_report(request):
-    curring = CuringStock.objects.all().order_by('-id')      
+def curing_report(request):  
+    # paginate curing report table
+    curring_list = CuringStock.objects.all().order_by('-id')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(curring_list, 15)
+    try:
+        curring = paginator.page(page)
+    except PageNotAnInteger:
+        curring = paginator.page(1)
+    except EmptyPage:
+        curring = paginator.page(paginator.num_pages) 
+
     context = {
         'curring':curring,
         'current_date':current_date
@@ -50,7 +62,19 @@ def production_report(request):
     curring = CuringStock.objects.all()
     productions = Production.objects.all().order_by('-id')   
     productionss = Moulding.objects.all().order_by('-id')  
-    mouldimgs = Moulding.objects.all().order_by('-id')     
+
+    # paginate production report table
+    mouldimgs_list = Moulding.objects.all().order_by('-id')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(mouldimgs_list, 15)
+    try:
+        mouldimgs = paginator.page(page)
+    except PageNotAnInteger:
+        mouldimgs = paginator.page(1)
+    except EmptyPage:
+        mouldimgs = paginator.page(paginator.num_pages)  
+
     context = {
         'productions':productions,
         'productionss':productionss,
@@ -100,7 +124,56 @@ def add_product(request):
         
     }        
     return render(request, 'form.html',context)  
-    #  productions = Production.objects.filter(date__month='9')   
+    #  productions = Production.objects.filter(date__month='9')  
+
+def add_product_material_consmption(request):
+    form = ProductMaterialConsumptionForm()
+    if request.method == 'POST':
+        form = ProductMaterialConsumptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect('prod_consumption_report')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
+
+
+def prod_consumption_report(request):
+    # paginate product material consumption report table
+    prod_cons_list = ProductMaterialConsumption.objects.all().order_by('-id')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(prod_cons_list, 15)
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)  
+
+    context = {
+        'products':products
+    }
+    return render(request, 'product_consumption.html', context)   
+
+
+def update_product_material_consmption(request, id):
+    product = get_object_or_404(ProductMaterialConsumption, id=id)
+    form = ProductMaterialConsumptionForm(instance=product)
+    if request.method == 'POST':
+        form = ProductMaterialConsumptionForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+
+            return redirect('prod_consumption_report')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
 
 def add_production_target(request):
     form = ProductionTargetForm()
@@ -362,7 +435,17 @@ def ready_stock_report(request):
 
     # image_list = Image.objects.order_by('collection__id').distinct('collection__id')
 
-    ready_for_sale = ReadyForSaleStock.objects.order_by('stock__product').distinct()     
+      
+    ready_list = ReadyForSaleStock.objects.all().order_by('-id')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(ready_list, 15)
+    try:
+        ready_for_sale = paginator.page(page)
+    except PageNotAnInteger:
+        ready_for_sale = paginator.page(1)
+    except EmptyPage:
+        ready_for_sale = paginator.page(paginator.num_pages)   
     context = {
         'ready_for_sale':ready_for_sale
     }

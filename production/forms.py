@@ -48,6 +48,10 @@ class ProductionForm(ModelForm):
             'date' : DatePickerInput(attrs={'max': today}),
         }
 
+class ProductMaterialConsumptionForm(ModelForm):
+    class Meta:
+        model = ProductMaterialConsumption
+        fields = '__all__'
 
 class ProductForm(ModelForm):
     class Meta:

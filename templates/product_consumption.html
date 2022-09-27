@@ -1,0 +1,118 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Material Consumption |Report</title>
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+    rel="stylesheet"
+    />
+</head>
+<style>
+      body{
+        background-color: #68BBE3;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color: #F2E34C;
+    }
+   
+</style>
+<body>
+    <div class="container mt-2 mb-2">
+      <nav class="navbar navbar-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+          {% if request.user.is_authenticated %}
+          <p class="text-sm">Hi, {{request.user.username}}</p>
+          <a class="text-sm text-uppercase" href="{% url 'logout' %}">Logout</a>
+          {% endif %}
+        </div>
+      </nav>
+        <div class="row mt-2 mb-2">
+            
+            {% if products %}
+                <table class="ml-2 mr-2 table table-responsive table-sm ">
+                    <thead>
+                      <tr>
+                        <th scope="col"><p class="text-sm text-muted">Product</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Oil</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Diesel</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Cement</p></th>
+                        <th scope="col"><p class="text-sm text-muted">White Cement</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Sand</p></th>
+                        <th scope="col"><p class="text-sm text-muted">River Sand</p></th>
+                        <th scope="col"><p class="text-sm text-muted">1/4 Ballast</p></th>
+                        <th scope="col"><p class="text-sm text-muted">1/2 Ballast</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Dust</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Pumice</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Action</p></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for production in products %}
+                        
+                      <tr>
+                        <td>{{production.product.name}}</td>
+                        <td>{{production.oil }}</td>
+                        <td>{{production.diesel}}</td>
+                        <td>{{production.cement}}</td>
+                        <td>{{production.white_cement }}</td>
+                        <td>{{production.sand }}</td>
+                        <td>{{production.river_sand }}</td>
+                        <td>{{production.quarter_ballast }}</td>
+                        <td>{{production.half_ballast }}</td>
+                        <td>{{production.dust }}</td>
+                        <td>{{production.pumice }}</td>
+
+
+                        
+                         <td>
+                            <a class="btn btn-outline-primary btn-md" href="{% url 'update_product_material_consmption' production.id %}">Update</a>
+                       
+                          </td>
+                      
+                      </tr>
+                      
+
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                <!-- </div> -->
+
+            {% endif %}
+            
+        </div>
+    </div>
+
+    
+
+
+    
+
+   <!-- MDB -->
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script> 
+</body>
+</html>
+
+
+

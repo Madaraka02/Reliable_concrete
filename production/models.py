@@ -90,7 +90,7 @@ class Moulding(models.Model):
 
     @property
     def cement_kgs(self):
-        cement_kgs = self.product.cement * 50 * self.qty_to_be_produced
+        cement_kgs = self.product.cement * self.qty_to_be_produced
         return cement_kgs
     @property
     def pumice_kgs(self):

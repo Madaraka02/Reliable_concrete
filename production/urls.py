@@ -2,9 +2,15 @@ from django.urls import path
 from .views import *
 
 
+
 urlpatterns = [
     path('', production_post, name='production'),
     path('add-product/', add_product, name='add_product'),
+    path('product/material/consumption/', prod_consumption_report, name='prod_consumption_report'),
+    path('<int:id>/product/material/consumption/', update_product_material_consmption, name='update_product_material_consmption'),
+
+    path('add-product/material/consumption/', add_product_material_consmption, name='add_product_material_consmption'),
+
     path('products/', products_report, name='products_report'),
     path('report/', production_report, name='production_report'),
     path('curing/report/', curing_report, name='curing_report'),
