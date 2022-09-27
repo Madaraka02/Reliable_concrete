@@ -379,6 +379,8 @@ def sale_stock(request, id):
         form = SaleStockForm(request.POST,request.FILES, instance=ready)
         if form.is_valid():
             user_qty = int(form.data['quantity'])
+            sale_amt = int(form.data['amount'])
+
             # 10
             if user_qty > avail_qty:
                 messages.warning(request, f'Your have only {avail_qty} units to sale {user_qty} is too much')
@@ -402,11 +404,12 @@ def sale_stock(request, id):
                 sale.product.quantity_sold=new_qty
                 print(f'send to db {sale.product.quantity_sold}')
 
-
-            sale.product.quantity_sold=new_qty
-            sale.product.selling = True 
-            sale.product.sold = True    
-            sale.product.date_sold = current_date
+            sale.product.quantity_sold=new_qty  #updates readystock model to this ne value
+            sale.product.selling = True   #updates readystock model to this ne value
+            sale.product.sold = True     #updates readystock model to this ne value 
+            sale.product.date_sold = current_date  #updates readystock model to this ne value
+            sale_snap = SalesTimestamp.objects.create(sale=ready,quantity_sold=user_qty,amount_sold=sale_amt,date_sold=current_date)
+            sale_snap.save() #takes a spanshot of the sale
             sale.save()
 
             return redirect('ready_stock_report')
