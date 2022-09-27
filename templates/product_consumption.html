@@ -94,6 +94,24 @@
                       {% endfor %}
                     </tbody>
                   </table>
+
+                  <div>
+                    <div class="pagination align-items-center justify-content-center">
+                      <span class="step-links">
+                          {% if products.has_previous %}                                     <!--If there is a previous page-->
+                              <a class="btn btn-info btn-sm" href="?page={{ products.previous_page_number }}">&laquo;</a>  <!--Hyperlink to previous page on Click-->
+                          {% endif %}
+                  
+                          <span class="current">
+                               Page{{ products.number }} of {{ products.paginator.num_pages }}  <!--customers_list.number Is the current page number,customers_list.paginator.num_pages Is the total number of pages-->
+                          </span>
+                  
+                          {% if products.has_next %}    <!--If there is a next page-->
+                              <a class="btn btn-info btn-sm" href="?page={{ products.next_page_number }}">&raquo;</a>    <!--Hyperlink to next page when clicked-->
+                          {% endif %}
+                      </span>
+                  </div> 
+                  </div>
                 <!-- </div> -->
 
             {% endif %}

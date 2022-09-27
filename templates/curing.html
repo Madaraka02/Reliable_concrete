@@ -100,6 +100,23 @@
                     </tbody>
                   </table>
                 <!-- </div> -->
+                <div>
+                  <div class="pagination align-items-center justify-content-center">
+                    <span class="step-links">
+                        {% if curring.has_previous %}                                     <!--If there is a previous page-->
+                            <a class="btn btn-info btn-sm" href="?page={{ curring.previous_page_number }}">&laquo;</a>  <!--Hyperlink to previous page on Click-->
+                        {% endif %}
+                
+                        <span class="current">
+                             Page{{ curring.number }} of {{ curring.paginator.num_pages }}  <!--customers_list.number Is the current page number,customers_list.paginator.num_pages Is the total number of pages-->
+                        </span>
+                
+                        {% if curring.has_next %}    <!--If there is a next page-->
+                            <a class="btn btn-info btn-sm" href="?page={{ curring.next_page_number }}">&raquo;</a>    <!--Hyperlink to next page when clicked-->
+                        {% endif %}
+                    </span>
+                </div> 
+                </div>
 
             {% endif %}
             

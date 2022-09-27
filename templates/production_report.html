@@ -138,6 +138,23 @@
                       {% endfor %}
                     </tbody>
                   </table>
+                  <div>
+                    <div class="pagination align-items-center justify-content-center">
+                      <span class="step-links">
+                          {% if mouldimgs.has_previous %}                                     <!--If there is a previous page-->
+                              <a class="btn btn-info btn-sm" href="?page={{ mouldimgs.previous_page_number }}">&laquo;</a>  <!--Hyperlink to previous page on Click-->
+                          {% endif %}
+                  
+                          <span class="current">
+                               Page{{ mouldimgs.number }} of {{ mouldimgs.paginator.num_pages }}  <!--customers_list.number Is the current page number,customers_list.paginator.num_pages Is the total number of pages-->
+                          </span>
+                  
+                          {% if mouldimgs.has_next %}    <!--If there is a next page-->
+                              <a class="btn btn-info btn-sm" href="?page={{ mouldimgs.next_page_number }}">&raquo;</a>    <!--Hyperlink to next page when clicked-->
+                          {% endif %}
+                      </span>
+                  </div> 
+                  </div>
                
                 </div>
                 <div class="col-md-2"></div>
