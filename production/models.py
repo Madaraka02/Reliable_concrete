@@ -19,7 +19,7 @@ river_sand_price_per_kg = 0
 dust_price_per_kg= 0
 class Product(models.Model):
     name = models.CharField(max_length=400,null=True)
-    description = models.TextField(null=True)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
