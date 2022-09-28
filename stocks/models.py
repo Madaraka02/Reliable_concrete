@@ -94,14 +94,14 @@ class SemiReleaseQty(models.Model):
 
 
 class StockRecording(models.Model):
-    name = models.CharField(max_length=300, null=True)     
+    name = models.CharField(max_length=300, null=True, blank=True)     
     quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     category = models.CharField(null=True, max_length=20, blank=True)
-    extra_field_one = models.CharField(max_length=300, null=True)     
-    extra_field_two = models.CharField(max_length=300, null=True)     
-    extra_field_three = models.CharField(max_length=300, null=True)     
-    extra_field_four = models.CharField(max_length=300, null=True)     
-    extra_field_five = models.CharField(max_length=300, null=True)     
+    extra_field_one = models.CharField(max_length=300, null=True, blank=True)     
+    extra_field_two = models.CharField(max_length=300, null=True, blank=True)     
+    extra_field_three = models.CharField(max_length=300, null=True, blank=True)     
+    extra_field_four = models.CharField(max_length=300, null=True, blank=True)     
+    extra_field_five = models.CharField(max_length=300, null=True, blank=True)     
     date = models.DateField(null=True) 
 
     def __str__(self):
