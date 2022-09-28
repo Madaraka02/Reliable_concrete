@@ -64,93 +64,94 @@
             {% if request.user.is_authenticated %}
             {% if request.user.is_staff %}
             <div class="container mt-4 mb-4">
-                <div class="row mt-4 mb-4">
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'production_report' %}">
+                <div class="row mt-2 mb-2">
+                    <div class="col-md-4 mt-2 mb-2 ">
+                        
                             <div class="card shadow-lg p-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View production report</p>
+                                    <a class="stretched-link"  href="{% url 'production_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
                     <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'curing_report' %}">
+                       
                             <div class="card shadow-lg p-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View curing products</p>
+                                    <a class="stretched-link" href="{% url 'curing_report' %}">
                                 </div>
                             </div>
-                        </a>
                     </div>
                     <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'ready_stock_report' %}">
-                            <div class="card shadow-lg p-3">
+                        
+                            <div class="card shadow-lg p-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View ready report</p>
+                                    <a class="stretched-link" href="{% url 'ready_stock_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
+                        
                     </div>
                 </div>
 
                 <div class="row mt-4 mb-4 mt-2 mb-2">
-                    <div class="col-md-4">
-                        <a href="{% url 'damages_report' %}">
-                            <div class="card shadow-lg p-2">
+                    <div class="col-md-4 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View damages report</p>
+                                    <a class="stretched-link" href="{% url 'damages_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'material_report' %}">
-                            <div class="card shadow-lg p-2">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View  materials report</p>
+                                    <a class="stretched-link" href="{% url 'material_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'add_material' %}">
-                            <div class="card shadow-lg p-2">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">Add raw materials</p>
+                                    <a class="stretched-link" href="{% url 'add_material' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
                 </div>
 
                 <div class="row mt-4 mb-4 mt-2 mb-2">
-                    <div class="col-md-4">
-                        <a href="{% url 'prod_consumption_report' %}">
-                            <div class="card shadow-lg p-2">
+                    <div class="col-md-4 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">Product Material Consumption</p>
+                                    <a class="stretched-link" href="{% url 'prod_consumption_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'add_product' %}">
-                            <div class="card shadow-lg p-2">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
-                                    <p class="card-text text-uppercase">Add product</p>
+                                    <h5 class="card-text text-uppercase">Add new product</h5>
+                                    <a class="stretched-link" href="{% url 'add_product' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'add_product_material_consmption' %}">
-                            <div class="card shadow-lg p-2">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-sm text-uppercase">Add product material consumption</p>
+                                    <a class="stretched-link" href="{% url 'add_product_material_consmption' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
                 </div>
 
@@ -158,23 +159,23 @@
             {% elif request.user.is_production_staff %}
             <div class="container mt-4 mb-4 mt-2 mb-2">
                 <div class="row mt-4 mb-4">
-                    <div class="col-md-4">
-                        <a href="{% url 'production_report' %}">
-                            <div class="card shadow-lg p-3">
+                    <div class="col-md-4 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View production report</p>
+                                    <a class="stretched-link" href="{% url 'production_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'moulding' %}">
-                            <div class="card shadow-lg p-3">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">Record production</p>
+                                    <a class="stretched-link" href="{% url 'moulding' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
                 </div>
 
@@ -194,14 +195,14 @@
                             </div>
                         </a>
                     </div> -->
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'material_report' %}">
-                            <div class="card shadow-lg p-3">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View  materials report</p>
+                                    <a class="stretched-link" href="{% url 'material_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
                 </div>
 
@@ -211,23 +212,23 @@
             <div class="container mt-4 mb-4">
                 <div class="row mt-4 mb-4">
                     
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'curing_report' %}">
-                            <div class="card shadow-lg p-3">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View curing products</p>
+                                    <a class="stretched-link" href="{% url 'curing_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <a href="{% url 'ready_stock_report' %}">
-                            <div class="card shadow-lg p-3">
+                    <div class="col-md-4 mt-2 mb-2 d-flex align-items-stretch">
+                        
+                            <div class="card shadow-lg p-2 z-depth-2">
                                 <div class="card-body">
                                     <p class="card-text text-uppercase">View ready report</p>
+                                    <a class="stretched-link" href="{% url 'ready_stock_report' %}"></a>
                                 </div>
                             </div>
-                        </a>
                     </div>
                 </div>
                 
