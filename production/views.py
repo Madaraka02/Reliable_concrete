@@ -969,7 +969,7 @@ def transit_damage(request):
             proddamage = form.save(commit=False)
             proddamage.category = "TRANSIT"
             proddamage.save()
-            messages.success(request, f"Damages recorded")
+            messages.success(request, f"Damages recorded at the office")
             return redirect('transit_damage')
     context = {
         'form':form,

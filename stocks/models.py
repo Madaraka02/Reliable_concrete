@@ -36,6 +36,12 @@ DAMAGES_CHOICES = (
     )
 
 
+class TDamage(models.Model):
+    product = models.CharField(max_length=300, null=True)
+    image =  models.FileField(upload_to='damages', null=True, blank=True)
+    quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    category = models.CharField(null=True, max_length=20, blank=True)
+    date = models.DateField(null=True)
 
 class Damage(models.Model):
     product = models.ForeignKey(Moulding, on_delete=models.CASCADE)

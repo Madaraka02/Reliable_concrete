@@ -43,7 +43,7 @@ class PackingDamageForm(ModelForm):
 
 class TransitDamageForm(ModelForm):
     class Meta:
-        model = Damage
+        model = TDamage
         fields = ['product','quantity_damaged','date','image']
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
