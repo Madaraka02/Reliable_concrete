@@ -992,3 +992,20 @@ def offloading_damage(request):
         
     }        
     return render(request, 'form.html',context)    
+
+
+
+def stock_take(request):
+    form = StockRecordingForm()
+    if request.method == 'POST':
+        form = StockRecordingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Record saved successfully')
+            return redirect('stock take')
+
+    context = {
+        'form':form,
+        
+    }
+    return render(request, 'form.html', context)        

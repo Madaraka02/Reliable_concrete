@@ -56,3 +56,10 @@ class OffloadingDamageForm(ModelForm):
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }
+
+
+
+class StockRecordingForm(ModelForm):
+    class Meta:
+        model = StockRecording
+        fields = '__all__'
