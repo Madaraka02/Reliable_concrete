@@ -44,7 +44,7 @@ class ProductMaterialConsumption(models.Model):
         
     
     def __str__(self):
-        return self.product.name
+        return str(self.product.name)
 
 
 
@@ -127,7 +127,7 @@ class Moulding(models.Model):
         return dust_kgs
 
     def __str__(self):
-        return self.product.product.name
+        return str(self.product.product.name)
 
 
 class Production(models.Model):
@@ -328,7 +328,7 @@ class CuringStock(models.Model):
             stock.save()
 # KCS trevor 
     def __str__(self):
-        return self.product.product.product.name
+        return str(self.product.product.product.name)
 
 class ReadyStock(models.Model):
     stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
@@ -345,7 +345,7 @@ class ReadyStock(models.Model):
         return remaining_stock
 
     def __str__(self):
-        return self.sold  
+        return str(self.sold  )
 
 class ReadyForSaleStock(models.Model):
     stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 
@@ -364,7 +364,7 @@ class ReadyForSaleStock(models.Model):
         return remaining_stock
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class SalesTimestamp(models.Model):
@@ -374,4 +374,4 @@ class SalesTimestamp(models.Model):
     date_sold = models.DateField(null=True, blank=True)  
 
     def __str__(self):
-        return self.sale.stock.product.product.product.name      
+        return str(self.sale.stock.product.product.product.name)      

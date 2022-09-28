@@ -3,11 +3,11 @@ from production.models import *
 
 # Create your models here.
 SALE_CHOICES = (
-    ('PRODUCTION','PRODUCTION'),
-    ('PACKING','PACKING'),
-    ('CURING','CURING'),
-    ('TRANSPORTING','TRANSPORTING'),
-    ("OFFLOADING",'OFFLOADING'),
+    ('LPO','LPO'),
+    ('INVOICE','INVOICE'),
+    ('CASH','CASH'),
+    # ("OFFLOADING",'OFFLOADING'),
+    ('INTERNAL TRANSFER','INTERNAL TRANSFER'),
     )
 class Sale(models.Model):
     product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE)
@@ -15,7 +15,7 @@ class Sale(models.Model):
     price_per_unit = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     amount = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     order_type = models.CharField(null=True, choices=SALE_CHOICES, max_length=30)
-    order_documents = models.FileField(upload_to='orders', default=True)
+    order_documents = models.FileField(upload_to='orders', blank=True,null=True)
     date = models.DateField(null=True)
 
     @property
