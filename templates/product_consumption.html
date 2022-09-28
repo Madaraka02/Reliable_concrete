@@ -35,16 +35,17 @@
    
 </style>
 <body>
+  <nav class="navbar navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+      {% if request.user.is_authenticated %}
+      <p class="text-sm">Hi, {{request.user.username}}</p>
+      <a class="text-sm text-uppercase" href="{% url 'logout' %}">Logout</a>
+      {% endif %}
+    </div>
+  </nav>
     <div class="container mt-2 mb-2">
-      <nav class="navbar navbar-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="{% url 'home' %}">Home</a>
-          {% if request.user.is_authenticated %}
-          <p class="text-sm">Hi, {{request.user.username}}</p>
-          <a class="text-sm text-uppercase" href="{% url 'logout' %}">Logout</a>
-          {% endif %}
-        </div>
-      </nav>
+
         <div class="row mt-2 mb-2">
             
             {% if products %}
