@@ -113,7 +113,7 @@ DATABASES = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://8936-105-160-67-219.eu.ngrok.io']
+CSRF_TRUSTED_ORIGINS = ['https://8e09-105-160-11-109.eu.ngrok.io ']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

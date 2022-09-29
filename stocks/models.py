@@ -95,7 +95,7 @@ class SemiReleaseQty(models.Model):
 
 class StockRecording(models.Model):
     name = models.CharField(max_length=300, null=True, blank=True)     
-    quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     category = models.CharField(null=True, max_length=20, blank=True)
     extra_field_one = models.CharField(max_length=300, null=True, blank=True)     
     extra_field_two = models.CharField(max_length=300, null=True, blank=True)     

@@ -23,16 +23,16 @@
 </head>
 <style>
       body{
-        background-color:  #F2E34C;
+        /* background-color:  #F2E34C; */
     }
     .card{
-        background-color: #F2E34C;
+        /* background-color: #F2E34C; */
     }
     .navbar{
-        background-color:#68BBE3 ;
+        /* background-color:#68BBE3 ; */
     }
     .parap{
-      color: #F2E34C;
+      /* color: #F2E34C; */
     }
    
 </style>
@@ -63,12 +63,14 @@
             <!-- <form action="">
                 <input type="text" name="month_num">
                 </form> -->
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
-                <a class="ml-2 mt-2" href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %}
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+            <button id="bbton" onclick="myFunction()" class="btn btn-outline-secondary">Show Chart</button>
+
+                <!-- <a class="ml-2 mt-2" href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %} -->
                 </a>
                 
-                <table class="ml-2 mr-2 table table-responsive table-sm ">
+                <table id="tabble" class="ml-2 mr-2 table table-responsive table-sm " style="display: block;">
                     <thead>
                       <tr>
                         <th scope="col"><p class=" text-muted">Product</p></th>
@@ -156,9 +158,12 @@
                       </span>
                   </div> 
                   </div>
-               
+                  {% if chart %}
+            
+                  <img id="plot" src="data:img/png;base64, {{chart|safe}}" style="display: none;" alt="">
+                  {% endif %}
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-1"></div>
             {% endif %}
           </div>
      
@@ -174,7 +179,27 @@
    <script
    type="text/javascript"
    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
-   ></script>     
+   ></script>   
+   <script>
+    function myFunction() {
+    var plot = document.getElementById("plot");
+    var tabble = document.getElementById("tabble");
+    var bbton = document.getElementById("bbton");
+  
+    if (plot.style.display === "none") {
+      plot.style.display = "block";
+      tabble.style.display = "none";
+      bbton.innerHTML = "Show Table";
+    } else {
+      plot.style.display = "none";
+      tabble.style.display = "block";
+      bbton.innerHTML = "Show Chart";
+     
+  
+    }
+  }
+  
+  </script>  
 </body>
 </html>
 

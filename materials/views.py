@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from production.models import *
+from .utils import *
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from datetime import datetime, date, timedelta
 
@@ -20,10 +23,28 @@ year = datetime.now().year
 current_date = datetime.today()
 def material_report(request):
     materials = RawMaterial.objects.all()    
-    raw_materials = Moulding.objects.all()    
+    raw_materials = Moulding.objects.all() 
+    materials_list = RawMaterial.objects.all().order_by('-id')
+
+    # materials = CuringStock.objects.all().order_by('-id')
+    x= [x.name for x in materials_list]
+    y= [y.available_qty for y in materials_list]
+    chart = get_plot(x, y)   
+    # pie = get_pie(x, y) 
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(materials_list, 5)
+    try:
+        materials = paginator.page(page)
+    except PageNotAnInteger:
+        materials = paginator.page(1)
+    except EmptyPage:
+        materials = paginator.page(paginator.num_pages) 
     context = {
         'materials':materials,
-        'raw_materials':raw_materials
+        'raw_materials':raw_materials,
+        'chart':chart,
+        # 'pie':pie
     }
     return render(request, 'materials.html', context)
 

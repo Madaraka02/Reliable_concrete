@@ -25,13 +25,13 @@
 </head>
 <style>
       body{
-        background-color: #68BBE3;
+        /* background-color: #68BBE3; */
     }
     .card{
-        background-color: #F2E34C;
+        /* background-color: #F2E34C; */
     }
     .navbar{
-        background-color: #F2E34C;
+        /* background-color: #F2E34C; */
     }
    
 </style>
@@ -51,9 +51,10 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
             {% if damages %}
+            <button id="bbton" onclick="myFunction()" class="btn btn-outline-secondary">Show Chart</button>
 
 
-                    <div class="table-responsive table sm">
+                    <div id="tabble" class="table-responsive table sm" style="display: block;">
                         <table class="table">
                           <thead>
                             <tr>
@@ -97,6 +98,10 @@
                       </div> 
                       </div>
                 <!-- </div> -->
+                {% if chart %}
+            
+                <img id="plot" src="data:img/png;base64, {{chart|safe}}" style="display: none;" alt="">
+                {% endif %}
 
             {% endif %}
             </div>
@@ -114,6 +119,26 @@
   type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
 ></script> 
+<script>
+  function myFunction() {
+  var plot = document.getElementById("plot");
+  var tabble = document.getElementById("tabble");
+  var bbton = document.getElementById("bbton");
+
+  if (plot.style.display === "none") {
+    plot.style.display = "block";
+    tabble.style.display = "none";
+    bbton.innerHTML = "Show Table";
+  } else {
+    plot.style.display = "none";
+    tabble.style.display = "block";
+    bbton.innerHTML = "Show Chart";
+   
+
+  }
+}
+
+</script> 
 </body>
 </html>
 

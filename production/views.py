@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from datetime import datetime, date, timedelta
+from .utils import *
 
 month = datetime.now().month
 
@@ -40,6 +41,9 @@ def production_post(request):
 def curing_report(request):  
     # paginate curing report table
     curring_list = CuringStock.objects.all().order_by('-id')
+    x= [x.product.product.product.name for x in curring_list]
+    y= [x.quantity_transfered for x in curring_list]
+    chart = get_plot(x, y)
     page = request.GET.get('page', 1)
 
     paginator = Paginator(curring_list, 15)
@@ -52,7 +56,8 @@ def curing_report(request):
 
     context = {
         'curring':curring,
-        'current_date':current_date
+        'current_date':current_date,
+        'chart':chart
 
     }
     return render(request, 'curing.html', context)
@@ -61,10 +66,14 @@ def curing_report(request):
 def production_report(request):
     curring = CuringStock.objects.all()
     productions = Production.objects.all().order_by('-id')   
-    productionss = Moulding.objects.all().order_by('-id')  
+    productionss = Moulding.objects.all().order_by('-id')
+
 
     # paginate production report table
     mouldimgs_list = Moulding.objects.all().order_by('-id')
+    x= [x.product.product.name for x in mouldimgs_list]
+    y= [y.qty_to_be_produced for y in mouldimgs_list]
+    chart = get_prod_plot(x, y)  
     page = request.GET.get('page', 1)
 
     paginator = Paginator(mouldimgs_list, 15)
@@ -79,7 +88,8 @@ def production_report(request):
         'productions':productions,
         'productionss':productionss,
         'curring':curring,
-        'mouldimgs':mouldimgs
+        'mouldimgs':mouldimgs,
+        'chart':chart
     }
     return render(request, 'production_report.html', context)
 
