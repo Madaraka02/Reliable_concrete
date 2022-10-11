@@ -48,6 +48,7 @@ class Damage(models.Model):
     image =  models.FileField(upload_to='damages', null=True, blank=True)
     quantity_damaged = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     category = models.CharField(null=True, max_length=20, blank=True)
+    reason_for_damage = models.TextField(null=True, blank=True)
     date = models.DateField(null=True)
     
 
@@ -106,3 +107,15 @@ class StockRecording(models.Model):
 
     def __str__(self):
         return str(self.name)  
+
+
+
+class StockCounts(models.Model):
+    product = models.ForeignKey(Moulding, on_delete=models.CASCADE,null=True)
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+
+    def __str__(self):
+        return str(self.product.product.product.name)  
+
+
+

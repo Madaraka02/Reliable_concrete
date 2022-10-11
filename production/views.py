@@ -46,7 +46,7 @@ def curing_report(request):
     chart = get_plot(x, y)
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(curring_list, 15)
+    paginator = Paginator(curring_list, 9)
     try:
         curring = paginator.page(page)
     except PageNotAnInteger:
@@ -76,7 +76,7 @@ def production_report(request):
     chart = get_prod_plot(x, y)  
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(mouldimgs_list, 15)
+    paginator = Paginator(mouldimgs_list, 9)
     try:
         mouldimgs = paginator.page(page)
     except PageNotAnInteger:
@@ -156,7 +156,7 @@ def prod_consumption_report(request):
     prod_cons_list = ProductMaterialConsumption.objects.all().order_by('-id')
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(prod_cons_list, 15)
+    paginator = Paginator(prod_cons_list, 9)
     try:
         products = paginator.page(page)
     except PageNotAnInteger:
@@ -641,7 +641,7 @@ def material_product_rship(request, id):
 
     # }
     # return render(request, 'production_report.html', context)    
-
+import decimal
 def moulding(request):
     # product = get_object_or_404(Product, id=id)
     materials = RawMaterial.objects.all()
@@ -653,16 +653,16 @@ def moulding(request):
             user_qty = form.data['qty_to_be_produced']
 
             product = get_object_or_404(ProductMaterialConsumption, id=user_prd)
-            estimated_oil = product.oil * int(user_qty)
-            estimated_diesel = product.diesel * int(user_qty)
-            estimated_cement = product.cement * int(user_qty)
-            estimated_white_cement = product.white_cement * int(user_qty)
-            estimated_sand = product.sand * int(user_qty)
-            estimated_river_sand = product.river_sand * int(user_qty)
-            estimated_quarter_ballast = product.quarter_ballast * int(user_qty)
-            estimated_half_ballast = product.half_ballast * int(user_qty)
-            estimated_pumice = product.pumice * int(user_qty)
-            estimated_dust = product.dust * int(user_qty)
+            estimated_oil = product.oil * decimal.Decimal(user_qty)
+            estimated_diesel = product.diesel * decimal.Decimal(user_qty)
+            estimated_cement = product.cement * decimal.Decimal(user_qty)
+            estimated_white_cement = product.white_cement * decimal.Decimal(user_qty)
+            estimated_sand = product.sand * decimal.Decimal(user_qty)
+            estimated_river_sand = product.river_sand * decimal.Decimal(user_qty)
+            estimated_quarter_ballast = product.quarter_ballast * decimal.Decimal(user_qty)
+            estimated_half_ballast = product.half_ballast * decimal.Decimal(user_qty)
+            estimated_pumice = product.pumice * decimal.Decimal(user_qty)
+            estimated_dust = product.dust * decimal.Decimal(user_qty)
             print(estimated_cement)
             
 

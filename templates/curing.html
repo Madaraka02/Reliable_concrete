@@ -47,8 +47,6 @@
     <div class="container mt-2 mb-2">
 
         <div class="row mt-2 mb-2">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
             {% if curring %}
             <button id="bbton" onclick="myFunction()" class="btn btn-outline-secondary">Show Chart</button>
 
@@ -127,8 +125,6 @@
             {% if chart %}
             <img id="plot" src="data:img/png;base64, {{chart|safe}}" style="display: none;" alt="">
             {% endif %}
-          </div>
-          <div class="col-md-2"></div>
             
         </div>
     </div>

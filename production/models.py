@@ -54,8 +54,8 @@ class Moulding(models.Model):
 
     product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE, null=True)
     # qty_produced = models.IntegerField(null=True, blank=True)
-    qty_to_be_produced = models.IntegerField(null=True, blank=True)
-    qty_transfered = models.IntegerField(default=0, null=True, blank=True)
+    qty_to_be_produced = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    qty_transfered = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     damgess = models.IntegerField(default=0, null=True, blank=True)
 
 
