@@ -328,7 +328,8 @@ class CuringStock(models.Model):
             stock.save()
 # KCS trevor 
     def __str__(self):
-        return str(self.product.product.product.name)
+        # return str(self.product.product.product.name)
+        return self.id
 
 class ReadyStock(models.Model):
     stock = models.ForeignKey(CuringStock, on_delete=models.SET_NULL, null=True) 

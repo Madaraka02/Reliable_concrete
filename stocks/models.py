@@ -111,11 +111,13 @@ class StockRecording(models.Model):
 
 
 class StockCounts(models.Model):
-    product = models.ForeignKey(Moulding, on_delete=models.CASCADE,null=True)
+    product = models.ForeignKey(ProductMaterialConsumption, on_delete=models.CASCADE,null=True)
     quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+    date = models.DateField(null=True) 
+
 
     def __str__(self):
-        return str(self.product.product.product.name)  
+        return str(self.product.product.name)  
 
 
 

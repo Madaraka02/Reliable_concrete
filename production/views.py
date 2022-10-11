@@ -41,9 +41,9 @@ def production_post(request):
 def curing_report(request):  
     # paginate curing report table
     curring_list = CuringStock.objects.all().order_by('-id')
-    x= [x.product.product.product.name for x in curring_list]
-    y= [x.quantity_transfered for x in curring_list]
-    chart = get_plot(x, y)
+    # x= [x.product.product.product.name for x in curring_list]
+    # y= [x.quantity_transfered for x in curring_list]
+    # chart = get_plot(x, y)
     page = request.GET.get('page', 1)
 
     paginator = Paginator(curring_list, 9)
@@ -57,7 +57,7 @@ def curing_report(request):
     context = {
         'curring':curring,
         'current_date':current_date,
-        'chart':chart
+        # 'chart':chart
 
     }
     return render(request, 'curing.html', context)
@@ -141,7 +141,13 @@ def add_product_material_consmption(request):
     if request.method == 'POST':
         form = ProductMaterialConsumptionForm(request.POST)
         if form.is_valid():
-            form.save()
+            pp = form.save(commit=False)
+            pp.save()
+
+            stcok = StockCounts.objects.create(product=pp,quantity=0,date=current_date)
+            stcok.save()
+            
+            
 
             return redirect('prod_consumption_report')
     context = {
@@ -344,6 +350,7 @@ def transfer_to_curnig(request,id):
     # stock_to_transfer = Moulding.objects.filter(product=productio, damages_confirmed=True)
     # transfered = produced - stocks_to_transfer
     available_qty = productio.qty_to_be_produced
+    name = productio.product.product.name
     # damaged =get_object_or_404(Damage, product=productio)
     damaged = Damage.objects.filter(product=productio).filter(category='PRODUCTION')
     qty_dam = 0
@@ -359,6 +366,21 @@ def transfer_to_curnig(request,id):
     if productio.transfered_to_curing == False and productio.damgess < available_qty:
 
         curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,transfered_to_ready=False)
+        take_count = get_object_or_404(StockCounts, product__product__name = name)
+        take_count.quantity += qty_good
+        take_count.date =current_date
+        take_count.save()
+        
+        # for take_count in take_counts:
+        #     print(take_count.quantity)
+        #     if take_count.product.product.name == name:
+        #         take_count.quantity += qty_good
+        #         # take_count.save()
+
+        #         print('yes')
+
+
+               
         # productio.qty_to_be_produced = qty_good
         productio.transfered_to_curing = True
         productio.save()
@@ -395,6 +417,7 @@ def transfer_to_ready(request):
         if current_date == date_out:
             ready_stock = ReadyForSaleStock.objects.create(stock=stock, sold=False, date_received=current_date, quantity_sold=0)
             ready_stock.save()
+
             stock.transfered_to_ready = True
             stock.save()
 
@@ -466,6 +489,7 @@ def sale_stock(request, id):
     ready = get_object_or_404(ReadyForSaleStock, id=id)
     avail_qty = ready.stock.quantity_transfered - ready.quantity_sold
     curr_in_db = ready.quantity_sold
+    name = ready.stock.product.product.product.name
     # 50-10= 40 SaleStockForm
     form = SaleStockForm(instance=ready)
     if request.method == 'POST':
@@ -504,6 +528,13 @@ def sale_stock(request, id):
             sale_snap = SalesTimestamp.objects.create(sale=ready,quantity_sold=user_qty,amount_sold=sale_amt,date_sold=current_date)
             sale_snap.save() #takes a spanshot of the sale
             sale.save()
+            
+            
+            take_count = get_object_or_404(StockCounts, product__product__name = name)
+            avail_count = take_count.quantity
+            take_count.date =current_date
+            take_count.quantity -= user_qty
+            take_count.save()
 
             return redirect('ready_stock_report')
     context = {
@@ -930,6 +961,8 @@ def production_damage(request,id):
 def curing_damage(request,id):
     product = get_object_or_404(CuringStock, id=id)
     available_qty = product.product.qty_to_be_produced
+    name = product.product.product.product.name
+
 
     form = curingDamageForm()
     if request.method == 'POST':
@@ -946,6 +979,12 @@ def curing_damage(request,id):
             product.quantity_transfered = transfered
             product.save()
             proddamage.save()
+
+            take_count = get_object_or_404(StockCounts, product__product__name = name)
+            avail_count = take_count.quantity
+            take_count.quantity -= dam
+            take_count.date =current_date
+            take_count.save()
 
             return redirect('transfer_stock_to_ready', id=id)
     context = {
