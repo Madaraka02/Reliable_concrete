@@ -1,0 +1,135 @@
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curing |Report</title>
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+    rel="stylesheet"
+    />
+</head>
+<style>
+      /* body{
+        background-color: #68BBE3;
+    }
+    .card{
+        background-color: #F2E34C;
+    }
+    .navbar{
+        background-color: #F2E34C;
+    } */
+   
+</style>
+<body>
+  <nav class="navbar navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+      {% if request.user.is_authenticated %}
+      <p class="text-sm">Hi, {{request.user.username}}</p>
+      <a class="text-sm text-uppercase" href="{% url 'logout' %}">Logout</a>
+      {% endif %}
+    </div>
+  </nav>
+    <div class="container mt-2 mb-2">
+
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="margin-top: 5rem;">
+        {{message}}
+        <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      {% endfor %}
+{% endif %}
+        <div class="row mt-2 mb-2">
+
+
+            {% if available_stocks %}
+            <!-- <form action="">
+                <input type="text" name="month_num">
+                </form> -->
+                <!-- <a class="ml-2 mt-2" href="{% url 'export_production_xls' %}">Generate Production report for {% now 'DATE_FORMAT' %}
+                </a> -->
+                <!-- <div class="table-responsive table-bordered"> -->
+                <table class="ml-2 mr-2 table table-responsive table-sm ">
+                    <thead>
+                      <tr>
+                        <th scope="col"><p class="text-sm text-muted">Product</p></th>
+                        <th scope="col"><p class="text-sm text-muted">QTY Available</p></th>
+                        <th scope="col"><p class="text-sm text-muted">Date</p></th>
+
+                        <!-- <th scope="col">Costs</th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for production in available_stocks %}
+                        
+                      <tr>
+                        <td>{{production.product.product.name}}</td>
+                        <td>{{production.quantity}}</td>
+                        <td>{{production.date_received|date:"SHORT_DATE_FORMAT"}}</td>
+
+                      
+                      </tr>
+                      <!-- 27/9/ONE BLOCK WAS BROKEN -->
+
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <div>
+                    <div class="pagination align-items-center justify-content-center">
+                      <span class="step-links">
+                          {% if available_stocks.has_previous %}                                     <!--If there is a previous page-->
+                              <a class="btn btn-info btn-sm" href="?page={{ available_stocks.previous_page_number }}">&laquo;</a>  <!--Hyperlink to previous page on Click-->
+                          {% endif %}
+                  
+                          <span class="current">
+                               Page{{ available_stocks.number }} of {{ available_stocks.paginator.num_pages }}  <!--customers_list.number Is the current page number,customers_list.paginator.num_pages Is the total number of pages-->
+                          </span>
+                  
+                          {% if available_stocks.has_next %}    <!--If there is a next page-->
+                              <a class="btn btn-info btn-sm" href="?page={{ available_stocks.next_page_number }}">&raquo;</a>    <!--Hyperlink to next page when clicked-->
+                          {% endif %}
+                      </span>
+                  </div> 
+                  </div>
+                <!-- </div> -->
+            {% else %}
+            <p class="mt-2 mb-2 text-uppercase">We are out of stock</p>
+            {% endif %}
+            
+        </div>
+    </div>
+
+    
+
+
+    
+
+   <!-- MDB -->
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script> 
+</body>
+</html>
+
+
+

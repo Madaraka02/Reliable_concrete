@@ -38,6 +38,30 @@ def production_post(request):
     }        
     return render(request, 'form.html',context)    
 
+def stocks_count(request):  
+    # paginate curing report table
+    stocks_list = StockCounts.objects.all().order_by('-id')
+    # x= [x.product.product.product.name for x in curring_list]
+    # y= [x.quantity_transfered for x in curring_list]
+    # chart = get_plot(x, y)
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(stocks_list, 9)
+    try:
+        available_stocks = paginator.page(page)
+    except PageNotAnInteger:
+        available_stocks = paginator.page(1)
+    except EmptyPage:
+        available_stocks = paginator.page(paginator.num_pages) 
+
+    context = {
+        'available_stocks':available_stocks,
+        'current_date':current_date,
+        # 'chart':chart
+
+    }
+    return render(request, 'availablestocks.html', context)
+
 def curing_report(request):  
     # paginate curing report table
     curring_list = CuringStock.objects.all().order_by('-id')
@@ -368,7 +392,7 @@ def transfer_to_curnig(request,id):
         curing_stock = CuringStock.objects.create(product=productio,enter_date=current_date,transfered_to_ready=False)
         take_count = get_object_or_404(StockCounts, product__product__name = name)
         take_count.quantity += qty_good
-        take_count.date =current_date
+        take_count.date = current_date
         take_count.save()
         
         # for take_count in take_counts:
