@@ -12,6 +12,8 @@ urlpatterns = [
     path('add-product/material/consumption/', add_product_material_consmption, name='add_product_material_consmption'),
 
     
+    path('stocks/search/', search_count, name='search_count'),
+
     path('products/', products_report, name='products_report'),
     path('report/', production_report, name='production_report'),
     path('curing/report/', curing_report, name='curing_report'),

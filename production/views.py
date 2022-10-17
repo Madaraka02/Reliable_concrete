@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from datetime import datetime, date, timedelta
 from .utils import *
+from django.db.models import Q
 
 month = datetime.now().month
 
@@ -38,6 +39,16 @@ def production_post(request):
     }        
     return render(request, 'form.html',context)    
 
+def search_count(request):
+    query = request.GET.get("q")
+    search_res = StockCounts.objects.filter(product__product__product__name__icontains=query)
+
+    context = {
+        'search_res':search_res,
+    }
+    return render(request, 'availablestocks.html', context)
+
+
 def stocks_count(request):  
     # paginate curing report table
     stocks_list = StockCounts.objects.all().order_by('-id')
@@ -46,7 +57,7 @@ def stocks_count(request):
     # chart = get_plot(x, y)
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(stocks_list, 9)
+    paginator = Paginator(stocks_list, 15)
     try:
         available_stocks = paginator.page(page)
     except PageNotAnInteger:
@@ -173,7 +184,7 @@ def add_product_material_consmption(request):
             
             
 
-            return redirect('prod_consumption_report')
+            return redirect('add_product_material_consmption')
     context = {
         'form':form,
         
