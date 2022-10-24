@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from datetime import datetime, date, timedelta
+from django.db.models import Q
 
 # from datetime import date
 
@@ -84,9 +85,13 @@ def add_material(request):
     if request.method == 'POST':
         form = MaterialForm(request.POST)
         if form.is_valid():
+            qty = int(form.data['quantity'])
             material = form.save(commit=False)
             material.available_qty = material.quantity
             material.save() 
+
+            material_count = MaterialCounts.objects.create(material=material,quantity=qty,date=current_date)
+            material_count.save()
 
             return redirect('add_material')
     context = {
@@ -96,6 +101,177 @@ def add_material(request):
     return render(request, 'form.html',context)  
     #  productions = Production.objects.filter(date__month='9')   
 
+
+def dispatch_material_to_branch(request):
+    form = DispatchMaterialExternalForm()
+    if request.method == 'POST':
+        form = DispatchMaterialExternalForm(request.POST)
+        if form.is_valid():
+            qty = int(form.data['quantity'])
+            raw_material = form.data['material']
+            to_branch = form.data['to']
+
+            material_dispatch = form.save()
+
+
+            r_material = get_object_or_404(RawMaterial,id=raw_material)
+            print(r_material)
+    
+            material_count = get_object_or_404(MaterialCounts, material=r_material)
+            count_qty=material_count.quantity
+            updated_qty=0
+            if count_qty > qty:
+                updated_qty=count_qty-qty
+            else:
+                return redirect('home')    
+                
+            material_count.quantity=updated_qty
+            print(material_count.material.name)
+            material_count.save()
+            # MaterialCounts.objects.create(material=material,quantity=qty,date=current_date)
+            # material_count.save()
+            branch = get_object_or_404(Branch, id=to_branch) #get branch
+            branchh_material = BranchMaterialCounts.objects.filter(material=raw_material, branch=to_branch) #get branch material to get available material
+             #get branch material to get available material
+
+            # qqty=branchh_material.quantity
+            # upqty=qqty+qty
+            # branchh_material.quantity=upqty
+
+            # print(branch.name)
+            print(branchh_material.quantity)
+
+            # branc_material.save()
+
+            return redirect('dispatch_material_to_branch')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)  
+
+
+
+def dispatch_material_to_site(request):
+    form = DispatchMaterialToSiteForm()
+    if request.method == 'POST':
+        form = DispatchMaterialToSiteForm(request.POST)
+        if form.is_valid():
+            qty = int(form.data['quantity'])
+            raw_material = form.data['material']
+            to_site = form.data['to']
+
+            material_dispatch = form.save()
+
+
+            r_material = get_object_or_404(RawMaterial,id=raw_material)
+            print(r_material)
+    
+            material_count = get_object_or_404(MaterialCounts, material=r_material)
+            count_qty=material_count.quantity
+            updated_qty=0
+            if count_qty > qty:
+                updated_qty=count_qty-qty
+            else:
+                return redirect('home')    
+                
+            material_count.quantity=updated_qty
+            print(material_count)
+            material_count.save()
+
+            site = get_object_or_404(Site, id=to_site) #get site
+            site_material = SiteMaterialCounts.objects.filter(material=r_material, site=site) #get branch material to get available material
+             #get branch material to get available material
+
+            qqty=site_material.quantity
+            upqty=qqty+qty
+            site_material.quantity=upqty
+
+            # branc_material.save()
+
+            return redirect('dispatch_material_to_site')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)  
+
+
+
+def main_material_sale(request, id):
+    material = get_object_or_404(RawMaterial,id=id)
+    materiall = get_object_or_404(MaterialCounts,material=material)
+    avail_qty =materiall.quantity
+
+    form = MainMaterialSaleForm()
+    if request.method == 'POST':
+        form = MainMaterialSaleForm(request.POST)
+        if form.is_valid():
+            qty = int(form.data['quantity'])
+            
+            if avail_qty > qty:
+
+                main_material_sale = form.save(commit=False)
+                main_material_sale.sale_by='R.C.W Main'
+                main_material_sale.date=current_date
+                main_material_sale.save()
+            else:
+                return redirect('home')    
+            
+
+
+            qqty=materiall.quantity
+            upqty=qqty-qty
+            materiall.quantity=upqty
+
+            # print(branch.name)
+            materiall.save()
+
+            return redirect('main_material_sale')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context) 
+
+def branch_material_sale(request, id):
+    branch = get_object_or_404(Branch,id=id)
+
+    form = BranchMaterialSaleForm()
+    if request.method == 'POST':
+        form = BranchMaterialSaleForm(request.POST)
+        if form.is_valid():
+            qty = int(form.data['quantity'])
+            materia=form.data['material']
+            materiall = get_object_or_404(MaterialCounts,material=materia)
+            avail_qty =materiall.quantity
+            if avail_qty > qty:
+
+                branch_material_sale = form.save(commit=False)
+                branch_material_sale.sale_by=branch.name
+                branch_material_sale.date=current_date
+                branch_material_sale.save()
+            else:
+                return redirect('home')    
+            
+
+            branch_material = BranchMaterialCounts.objects.filter(branch=branch) #get branch material to get available material
+             #get branch material to get available material
+
+            qqty=branch_material.quantity
+            upqty=qqty+qty
+            branch_material.quantity=upqty
+
+            # print(branch.name)
+            branc_material.save()
+
+            return redirect('branch_material_sale')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)  
+# 
 import xlwt
 
 

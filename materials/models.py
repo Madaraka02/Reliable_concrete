@@ -147,6 +147,7 @@ class BranchMaterialSale(models.Model): #to branch
 class MaterialSale(models.Model): #to branch
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    sale_by = models.CharField(max_length=400, null=True)
     date = models.DateField(null=True)
 
 

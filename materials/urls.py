@@ -4,6 +4,9 @@ from .views import *
 
 urlpatterns = [
     path('add-material/', add_material, name='add_material'),
+    path('branch/<str:id>/sale/', branch_material_sale, name='branch_material_sale'),
+    path('main/<str:id>/sale/', main_material_sale, name='main_material_sale'),
+    path('dispatch/material/branch/', dispatch_material_to_branch, name='dispatch_material_to_branch'),
     path('add-material-use/', add_material_use, name='add_material_use'),
     path('report/', material_report, name='material_report'),
     path('materials/export/excel/', export_materials_xls, name='export_materials_xls'),

@@ -68,10 +68,10 @@ class DispatchStockToSiteForm(ModelForm):
 
 class BranchMaterialSaleForm(ModelForm):
     class Meta:
-        model=BranchMaterialSale
-        fields=['quantity','date']
+        model=MaterialSale
+        fields=['material','quantity']
 
-class MaterialSaleForm(ModelForm):
+class MainMaterialSaleForm(ModelForm):
     class Meta:
         model=MaterialSale
-        fields=['quantity','date']
+        fields=['quantity']

@@ -4,6 +4,8 @@ from production.views import *
 
 urlpatterns = [
     path('', stock, name='stock'),
+    path('create/site',create_site, name='create_site'),
+    path('create/branch',create_Branch, name='create_Branch'),
     path('stock/take', stock_take, name='stock_take'),
     path('count/', stocks_count, name='stocks_count'),
     path('report/', stock_report, name='stock_report'),
@@ -11,9 +13,6 @@ urlpatterns = [
 ]
 
 # RasiseProductionNotification
-
-# Branch
-# Site
 
 # DispatchMaterialExternal
 # DispatchMaterialToSite
