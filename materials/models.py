@@ -1,9 +1,13 @@
 from django.db import models
-from production.models import ProductMaterialConsumption
+from production.models import *
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your models here.
 class RawMaterial(models.Model):
     name = models.CharField(max_length=400, null=True)
+    confirm_received = models.BooleanField(default=False) #gramuel
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True) #1000
     amount = models.DecimalField(max_digits=20,decimal_places=2, null=True) #400
     date = models.DateField(null=True)
@@ -50,3 +54,101 @@ class RawMaterialUsage(models.Model):
     def __str__(self):
         return self.material
 
+
+
+
+
+
+
+class Branch(models.Model):
+    name = models.CharField(max_length=400, null=True)
+    manager = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    
+    def __str__(self):
+        return self.name
+
+class Site(models.Model):
+    name = models.CharField(max_length=400, null=True)
+    manager = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.name
+
+class DispatchMaterialExternal(models.Model): #to branch
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    to = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return self.to.name
+
+class DispatchMaterialToSite(models.Model):
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    to = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return self.to.name
+
+
+class MaterialCounts(models.Model):
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+    date = models.DateField(null=True) 
+
+    def __str__(self):
+        return self.material.name
+
+
+class BranchMaterialCounts(models.Model):
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+    date = models.DateField(null=True) 
+
+    def __str__(self):
+        return self.branch.name        
+
+
+class SiteMaterialCounts(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+    date = models.DateField(null=True) 
+
+    def __str__(self):
+        return self.site.name   
+
+
+class TotalMaterialCounts(models.Model): 
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+ 
+
+    def __str__(self):
+        return self.material.name          
+
+
+
+class BranchMaterialSale(models.Model): #to branch
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return str(self.material.name)
+
+
+class MaterialSale(models.Model): #to branch
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return str(self.material.name)

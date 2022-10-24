@@ -34,9 +34,19 @@ class User(AbstractUser):
     username = models.CharField(max_length=200)    
     address = models.CharField(max_length=200)    
     phone_number = PhoneNumberField()
+
     is_production_staff=models.BooleanField(default=False)
     is_store_staff=models.BooleanField(default=False)
     is_sales_staff=models.BooleanField(default=False)
+    is_branch_staff=models.BooleanField(default=False)
+    is_site_staff=models.BooleanField(default=False)
+    is_dispatch_staff=models.BooleanField(default=False)
+    is_dispatch_staff=models.BooleanField(default=False)
+    is_procurement_staff=models.BooleanField(default=False)
+
+
+
+
     # is_social_media_staff=models.BooleanField(default=False)
 
 

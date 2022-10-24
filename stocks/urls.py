@@ -9,3 +9,23 @@ urlpatterns = [
     path('report/', stock_report, name='stock_report'),
     path('export/csv/', export_users_xls, name='export_users_csv'),
 ]
+
+# RasiseProductionNotification
+
+# Branch
+# Site
+
+# DispatchMaterialExternal
+# DispatchMaterialToSite
+# MaterialCounts
+# BranchMaterialCounts
+# SiteMaterialCounts
+# TotalMaterialCounts
+# BranchMaterialSale
+# MaterialSale
+
+# DispatchStockToSite
+# SiteStockCounts
+# DispatchStockToBranch
+# BranchStockCounts
+# BranchStockSale

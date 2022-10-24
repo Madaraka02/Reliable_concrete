@@ -1,5 +1,6 @@
 from django.db import models
 from production.models import *
+from materials.models import *
 
 # Create your models here.
 
@@ -120,4 +121,53 @@ class StockCounts(models.Model):
         return str(self.product.product.name)  
 
 
+class DispatchStockToBranch(models.Model):
+    product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE) 
+    to = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
 
+
+    def __str__(self):
+        return str(self.quantity)
+
+class DispatchStockToSite(models.Model):
+    product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE) 
+    to = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return str(self.quantity)
+
+
+class BranchStockCounts(models.Model):
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+    date = models.DateField(null=True) 
+
+    def __str__(self):
+        return self.branch.name        
+
+
+class SiteStockCounts(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
+    date = models.DateField(null=True) 
+
+    def __str__(self):
+        return self.site.name  
+
+
+class BranchStockSale(models.Model):
+    product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE)
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    amount = models.IntegerField(default=0, null=True, blank=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return str(self.quantity)
