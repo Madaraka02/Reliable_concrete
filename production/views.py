@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from materials.models import *
+from materials.forms import *
 from stocks.models import *
 from stocks.forms import *
 from sales.forms import *
@@ -1093,3 +1094,60 @@ def stock_take(request):
         
     }
     return render(request, 'form.html', context)        
+
+
+
+
+
+
+def create_site(request):
+    materials = RawMaterial.objects.all()
+    stocks = ReadyForSaleStock.objects.all()
+    form = SiteForm()
+    if request.method == 'POST':
+        form = SiteForm(request.POST)
+        if form.is_valid():
+            site = form.save()
+            # create material and stock counts with 0
+             # site materials SiteMaterialCounts
+            for material in materials:
+                site_material = SiteMaterialCounts.objects.create(material=material, site=site,quantity=0,date=current_date)
+                site_material.save()
+           
+            # site stocks  SiteStockCounts
+            for stock in stocks:
+                site_stock = SiteStockCounts.objects.create(site=site,product=stock,quantity=0, date=current_date)
+                site_stock.save()
+
+            return redirect('home')
+    context = {
+        'form':form,
+    }        
+    return render(request, 'form.html',context)   
+
+def create_Branch(request):
+    materials = RawMaterial.objects.all()
+    stocks = ReadyForSaleStock.objects.all()
+
+    form = BranchForm()
+    if request.method == 'POST':
+        form = BranchForm(request.POST)
+        if form.is_valid():
+            branch = form.save()
+            # create material and stock counts with 0
+            # branch materials BranchMaterialCounts
+            for material in materials:
+                branch_material = BranchMaterialCounts.objects.create(material=material, branch=branch,quantity=0,date=current_date)
+                branch_material.save()
+            # branch stocks  BranchStockCounts
+            for stock in stocks:
+                branch_stock = BranchStockCounts.objects.create(branch=branch,product=stock,quantity=0, date=current_date)
+                branch_stock.save()
+            
+            
+
+            return redirect('home')
+    context = {
+        'form':form,
+    }        
+    return render(request, 'form.html',context)   
