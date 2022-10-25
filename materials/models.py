@@ -134,7 +134,7 @@ class TotalMaterialCounts(models.Model):
 
 
 
-class BranchMaterialSale(models.Model): #to branch
+class BranchMaterialSale(models.Model): 
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     date = models.DateField(null=True)
@@ -144,7 +144,7 @@ class BranchMaterialSale(models.Model): #to branch
         return str(self.material.name)
 
 
-class MaterialSale(models.Model): #to branch
+class MaterialSale(models.Model): 
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     sale_by = models.CharField(max_length=400, null=True)

@@ -79,7 +79,13 @@
                                 <td>{{production.available_qty}}</td>
                                 <td>{{production.date|date:"SHORT_DATE_FORMAT"}}</td>
                                 <td>
+                                  {% if production.confirm_received %}
                                   <a class="btn btn-outline-primary btn-sm" href="{% url 'update_material' production.id %}">Update</a>
+
+                                  {% else %}
+                                  <a class="btn btn-outline-primary btn-sm" href="{% url 'confirm_material_receive' production.id %}">Confirm you received</a>
+
+                                  {% endif %}
                                 </td>
 
                             </tr>

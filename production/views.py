@@ -526,6 +526,7 @@ def sale_stock(request, id):
     avail_qty = ready.stock.quantity_transfered - ready.quantity_sold
     curr_in_db = ready.quantity_sold
     name = ready.stock.product.product.product.name
+    main='R.C.W'
     # 50-10= 40 SaleStockForm
     form = SaleStockForm(instance=ready)
     if request.method == 'POST':
@@ -561,7 +562,7 @@ def sale_stock(request, id):
             sale.product.selling = True   #updates readystock model to this ne value
             sale.product.sold = True     #updates readystock model to this ne value 
             sale.product.date_sold = current_date  #updates readystock model to this ne value
-            sale_snap = SalesTimestamp.objects.create(sale=ready,quantity_sold=user_qty,amount_sold=sale_amt,date_sold=current_date)
+            sale_snap = SalesTimestamp.objects.create(sale=ready,quantity_sold=user_qty,amount_sold=sale_amt,sale_branch=main,date_sold=current_date)
             sale_snap.save() #takes a spanshot of the sale
             sale.save()
             

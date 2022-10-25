@@ -365,7 +365,7 @@ class ReadyForSaleStock(models.Model):
         return remaining_stock
 
     def __str__(self):
-        return str(self.id)
+        return str(self.stock.product.product.product.name)
 
 
 class SalesTimestamp(models.Model):

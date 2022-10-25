@@ -126,22 +126,16 @@ def dispatch_material_to_branch(request):
                 return redirect('home')    
                 
             material_count.quantity=updated_qty
-            print(material_count.material.name)
             material_count.save()
-            # MaterialCounts.objects.create(material=material,quantity=qty,date=current_date)
-            # material_count.save()
             branch = get_object_or_404(Branch, id=to_branch) #get branch
-            branchh_material = BranchMaterialCounts.objects.filter(material=raw_material, branch=to_branch) #get branch material to get available material
+            branchh_material = BranchMaterialCounts.objects.get(material=raw_material, branch=to_branch) #get branch material to get available material
              #get branch material to get available material
 
-            # qqty=branchh_material.quantity
-            # upqty=qqty+qty
-            # branchh_material.quantity=upqty
+            qqty=branchh_material.quantity
+            upqty=qqty+qty
+            branchh_material.quantity=upqty
 
-            # print(branch.name)
-            print(branchh_material.quantity)
-
-            # branc_material.save()
+            branchh_material.save()
 
             return redirect('dispatch_material_to_branch')
     context = {
@@ -180,14 +174,14 @@ def dispatch_material_to_site(request):
             material_count.save()
 
             site = get_object_or_404(Site, id=to_site) #get site
-            site_material = SiteMaterialCounts.objects.filter(material=r_material, site=site) #get branch material to get available material
+            site_material = SiteMaterialCounts.objects.get(material=r_material, site=site) #get branch material to get available material
              #get branch material to get available material
 
             qqty=site_material.quantity
             upqty=qqty+qty
             site_material.quantity=upqty
 
-            # branc_material.save()
+            site_material.save()
 
             return redirect('dispatch_material_to_site')
     context = {
@@ -218,13 +212,8 @@ def main_material_sale(request, id):
             else:
                 return redirect('home')    
             
-
-
-            qqty=materiall.quantity
-            upqty=qqty-qty
+            upqty=avail_qty-qty
             materiall.quantity=upqty
-
-            # print(branch.name)
             materiall.save()
 
             return redirect('main_material_sale')
@@ -243,8 +232,10 @@ def branch_material_sale(request, id):
         if form.is_valid():
             qty = int(form.data['quantity'])
             materia=form.data['material']
-            materiall = get_object_or_404(MaterialCounts,material=materia)
-            avail_qty =materiall.quantity
+            # materiall = get_object_or_404(MaterialCounts,material=materia)
+            branch_material = BranchMaterialCounts.objects.get(branch=branch, material=materia) #get branch material to get available material
+
+            avail_qty =branch_material.quantity
             if avail_qty > qty:
 
                 branch_material_sale = form.save(commit=False)
@@ -252,20 +243,18 @@ def branch_material_sale(request, id):
                 branch_material_sale.date=current_date
                 branch_material_sale.save()
             else:
+                # create request to main site for additional materials
                 return redirect('home')    
             
 
-            branch_material = BranchMaterialCounts.objects.filter(branch=branch) #get branch material to get available material
-             #get branch material to get available material
-
             qqty=branch_material.quantity
-            upqty=qqty+qty
+            upqty=avail_qty-qty
             branch_material.quantity=upqty
 
             # print(branch.name)
-            branc_material.save()
+            branch_material.save()
 
-            return redirect('branch_material_sale')
+            return redirect('branch_material_sale',id=id)
     context = {
         'form':form,
         
@@ -359,6 +348,16 @@ def update_material_use(request, id):
     }        
     return render(request, 'form.html',context)  
 
+
+
+def confirm_material_receive(request, id):
+    material = get_object_or_404(RawMaterial, id=id)
+    if material.confirm_received==False:
+        material.confirm_received=True
+        material.save()
+        return redirect('material_report')
+
+    return render(request, 'materials.html')
 
 def add_material_use(request):
     form = MaterialUseForm()

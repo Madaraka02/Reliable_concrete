@@ -163,6 +163,7 @@ class SiteStockCounts(models.Model):
 
 
 class BranchStockSale(models.Model):
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) 
     product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     amount = models.IntegerField(default=0, null=True, blank=True)

@@ -65,6 +65,11 @@ class DispatchStockToSiteForm(ModelForm):
         fields='__all__'
 
 
+class BranchStockSaleForm(ModelForm):
+    class Meta:
+        model=BranchStockSale
+        fields=['product','quantity', 'amount']
+
 
 class BranchMaterialSaleForm(ModelForm):
     class Meta:
