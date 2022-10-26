@@ -93,7 +93,7 @@ def dispatch_stock_to_branch(request):
                 
             else:
                 # raise production notification
-                return redirect('home')    
+                return redirect('stock_home')    
                 
             prod.quantity_sold=updated_qty
             prod.save()
@@ -109,7 +109,7 @@ def dispatch_stock_to_branch(request):
 
             branchh_material.save()
 
-            return redirect('dispatch_stock_to_branch')
+            return redirect('stock_home')
     context = {
         'form':form,
         
@@ -137,7 +137,7 @@ def dispatch_stock_to_site(request):
             if count_qty > qty:
                 updated_qty=already_sold+qty
             else:
-                return redirect('home')    
+                return redirect('stock_home')    
                 
             prod.quantity_sold=updated_qty
             prod.save()
@@ -153,7 +153,7 @@ def dispatch_stock_to_site(request):
 
             branchh_material.save()
 
-            return redirect('dispatch_stock_to_site')
+            return redirect('stock_home')
     context = {
         'form':form,
         
@@ -182,7 +182,7 @@ def branch_stock_sale(request, id):
                 branch_material_sale = form.save()
             else:
                 # create request to main site for additional materials
-                return redirect('home')    
+                return redirect('branch_home')    
             
 
             qqty=branch_material.quantity
@@ -195,9 +195,40 @@ def branch_stock_sale(request, id):
             sale_timestamp = SalesTimestamp.objects.create(
                 sale=prod,quantity_sold=qty,amount_sold=amt,sale_branch=branch,date_sold=current_date)
             sale_timestamp.save()
-            return redirect('branch_stock_sale',id=id)
+            return redirect('branch_home')
     context = {
         'form':form,
         
     }        
     return render(request, 'form.html',context)  
+
+
+def site_material_use(request, id):
+    product=get_object_or_404(ReadyForSaleStock, id=id)
+    site=request.user
+
+    form = SiteStockUseForm()
+    if request.method == 'POST':
+        form = SiteStockUseForm(request.POST)
+        if form.is_valid():
+            qty = int(form.data['quantity'])
+
+            material_use = form.save()
+
+            material_count = SiteStockCounts.objects.get(product=product, site=site)
+            count_qty=material_count.quantity
+            updated_qty=0
+            if count_qty > qty:
+                updated_qty=count_qty-qty
+            else:
+                return redirect('home')    
+                
+            material_count.quantity=updated_qty
+            material_count.save()
+
+            return redirect('site_home')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)      

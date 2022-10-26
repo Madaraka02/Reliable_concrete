@@ -47,10 +47,20 @@ class DispatchMaterialExternalForm(ModelForm):
     class Meta:
         model=DispatchMaterialExternal
         fields='__all__'
+
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
+
 class DispatchMaterialToSiteForm(ModelForm):
     class Meta:
         model=DispatchMaterialToSite
         fields='__all__'
+
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
+
 
 
 
@@ -59,10 +69,19 @@ class DispatchStockToBranchForm(ModelForm):
         model=DispatchStockToBranch
         fields='__all__'
 
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
+
+
 class DispatchStockToSiteForm(ModelForm):
     class Meta:
         model=DispatchStockToSite
         fields='__all__'
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
+
 
 
 class BranchStockSaleForm(ModelForm):
@@ -80,3 +99,22 @@ class MainMaterialSaleForm(ModelForm):
     class Meta:
         model=MaterialSale
         fields=['quantity']
+
+
+class SiteMaterialUseForm(ModelForm):
+    class Meta:
+        model=SiteMaterialUse
+        fields=['quantity', 'date']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
+
+
+class SiteStockUseForm(ModelForm):
+    class Meta:
+        model=SiteStockUse
+        fields=['quantity', 'date']
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
+ 

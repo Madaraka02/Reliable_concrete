@@ -123,7 +123,7 @@ def dispatch_material_to_branch(request):
             if count_qty > qty:
                 updated_qty=count_qty-qty
             else:
-                return redirect('home')    
+                return redirect('store_home')    
                 
             material_count.quantity=updated_qty
             material_count.save()
@@ -137,7 +137,7 @@ def dispatch_material_to_branch(request):
 
             branchh_material.save()
 
-            return redirect('dispatch_material_to_branch')
+            return redirect('store_home')
     context = {
         'form':form,
         
@@ -167,7 +167,7 @@ def dispatch_material_to_site(request):
             if count_qty > qty:
                 updated_qty=count_qty-qty
             else:
-                return redirect('home')    
+                return redirect('store_home')    
                 
             material_count.quantity=updated_qty
             print(material_count)
@@ -183,7 +183,7 @@ def dispatch_material_to_site(request):
 
             site_material.save()
 
-            return redirect('dispatch_material_to_site')
+            return redirect('store_home')
     context = {
         'form':form,
         
@@ -210,13 +210,13 @@ def main_material_sale(request, id):
                 main_material_sale.date=current_date
                 main_material_sale.save()
             else:
-                return redirect('home')    
+                return redirect('store_home')    
             
             upqty=avail_qty-qty
             materiall.quantity=upqty
             materiall.save()
 
-            return redirect('main_material_sale')
+            return redirect('store_home')
     context = {
         'form':form,
         
@@ -244,7 +244,7 @@ def branch_material_sale(request, id):
                 branch_material_sale.save()
             else:
                 # create request to main site for additional materials
-                return redirect('home')    
+                return redirect('branch_home')    
             
 
             qqty=branch_material.quantity
@@ -254,13 +254,46 @@ def branch_material_sale(request, id):
             # print(branch.name)
             branch_material.save()
 
-            return redirect('branch_material_sale',id=id)
+            return redirect('branch_home')
     context = {
         'form':form,
         
     }        
     return render(request, 'form.html',context)  
 # 
+
+def site_material_use(request, id):
+    material=get_object_or_404(RawMaterial, id=id)
+    site=request.user
+
+    form = SiteMaterialUseForm()
+    if request.method == 'POST':
+        form = SiteMaterialUseForm(request.POST)
+        if form.is_valid():
+            qty = int(form.data['quantity'])
+
+            material_use = form.save()
+
+    
+            material_count = SiteMaterialCounts.objects.get(material=material, site=site)
+            count_qty=material_count.quantity
+            updated_qty=0
+            if count_qty > qty:
+                updated_qty=count_qty-qty
+            else:
+                return redirect('site_home')    
+                
+            material_count.quantity=updated_qty
+            print(material_count)
+            material_count.save()
+
+            return redirect('site_home')
+    context = {
+        'form':form,
+        
+    }        
+    return render(request, 'form.html',context)  
+
 import xlwt
 
 

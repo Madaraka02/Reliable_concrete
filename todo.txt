@@ -5,3 +5,7 @@ store page-dispatch materials to site and branch
     -sale materials
 stocks page - dispatch stocks to site and branch
 implement raise shortage notification
+stock_home
+store_home
+site_home
+branch_home

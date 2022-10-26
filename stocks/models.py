@@ -143,7 +143,7 @@ class DispatchStockToSite(models.Model):
 
 
 class BranchStockCounts(models.Model):
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True) 
     product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
     date = models.DateField(null=True) 
@@ -153,7 +153,7 @@ class BranchStockCounts(models.Model):
 
 
 class SiteStockCounts(models.Model):
-    site = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True) 
     product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
     date = models.DateField(null=True) 
@@ -163,7 +163,7 @@ class SiteStockCounts(models.Model):
 
 
 class BranchStockSale(models.Model):
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True) 
     product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     amount = models.IntegerField(default=0, null=True, blank=True)
@@ -172,3 +172,13 @@ class BranchStockSale(models.Model):
 
     def __str__(self):
         return str(self.quantity)
+
+class SiteStockUse(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True) 
+    product = models.ForeignKey(ReadyForSaleStock, on_delete=models.CASCADE)
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return str(self.quantity)        

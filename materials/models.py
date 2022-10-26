@@ -76,7 +76,7 @@ class Site(models.Model):
 
 class DispatchMaterialExternal(models.Model): #to branch
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
-    to = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    to = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     date = models.DateField(null=True)
 
@@ -86,7 +86,7 @@ class DispatchMaterialExternal(models.Model): #to branch
 
 class DispatchMaterialToSite(models.Model):
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
-    to = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    to = models.ForeignKey(Site, on_delete=models.CASCADE, null=True) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     date = models.DateField(null=True)
 
@@ -105,7 +105,7 @@ class MaterialCounts(models.Model):
 
 
 class BranchMaterialCounts(models.Model):
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) 
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True) 
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
     date = models.DateField(null=True) 
@@ -115,7 +115,7 @@ class BranchMaterialCounts(models.Model):
 
 
 class SiteMaterialCounts(models.Model):
-    site = models.ForeignKey(Site, on_delete=models.CASCADE) 
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True) 
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=200,decimal_places=3, null=True,default=0)
     date = models.DateField(null=True) 
@@ -153,3 +153,15 @@ class MaterialSale(models.Model):
 
     def __str__(self):
         return str(self.material.name)
+
+
+class SiteMaterialUse(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True) 
+    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    date = models.DateField(null=True)
+
+
+    def __str__(self):
+        return str(self.material.name)
+
