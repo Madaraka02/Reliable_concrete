@@ -62,14 +62,14 @@ class RawMaterialUsage(models.Model):
 
 class Branch(models.Model):
     name = models.CharField(max_length=400, null=True)
-    manager = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    manager = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
     
     def __str__(self):
         return self.name
 
 class Site(models.Model):
     name = models.CharField(max_length=400, null=True)
-    manager = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    manager = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -135,8 +135,10 @@ class TotalMaterialCounts(models.Model):
 
 
 class BranchMaterialSale(models.Model): 
-    material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
+    material = models.ForeignKey(BranchMaterialCounts, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+    amount = models.DecimalField(max_digits=20,decimal_places=2, null=True)
+
     date = models.DateField(null=True)
 
 

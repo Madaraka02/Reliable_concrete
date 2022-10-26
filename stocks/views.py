@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
+from production.models import *
+from materials.models import *
 from .forms import *
 from materials.forms import *
-
+from django.contrib.auth.decorators import login_required
 import csv
 import xlwt
 from django.http import HttpResponse
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 def export_stocks_csv(request):
     response = HttpResponse(content_type='text/csv')
@@ -84,6 +89,8 @@ def dispatch_stock_to_branch(request):
 
 
             prod = get_object_or_404(ReadyForSaleStock,id=product)
+            name = prod.stock.product.product.product.name
+
     
             count_qty=prod.remaining_stock
             already_sold=prod.quantity_sold
@@ -109,6 +116,12 @@ def dispatch_stock_to_branch(request):
 
             branchh_material.save()
 
+            available_stock = get_object_or_404(StockCounts,product__product__name = name)
+            availl_count = available_stock.quantity
+            available_stock.date =current_date
+            available_stock.quantity -= qty
+            available_stock.save()
+
             return redirect('stock_home')
     context = {
         'form':form,
@@ -130,7 +143,7 @@ def dispatch_stock_to_site(request):
 
 
             prod = get_object_or_404(ReadyForSaleStock,id=product)
-    
+            name = prod.stock.product.product.product.name
             count_qty=prod.remaining_stock
             already_sold=prod.quantity_sold
             updated_qty=0
@@ -153,6 +166,12 @@ def dispatch_stock_to_site(request):
 
             branchh_material.save()
 
+            available_stock = get_object_or_404(StockCounts,product__product__name = name)
+            availl_count = available_stock.quantity
+            available_stock.date =current_date
+            available_stock.quantity -= qty
+            available_stock.save()
+
             return redirect('stock_home')
     context = {
         'form':form,
@@ -162,7 +181,9 @@ def dispatch_stock_to_site(request):
 
 
 def branch_stock_sale(request, id):
-    branch = get_object_or_404(Branch,id=id)
+    prod = get_object_or_404(ReadyForSaleStock,id=id)
+    user=request.user
+    branch=Branch.objects.get(manager=user)
 
     form = BranchStockSaleForm()
     if request.method == 'POST':
@@ -171,15 +192,19 @@ def branch_stock_sale(request, id):
             qty = int(form.data['quantity'])
             amt = int(form.data['amount'])
 
-            product=form.data['product']
-            prod = get_object_or_404(ReadyForSaleStock,id=product)
+            # product=form.data['product']
+            # prod = get_object_or_404(ReadyForSaleStock,id=product)
+            
             # materiall = get_object_or_404(MaterialCounts,material=materia)
             branch_material = BranchStockCounts.objects.get(branch=branch, product=prod) #get branch material to get available material
 
             avail_qty =branch_material.quantity
             if avail_qty > qty:
 
-                branch_material_sale = form.save()
+                branch_material_sale = form.save(commit=False)
+                branch_material_sale.branch=branch
+                branch_material_sale.product=prod
+                branch_material_sale.save()
             else:
                 # create request to main site for additional materials
                 return redirect('branch_home')    
@@ -203,9 +228,11 @@ def branch_stock_sale(request, id):
     return render(request, 'form.html',context)  
 
 
-def site_material_use(request, id):
+def site_stock_use(request, id):
     product=get_object_or_404(ReadyForSaleStock, id=id)
-    site=request.user
+
+    user=request.user
+    site=Site.objects.get(manager=user)
 
     form = SiteStockUseForm()
     if request.method == 'POST':
@@ -213,7 +240,10 @@ def site_material_use(request, id):
         if form.is_valid():
             qty = int(form.data['quantity'])
 
-            material_use = form.save()
+            material_use = form.save(commit=False)
+            material_use.site=site
+            material_use.product=product
+            material_use.save()
 
             material_count = SiteStockCounts.objects.get(product=product, site=site)
             count_qty=material_count.quantity
@@ -232,3 +262,146 @@ def site_material_use(request, id):
         
     }        
     return render(request, 'form.html',context)      
+
+
+@login_required 
+def stock_home(request):
+    if request.user.is_staff or request.user.is_sales_staff:
+        user=request.user
+
+        stocks_list = StockCounts.objects.all().order_by('-id')
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(stocks_list, 15)
+        try:
+            available_stocks = paginator.page(page)
+        except PageNotAnInteger:
+            available_stocks = paginator.page(1)
+        except EmptyPage:
+            available_stocks = paginator.page(paginator.num_pages) 
+
+        context = {
+            'available_stocks':available_stocks,
+            'current_date':current_date,
+
+        }
+            
+        # StockCounts
+        # DispatchStockToBranch
+        # DispatchStockToSite
+        return render(request, 'stock_home.html', context)
+
+@login_required 
+def store_home(request):
+    if request.user.is_staff or request.user.is_store_staff:
+        user=request.user
+
+        raw_materials = Moulding.objects.all() 
+        materials_list = RawMaterial.objects.all().order_by('-id')
+
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(materials_list, 5)
+        try:
+            materials = paginator.page(page)
+        except PageNotAnInteger:
+            materials = paginator.page(1)
+        except EmptyPage:
+            materials = paginator.page(paginator.num_pages) 
+        context = {
+            'materials':materials,
+            'raw_materials':raw_materials,
+        }
+                # DispatchMaterialExternal
+        # DispatchMaterialToSite
+        # MaterialCounts
+        # MaterialSale 
+        return render(request, 'store_home.html', context)
+
+
+@login_required 
+def site_home(request):
+    if request.user.is_staff or request.user.is_site_staff:
+        user=request.user
+        site=Site.objects.get(manager=user)
+
+        materials_list = SiteMaterialCounts.objects.filter(site=site).order_by('-id')
+        stock_list = SiteStockCounts.objects.filter(site=site).order_by('-id')
+
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(materials_list, 10)
+        try:
+            materials = paginator.page(page)
+        except PageNotAnInteger:
+            materials = paginator.page(1)
+        except EmptyPage:
+            materials = paginator.page(paginator.num_pages) 
+
+
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(stock_list, 10)
+        try:
+            stocks = paginator.page(page)
+        except PageNotAnInteger:
+            stocks = paginator.page(1)
+        except EmptyPage:
+            stocks = paginator.page(paginator.num_pages)    
+        context = {
+            'materials':materials,
+            'site':site,
+            'stocks':stocks
+        }
+              
+        # Site
+        # SiteMaterialCounts
+        # SiteMaterialUse
+        # SiteStockCounts
+        # SiteStockUse
+        return render(request, 'site_home.html', context)
+@login_required 
+def branch_home(request):
+    if request.user.is_staff or request.user.is_branch_staff:
+        user=request.user
+
+        branch=Branch.objects.get(manager=user)
+
+        materials_list = BranchMaterialCounts.objects.filter(branch=branch).order_by('-id')
+        stock_list = BranchStockCounts.objects.filter(branch=branch).order_by('-id')
+
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(materials_list, 10)
+        try:
+            materials = paginator.page(page)
+        except PageNotAnInteger:
+            materials = paginator.page(1)
+        except EmptyPage:
+            materials = paginator.page(paginator.num_pages) 
+
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(stock_list, 10)
+        try:
+            stocks = paginator.page(page)
+        except PageNotAnInteger:
+            stocks = paginator.page(1)
+        except EmptyPage:
+            stocks = paginator.page(paginator.num_pages) 
+        context = {
+            'materials':materials,
+            'branch':branch,
+            'stocks':stocks
+        }
+         
+        # BranchStockCounts
+        # BranchStockSale
+        # Branch
+        # BranchMaterialCounts
+        # BranchMaterialSale    
+        return render(request, 'branch_home.html',context)
+
+
+
+# is_dispatch_staff

@@ -15,7 +15,7 @@ class MaterialForm(ModelForm):
     class Meta:
         model = RawMaterial
         # fields = '__all__'
-        exclude = ('available_qty',)
+        exclude = ('available_qty','confirm_received')
         widgets = {
             'date' : DatePickerInput(attrs={'max': today}),
         }    
@@ -87,13 +87,15 @@ class DispatchStockToSiteForm(ModelForm):
 class BranchStockSaleForm(ModelForm):
     class Meta:
         model=BranchStockSale
-        fields=['product','quantity', 'amount']
+        fields=['quantity', 'amount','date']
 
-
+        widgets = {
+            'date' : DatePickerInput(attrs={'max': today}),
+        } 
 class BranchMaterialSaleForm(ModelForm):
     class Meta:
         model=MaterialSale
-        fields=['material','quantity']
+        fields=['quantity']
 
 class MainMaterialSaleForm(ModelForm):
     class Meta:

@@ -67,6 +67,9 @@ def update_material(request, id):
 
             timestamped = TimeStampedMaterialUpdate.objects.create(material=material,quantity=bought,amount_paid=amt_paid,date=current_date)
             timestamped.save()
+            material_count = MaterialCounts.objects.get(material=material)
+            material_count.quantity +=bought
+            material_count.save()
             material.save()
             # print(f'instock {updated}')
             # print(f'Boughtupdates {qty_bought}')
@@ -114,7 +117,9 @@ def dispatch_material_to_branch(request):
             material_dispatch = form.save()
 
 
+            # r_material = RawMaterial.objects.get(id=raw_material,confirm_received=True)
             r_material = get_object_or_404(RawMaterial,id=raw_material)
+
             print(r_material)
     
             material_count = get_object_or_404(MaterialCounts, material=r_material)
@@ -124,9 +129,13 @@ def dispatch_material_to_branch(request):
                 updated_qty=count_qty-qty
             else:
                 return redirect('store_home')    
+
                 
             material_count.quantity=updated_qty
             material_count.save()
+
+            
+
             branch = get_object_or_404(Branch, id=to_branch) #get branch
             branchh_material = BranchMaterialCounts.objects.get(material=raw_material, branch=to_branch) #get branch material to get available material
              #get branch material to get available material
@@ -136,7 +145,8 @@ def dispatch_material_to_branch(request):
             branchh_material.quantity=upqty
 
             branchh_material.save()
-
+            r_material.quantity -=qty
+            r_material.save()
             return redirect('store_home')
     context = {
         'form':form,
@@ -159,6 +169,8 @@ def dispatch_material_to_site(request):
 
 
             r_material = get_object_or_404(RawMaterial,id=raw_material)
+            # r_material = RawMaterial.objects.get(id=raw_material)
+
             print(r_material)
     
             material_count = get_object_or_404(MaterialCounts, material=r_material)
@@ -176,12 +188,18 @@ def dispatch_material_to_site(request):
             site = get_object_or_404(Site, id=to_site) #get site
             site_material = SiteMaterialCounts.objects.get(material=r_material, site=site) #get branch material to get available material
              #get branch material to get available material
+            
 
             qqty=site_material.quantity
             upqty=qqty+qty
             site_material.quantity=upqty
+            r_material.quantity=rqty
 
             site_material.save()
+            rqty=r_material.quantity
+            ruqty=rqty-qty
+            r_material.save()
+
 
             return redirect('store_home')
     context = {
@@ -216,6 +234,11 @@ def main_material_sale(request, id):
             materiall.quantity=upqty
             materiall.save()
 
+            mat_qty=material.quantity
+            matupqty=mat_qty-qty
+            material.quantity=matupqty
+            material.save()
+
             return redirect('store_home')
     context = {
         'form':form,
@@ -224,16 +247,17 @@ def main_material_sale(request, id):
     return render(request, 'form.html',context) 
 
 def branch_material_sale(request, id):
-    branch = get_object_or_404(Branch,id=id)
+    branch_material = get_object_or_404(BranchMaterialCounts,id=id)
+    user=request.user
+    branch=Branch.objects.get(manager=user)
 
     form = BranchMaterialSaleForm()
     if request.method == 'POST':
         form = BranchMaterialSaleForm(request.POST)
         if form.is_valid():
             qty = int(form.data['quantity'])
-            materia=form.data['material']
             # materiall = get_object_or_404(MaterialCounts,material=materia)
-            branch_material = BranchMaterialCounts.objects.get(branch=branch, material=materia) #get branch material to get available material
+            # branch_mateial = BranchMaterialCounts.objects.get(branch=branch, material=material) #get branch material to get available material
 
             avail_qty =branch_material.quantity
             if avail_qty > qty:
@@ -241,6 +265,7 @@ def branch_material_sale(request, id):
                 branch_material_sale = form.save(commit=False)
                 branch_material_sale.sale_by=branch.name
                 branch_material_sale.date=current_date
+                branch_material_sale.material=branch_material.material
                 branch_material_sale.save()
             else:
                 # create request to main site for additional materials
@@ -264,7 +289,9 @@ def branch_material_sale(request, id):
 
 def site_material_use(request, id):
     material=get_object_or_404(RawMaterial, id=id)
-    site=request.user
+    user=request.user
+    site=Site.objects.get(manager=user)
+
 
     form = SiteMaterialUseForm()
     if request.method == 'POST':
@@ -272,7 +299,10 @@ def site_material_use(request, id):
         if form.is_valid():
             qty = int(form.data['quantity'])
 
-            material_use = form.save()
+            material_use = form.save(commit=False)
+            material_use.site=site
+            material_use.material=material
+            material_use.save()
 
     
             material_count = SiteMaterialCounts.objects.get(material=material, site=site)

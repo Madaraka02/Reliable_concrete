@@ -41,7 +41,6 @@ class User(AbstractUser):
     is_branch_staff=models.BooleanField(default=False)
     is_site_staff=models.BooleanField(default=False)
     is_dispatch_staff=models.BooleanField(default=False)
-    is_dispatch_staff=models.BooleanField(default=False)
     is_procurement_staff=models.BooleanField(default=False)
 
 

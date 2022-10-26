@@ -8,6 +8,7 @@ urlpatterns = [
     path('main/<str:id>/sale/', main_material_sale, name='main_material_sale'),
     path('dispatch/material/branch/', dispatch_material_to_branch, name='dispatch_material_to_branch'),
     path('dispatch/material/site/', dispatch_material_to_site, name='dispatch_material_to_site'),
+    path('site/<str:id>/use/', site_material_use, name='site_material_use'),
 
     path('add-material-use/', add_material_use, name='add_material_use'),
     path('report/', material_report, name='material_report'),
@@ -18,3 +19,4 @@ urlpatterns = [
     path('<int:id>/confirm-recceive/', confirm_material_receive, name='confirm_material_receive')
 
 ]
+

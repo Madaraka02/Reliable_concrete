@@ -43,10 +43,43 @@
 <nav class="navbar navbar-light"  >
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">Home</a>
-      <a href="{% url 'dispatch_stock_to_branch' %}">Dispatch stock to branch</a>
-      <a href="{% url 'create_Branch' %}"> branch</a>
+      {% if request.user.is_authenticated and request.user.is_sales_staff %}
+      <a href="{% url 'stock_home' %}">Stocks dashboard</a>
+      {% endif %}
+      {% if request.user.is_authenticated and request.user.is_store_staff %}
+      <a href="{% url 'store_home' %}">Store dashboard</a>
+      {% endif %}
+      {% if request.user.is_authenticated and request.user.is_branch_staff %}
+      <a href="{% url 'site_home' %}">Site dashboard</a>
+      {% endif %}
+      {% if request.user.is_authenticated and request.user.is_site_staff %}
+      <a href="{% url 'branch_home' %}">Branch dashboard</a>
+      {% endif %}
+
+      {% if request.user.is_authenticated and request.user.is_procurement_staff %}
+      <a href="{% url 'add_material' %}">Purchase Materials</a>
+      {% endif %}
+
+      {% if request.user.is_authenticated and request.user.is_dispatch_staff %}
+      <a href="{% url 'stock_home' %}">Stocks dashboard</a>
+      <a href="{% url 'store_home' %}">Store dashboard</a>
+
+      {% endif %}
+
+
+
+
+
 
       {% if request.user.is_authenticated and request.user.is_staff %}
+      <a href="{% url 'stock_home' %}">Stocks </a>
+      <a href="{% url 'store_home' %}">Store </a>
+      <a href="{% url 'site_home' %}">Site </a>
+      <a href="{% url 'branch_home' %}">Branch </a>
+      <a href="{% url 'add_material' %}">Purchase Materials</a>
+
+      <a href="{% url 'create_Branch' %}">Create branch</a>
+      <a href="{% url 'create_site' %}">Create site</a>
       <a class="text-sm text-uppercase" href="{% url 'register' %}">Register Staff</a>
 
       
