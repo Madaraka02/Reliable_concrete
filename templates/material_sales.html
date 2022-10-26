@@ -1,0 +1,204 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch</title>
+
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+    rel="stylesheet"
+    />
+</head>
+<style>
+      body{
+        /* background-color: #68BBE3; */
+    }
+    .card{
+        /* background-color: #F2E34C; */
+    }
+    .navbar{
+        /* background-color: #F2E34C; */
+    }
+   
+</style>
+<body>
+  <nav class="navbar navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+      {% if request.user.is_authenticated %}
+      <p class="text-sm">Hi, {{request.user.username}}: {{branch.name}} branch</p>
+      <a class="text-sm text-uppercase" href="{% url 'logout' %}">Logout</a>
+      {% endif %}
+    </div>
+  </nav>
+    <div class="container mt-2 mb-2">
+
+        <div class="row mt-2 mb-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+            
+
+            <button id="bbton" onclick="myFunction()" class="btn btn-outline-secondary">Show material sales</button>
+            {% if stocks %}
+<div id="tabble" class="" style="display: block;">
+                    <div  class="table-responsive table sm" >
+                        <table class="table">
+                          <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Sold by</th>
+
+
+                                
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for production in stocks %}
+                            <tr>
+                                <td>{{production.product.stock.product.product.product.name}}</td>
+                                <td>{{production.quantity}}</td>
+                                <td>
+                                  {{production.branch}}
+
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <div class="pagination align-items-center justify-content-center">
+                          <span class="step-links">
+                              {% if stocks.has_previous %}                                     <!--If there is a previous page-->
+                                  <a class="btn btn-info btn-sm" href="?page={{ stocks.previous_page_number }}">&laquo;</a>  <!--Hyperlink to previous page on Click-->
+                              {% endif %}
+                      
+                              <span class="current">
+                                   Page{{ stocks.number }} of {{ stocks.paginator.num_pages }}  <!--customers_list.number Is the current page number,customers_list.paginator.num_pages Is the total number of pages-->
+                              </span>
+                      
+                              {% if stocks.has_next %}    <!--If there is a next page-->
+                                  <a class="btn btn-info btn-sm" href="?page={{ stocks.next_page_number }}">&raquo;</a>    <!--Hyperlink to next page when clicked-->
+                              {% endif %}
+                          </span>
+                      </div> 
+                      </div>
+                    </div>
+                <!-- </div> -->
+
+            {% endif %}
+            
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+
+        <div class="row mt-2 mb-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+            {% if materials %}
+<div id="plot" class="" style="display: none;">
+
+                    <div   class="table-responsive table sm" >
+                        <table class="table">
+                          <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity </th>
+                                <th scope="col">Sold by</th>
+
+
+                                
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for production in materials %}
+                            <tr>
+                                <td>{{production.material.name}}</td>
+                                <td>{{production.quantity}}</td>
+                                <td>{{production.sale_by}}
+
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <div class="pagination align-items-center justify-content-center">
+                          <span class="step-links">
+                              {% if materials.has_previous %}                                     <!--If there is a previous page-->
+                                  <a class="btn btn-info btn-sm" href="?page={{ materials.previous_page_number }}">&laquo;</a>  <!--Hyperlink to previous page on Click-->
+                              {% endif %}
+                      
+                              <span class="current">
+                                   Page{{ materials.number }} of {{ materials.paginator.num_pages }}  <!--customers_list.number Is the current page number,customers_list.paginator.num_pages Is the total number of pages-->
+                              </span>
+                      
+                              {% if materials.has_next %}    <!--If there is a next page-->
+                                  <a class="btn btn-info btn-sm" href="?page={{ materials.next_page_number }}">&raquo;</a>    <!--Hyperlink to next page when clicked-->
+                              {% endif %}
+                          </span>
+                      </div> 
+                      </div>
+                <!-- </div> -->
+            </div>
+            {% endif %}
+            
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    
+
+
+    
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script> 
+
+<script>
+    function myFunction() {
+    var plot = document.getElementById("plot");
+    var tabble = document.getElementById("tabble");
+    var bbton = document.getElementById("bbton");
+  
+    if (plot.style.display === "none") {
+      plot.style.display = "block";
+      tabble.style.display = "none";
+      bbton.innerHTML = "Show stock sales";
+    } else {
+      plot.style.display = "none";
+      tabble.style.display = "block";
+      bbton.innerHTML = "Show material sales";
+     
+  
+    }
+  }
+  
+  </script>
+</body>
+</html>
+
+
+

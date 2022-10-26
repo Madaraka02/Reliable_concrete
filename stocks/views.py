@@ -403,5 +403,34 @@ def branch_home(request):
         return render(request, 'branch_home.html',context)
 
 
+def material_sales_report(request):
+    stock_list = BranchStockSale.objects.all().order_by('-id')
+
+    material_list = MaterialSale.objects.all().order_by('-id')
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(material_list, 10)
+    try:
+        materials = paginator.page(page)
+    except PageNotAnInteger:
+        materials = paginator.page(1)
+    except EmptyPage:
+        materials = paginator.page(paginator.num_pages) 
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(stock_list, 10)
+    try:
+        stocks = paginator.page(page)
+    except PageNotAnInteger:
+        stocks = paginator.page(1)
+    except EmptyPage:
+        stocks = paginator.page(paginator.num_pages)     
+    context = {
+        'materials':materials,
+        'stocks':stocks
+    }
+    return render(request, 'material_sales.html', context)
 
 # is_dispatch_staff

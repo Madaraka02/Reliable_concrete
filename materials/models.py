@@ -150,6 +150,7 @@ class MaterialSale(models.Model):
     material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE) 
     quantity = models.DecimalField(max_digits=20,decimal_places=2, null=True)
     sale_by = models.CharField(max_length=400, null=True)
+    # amt
     date = models.DateField(null=True)
 
 

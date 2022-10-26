@@ -4,6 +4,8 @@ from production.views import *
 
 urlpatterns = [
     path('', stock, name='stock'),
+    path('material/sales/', material_sales_report, name='material_sales_report'),
+
     path('create/site/',create_site, name='create_site'),
     path('create/branch/',create_Branch, name='create_Branch'),
     path('send/branch/',dispatch_stock_to_branch, name='dispatch_stock_to_branch'),

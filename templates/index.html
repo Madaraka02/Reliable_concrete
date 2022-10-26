@@ -72,11 +72,8 @@
 
 
       {% if request.user.is_authenticated and request.user.is_staff %}
-      <a href="{% url 'stock_home' %}">Stocks </a>
-      <a href="{% url 'store_home' %}">Store </a>
-      <a href="{% url 'site_home' %}">Site </a>
-      <a href="{% url 'branch_home' %}">Branch </a>
-      <a href="{% url 'add_material' %}">Purchase Materials</a>
+
+      <a href="{% url 'material_sales_report' %}">Material sales </a>
 
       <a href="{% url 'create_Branch' %}">Create branch</a>
       <a href="{% url 'create_site' %}">Create site</a>
