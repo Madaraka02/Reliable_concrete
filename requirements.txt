@@ -13,6 +13,7 @@ crispy-bootstrap5==0.6
 cycler==0.11.0
 Deprecated==1.2.13
 Django==4.1.1
+django-cors-headers==3.13.0
 django-crispy-forms==1.14.0
 django-formtools==2.3
 django-mathfilters==1.0.0

@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'mathfilters',
     'phonenumber_field',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders'
 ]
 
 LOGIN_REDIRECT_URL = 'home'
@@ -63,6 +64,7 @@ AUTH_USER_MODEL = 'accounts.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -89,7 +91,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'reliable.wsgi.application'
-
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
 
 # Celery
 # CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
@@ -126,7 +136,7 @@ DATABASES = {
 }
 
 
-# CSRF_TRUSTED_ORIGINS = ['https://reliableconcretestocks.up.railway.app/']
+CSRF_TRUSTED_ORIGINS = ['https://reliableconcretestocks.up.railway.app/']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
