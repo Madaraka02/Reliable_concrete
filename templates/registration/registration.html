@@ -37,6 +37,9 @@
             <div class="col-md-3 mt-4 mb-4"></div>
             <div class="col-md-6 mt-4 mb-4 shadow-lg p-3">
                 {% if request.user.is_authenticated and request.user.is_staff %}
+                <p class="text-center"> <span>
+                    <a href="{% url 'home' %}">Home</a>
+                </span></p>
                 <p class="text-center">REGISTER STAFF</p>
                 <form action="" method="post">
                     {% csrf_token %}
