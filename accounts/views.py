@@ -19,4 +19,16 @@ class UserRegisterView(generic.CreateView):
     success_url = reverse_lazy('home')
 
 
+def register(request):
+    form = CustomUserCreationForm()
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+    return render(request, 'registration/registration.html', {'form':form})        
+
+
+
        

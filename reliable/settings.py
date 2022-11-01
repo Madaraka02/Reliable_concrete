@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL='login'
 LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -106,14 +107,26 @@ WSGI_APPLICATION = 'reliable.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER':'postgres',
+        'PASSWORD':'F3i5SAzls62hgYNOH6LK',
+        'HOST':'containers-us-west-90.railway.app',
+        'PORT':6898,
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://8e09-105-160-11-109.eu.ngrok.io ']
+
+CSRF_TRUSTED_ORIGINS = [' ']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
