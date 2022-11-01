@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 
 
@@ -26,6 +27,8 @@ def register(request):
 
         if form.is_valid():
             form.save()
+            messages.success(request, "Staff member was created  successfully")
+            return redirect('register')
 
     return render(request, 'registration/registration.html', {'form':form})        
 
