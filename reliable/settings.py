@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-d9y*jgxqj0stj$_ovjh$#7285p)zq1+)_&s@saq%7jev=15d2%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -126,7 +126,7 @@ DATABASES = {
 }
 
 
-CSRF_TRUSTED_ORIGINS = ['https://reliale-concrete-stocks.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://reliableconcretestocks.up.railway.app/']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
