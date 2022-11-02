@@ -73,6 +73,7 @@ def update_material(request, id):
             material.save()
             # print(f'instock {updated}')
             # print(f'Boughtupdates {qty_bought}')
+            messages.success(request, 'Updated successfully')
 
             return redirect('material_report')
     context = {
@@ -95,6 +96,7 @@ def add_material(request):
 
             material_count = MaterialCounts.objects.create(material=material,quantity=qty,date=current_date)
             material_count.save()
+            messages.success(request, 'Added successfully')
 
             return redirect('add_material')
     context = {
@@ -147,6 +149,8 @@ def dispatch_material_to_branch(request):
             branchh_material.save()
             r_material.quantity -=qty
             r_material.save()
+            messages.success(request, 'Dispatched successfully')
+
             return redirect('store_home')
     context = {
         'form':form,
@@ -200,6 +204,7 @@ def dispatch_material_to_site(request):
             ruqty=rqty-qty
             r_material.save()
 
+            messages.success(request, 'Dispatched successfully')
 
             return redirect('store_home')
     context = {
@@ -238,6 +243,7 @@ def main_material_sale(request, id):
             matupqty=mat_qty-qty
             material.quantity=matupqty
             material.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('store_home')
     context = {
@@ -278,6 +284,7 @@ def branch_material_sale(request, id):
 
             # print(branch.name)
             branch_material.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('branch_home')
     context = {
@@ -316,6 +323,7 @@ def site_material_use(request, id):
             material_count.quantity=updated_qty
             print(material_count)
             material_count.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('site_home')
     context = {
@@ -428,6 +436,8 @@ def add_material_use(request):
         form = MaterialUseForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Recorded successfully')
+
 
             return redirect('add_material')
     context = {

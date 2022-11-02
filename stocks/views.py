@@ -61,6 +61,7 @@ def stock(request):
         form = StockForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Added successfully')
 
             return redirect('stock')
     context = {
@@ -121,6 +122,7 @@ def dispatch_stock_to_branch(request):
             available_stock.date =current_date
             available_stock.quantity -= qty
             available_stock.save()
+            messages.success(request, 'Dispatched successfully')
 
             return redirect('stock_home')
     context = {
@@ -171,6 +173,7 @@ def dispatch_stock_to_site(request):
             available_stock.date =current_date
             available_stock.quantity -= qty
             available_stock.save()
+            messages.success(request, 'Dispatched successfully')
 
             return redirect('stock_home')
     context = {
@@ -220,6 +223,8 @@ def branch_stock_sale(request, id):
             sale_timestamp = SalesTimestamp.objects.create(
                 sale=prod,quantity_sold=qty,amount_sold=amt,sale_branch=branch,date_sold=current_date)
             sale_timestamp.save()
+            messages.success(request, 'Updated successfully')
+
             return redirect('branch_home')
     context = {
         'form':form,
@@ -255,6 +260,7 @@ def site_stock_use(request, id):
                 
             material_count.quantity=updated_qty
             material_count.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('site_home')
     context = {

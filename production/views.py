@@ -143,6 +143,7 @@ def update_production(request, id):
         form = ProductionForm(request.POST, instance=production)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('production_report')
     context = {
@@ -164,7 +165,9 @@ def add_product(request):
         if form.is_valid():
             form.save()
 
-            return redirect('add_product')
+            messages.success(request, 'Product added successfully. Add product material consumption')
+
+            return redirect('add_product_material_consmption')
     context = {
         'form':form,
         
@@ -183,9 +186,10 @@ def add_product_material_consmption(request):
             stcok = StockCounts.objects.create(product=pp,quantity=0,date=current_date)
             stcok.save()
             
+            messages.success(request, 'Material consumption added successfully and more products')
             
 
-            return redirect('add_product_material_consmption')
+            return redirect('add_product')
     context = {
         'form':form,
         
@@ -219,6 +223,7 @@ def update_product_material_consmption(request, id):
         form = ProductMaterialConsumptionForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('prod_consumption_report')
     context = {
@@ -303,6 +308,7 @@ def update_product(request, id):
             date=current_date
             )
             material_receipt.save()
+            messages.success(request, 'Updated successfully')
 
             return redirect('production_report')
     context = {
@@ -708,7 +714,7 @@ def material_product_rship(request, id):
 
     productconsumption.production_confirmed=True
     productconsumption.save()
-    return redirect('register')
+    return redirect('production_report')
 
     # context = {
     #     'material':material,
@@ -844,6 +850,8 @@ def moulding(request):
             # date=current_date
             # )
             # material_receipt.save()
+            messages.success(request, 'Recorded successfully')
+
             return redirect('production_report')
     context = {
         'form':form,
@@ -1013,6 +1021,8 @@ def production_damage(request,id):
             product.save()
 
             proddamage.save()
+            messages.success(request, 'Recorded  successfully')
+
 
             return redirect('transfer_to_curnig', id=id)
     context = {
@@ -1048,6 +1058,7 @@ def curing_damage(request,id):
             take_count.quantity -= dam
             take_count.date =current_date
             take_count.save()
+            messages.success(request, 'Transfered successfully')
 
             return redirect('transfer_stock_to_ready', id=id)
     context = {
@@ -1145,6 +1156,8 @@ def create_site(request):
             for stock in stocks:
                 site_stock = SiteStockCounts.objects.create(site=site,product=stock,quantity=0, date=current_date)
                 site_stock.save()
+            messages.success(request, 'Site created successfully')
+
 
             return redirect('home')
     context = {
@@ -1172,6 +1185,7 @@ def create_Branch(request):
                 branch_stock.save()
             
             
+            messages.success(request, 'Branch created successfully')
 
             return redirect('home')
     context = {
