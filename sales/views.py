@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .utils import *
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-
+from django.contrib import messages
 
 @login_required
 def home(request):
