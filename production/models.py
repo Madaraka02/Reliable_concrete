@@ -37,6 +37,8 @@ class ProductMaterialConsumption(models.Model):
     river_sand = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     quarter_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     half_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    D8 = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+
     pumice = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     dust = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     curing_days = models.PositiveIntegerField(default=10)
@@ -78,6 +80,10 @@ class Moulding(models.Model):
     #     production_cost = self.total_wages + self.oil_cost + self.cement_cost + self.white_cement_cost + self.sand_cost + self.river_sand_cost + self.quarter_ballast_cost + self.half_ballast_cost + self.dust_cost + self.diesel_cost
     #     return production_cost
         
+    @property
+    def d8_length(self):
+        oil_ltrs = self.product.D8 * self.qty_to_be_produced
+        return oil_ltrs
     @property
     def oil_ltrs(self):
         oil_ltrs = self.product.oil * self.qty_to_be_produced
@@ -139,6 +145,8 @@ class Production(models.Model):
     wage_per_labourer = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     
     oil_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+    D8 = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
+
     fuel_used_in_litres = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)
     white_cement_bags_used = models.DecimalField(max_digits=20,decimal_places=2, null=True, blank=True)

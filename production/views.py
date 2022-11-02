@@ -601,6 +601,7 @@ def material_product_rship(request, id):
     qballast = productconsumption.quarter_ballast_kgs
     dust = productconsumption.dust_kgs
     pumice = productconsumption.pumice_kgs
+    d8=productconsumption.d8_length
     
     for material in materials:
         
@@ -621,6 +622,14 @@ def material_product_rship(request, id):
             material.save()
             rm = RawMaterialUsage.objects.create(material=material,
             product=productconsumption.product,quantity=sand, date=current_date)
+            rm.save()
+
+        if mname == 'D8':
+            remainder = mqty - d8
+            material.available_qty = remainder
+            material.save()
+            rm = RawMaterialUsage.objects.create(material=material,
+            product=productconsumption.product,quantity=d8, date=current_date)
             rm.save()
 
         if mname == 'Half_ballast':
@@ -699,7 +708,7 @@ def material_product_rship(request, id):
 
     productconsumption.production_confirmed=True
     productconsumption.save()
-    return redirect('production_report')
+    return redirect('register')
 
     # context = {
     #     'material':material,
@@ -731,6 +740,8 @@ def moulding(request):
             estimated_half_ballast = product.half_ballast * decimal.Decimal(user_qty)
             estimated_pumice = product.pumice * decimal.Decimal(user_qty)
             estimated_dust = product.dust * decimal.Decimal(user_qty)
+            estimated_d8 = product.D8 * decimal.Decimal(user_qty)
+
             print(estimated_cement)
             
 
@@ -751,6 +762,12 @@ def moulding(request):
                         messages.warning(request, f"No enough Half ballast")
                         return redirect('production_report')
                 
+
+                elif mname == 'D8':
+                    if mqty < estimated_d8:
+                        messages.warning(request, f"No enough D8")
+                        return redirect('production_report')
+
                 elif mname == 'Oil':
                     if mqty < estimated_oil:
                         messages.warning(request, f"No enough Oil")
@@ -806,6 +823,7 @@ def moulding(request):
             half_ballast=estimated_half_ballast,
             pumice=estimated_pumice,
             dust=estimated_dust,
+            D8=estimated_d8,
             date=current_date
             )
             semi_material_receipt.save()    
@@ -867,6 +885,8 @@ def semi_materials_receipt(request, id):
     p.drawString(425,765, f"1/2BALLAST")
     p.drawString(500,765, f"PUMICE")
     p.drawString(550,765, f"DUST")
+    p.drawString(575,765, f"D8")
+
 
     p.line(10,760,580,760)
 
@@ -883,6 +903,8 @@ def semi_materials_receipt(request, id):
     p.drawString(425,740, f"{client.half_ballast}")
     p.drawString(500,740, f"{client.pumice}")
     p.drawString(550,740, f"{client.dust}")
+    p.drawString(575,740, f"{client.D8}")
+
     p.drawString(500,720, f"Date: {client.date.strftime('%Y-%m-%d')}")
 
 
@@ -931,6 +953,8 @@ def materials_receipt(request, id):
     p.drawString(425,765, f"1/2BALLAST")
     p.drawString(500,765, f"PUMICE")
     p.drawString(550,765, f"DUST")
+    p.drawString(575,765, f"D8")
+
 
     p.line(10,760,580,760)
 
@@ -947,6 +971,8 @@ def materials_receipt(request, id):
     p.drawString(425,740, f"{client.half_ballast}")
     p.drawString(500,740, f"{client.pumice}")
     p.drawString(550,740, f"{client.dust}")
+    p.drawString(575,740, f"{client.D8}")
+
     p.drawString(500,720, f"Date: {client.date.strftime('%Y-%m-%d')}")
 
 
