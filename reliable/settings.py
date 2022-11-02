@@ -55,12 +55,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    'django_extensions',
 ]
-GRAPH_MODELS = {
-  'all_applications': True,
-  'group_models': True,
-}
+
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL='login'
 LOGOUT_REDIRECT_URL = 'home'
