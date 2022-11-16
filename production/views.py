@@ -763,8 +763,9 @@ def moulding(request):
             for prodd in productions:
                 
                 if prodd.product == target_product:
+                    moulded=get_object_or_404(Moulding, product=target_product)
                     messages.warning(request, f"This product is already being produced update quantity instead")
-                    return redirect('production_report')
+                    return redirect('update_product', id=moulded.id)
                     
                 else:
                     print('no')    
