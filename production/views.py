@@ -290,7 +290,7 @@ def update_product(request, id):
     if request.method == 'POST':
         form = MouldingUpdateForm(request.POST, instance=product)
         if form.is_valid():
-            user_qty = form.data['qty_to_be_produced']
+            user_qty = int(float(form.data['qty_to_be_produced']))
             pp = form.save(commit=False)
             
             pp.production_ended = True
@@ -757,7 +757,7 @@ def moulding(request):
         form = MouldingForm(request.POST)
         if form.is_valid():
             user_prd = form.data['product']
-            user_qty = form.data['qty_to_be_produced']
+            user_qty = int(float(form.data['qty_to_be_produced']))
 
             target_product=get_object_or_404(ProductMaterialConsumption, id=user_prd)
             for prodd in productions:
