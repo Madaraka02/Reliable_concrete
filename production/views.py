@@ -42,7 +42,7 @@ def production_post(request):
 
 def search_count(request):
     query = request.GET.get("q")
-    search_res = StockCounts.objects.filter(product__product__product__name__icontains=query)
+    search_res = StockCounts.objects.filter(product__product__name__icontains=query)
 
     context = {
         'search_res':search_res,
