@@ -28,6 +28,8 @@ urlpatterns = [
     path('<int:id>/sale/', sale_stock, name='sale_stock'),
     path('plan/', add_production_target, name='add_production_target'),
     path('moulding/', moulding, name='moulding'),
+    path('moulding/<str:id>/update/', update_product, name='update_product'),
+
     path('transfer-ready/', transfer_to_ready, name='transfer_to_ready'),
     path('<int:id>/damage/', production_damage, name='production_damage'),
     path('<int:id>/curing/damage/', curing_damage, name='curing_damage'),

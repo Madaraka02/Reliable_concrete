@@ -748,6 +748,9 @@ def material_product_rship(request, id):
 import decimal
 def moulding(request):
     # product = get_object_or_404(Product, id=id)
+    productions = Moulding.objects.filter(date=current_date)
+
+
     materials = RawMaterial.objects.all()
     form = MouldingForm()
     if request.method == 'POST':
@@ -755,6 +758,16 @@ def moulding(request):
         if form.is_valid():
             user_prd = form.data['product']
             user_qty = form.data['qty_to_be_produced']
+
+            target_product=get_object_or_404(ProductMaterialConsumption, id=user_prd)
+            for prodd in productions:
+                
+                if prodd.product == target_product:
+                    messages.warning(request, f"This product is already being produced update quantity instead")
+                    return redirect('production_report')
+                    
+                else:
+                    print('no')    
 
             product = get_object_or_404(ProductMaterialConsumption, id=user_prd)
             estimated_oil = product.oil * decimal.Decimal(user_qty)
