@@ -71,6 +71,8 @@ class ReleaseQty(models.Model):
     half_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     pumice = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     dust = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    D8 = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+
     date = models.DateField(null=True)
 
     def __str__(self):
@@ -89,6 +91,8 @@ class SemiReleaseQty(models.Model):
     half_ballast = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     pumice = models.DecimalField(max_digits=20,decimal_places=2,default=0)
     dust = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    D8 = models.DecimalField(max_digits=20,decimal_places=2,default=0)
+
     date = models.DateField(null=True)
 
     def __str__(self):

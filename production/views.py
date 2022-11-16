@@ -158,6 +158,27 @@ def delete_product(request, id):
     product.delete()
     return redirect('products_report')
 
+
+
+
+def edit_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    form = ProductForm(instance=product)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'Product updated successfully.')
+
+            return redirect('products_report')
+    context = {
+        'form':form,
+        'product':product
+        
+    }        
+    return render(request, 'form.html',context)      
+
 def add_product(request):
     form = ProductForm()
     if request.method == 'POST':
@@ -704,7 +725,7 @@ def material_product_rship(request, id):
             product=productconsumption.product,quantity=pumice, date=current_date)
             rm.save()    
 
-        if mname == 'River_sand':
+        if mname == '    ':
             remainder = mqty - rsand
             material.available_qty = remainder
             material.save()
