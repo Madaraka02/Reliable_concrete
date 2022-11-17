@@ -56,7 +56,9 @@
         <div class="row mt-2 mb-2">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-            {% if materials %}
+              
+
+              {% if materials %}
 
             <button id="bbton" onclick="myFunction()" class="btn btn-outline-secondary">Show Stock</button>
 <div id="tabble" class="" style="display: block;">
@@ -106,6 +108,8 @@
                       </div>
                     </div>
                 <!-- </div> -->
+                {% else %}
+                No materials
 
             {% endif %}
             
@@ -166,6 +170,8 @@
                       </div>
                 <!-- </div> -->
             </div>
+            {% else %}
+                No stocks
             {% endif %}
             
             </div>

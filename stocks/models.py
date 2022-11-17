@@ -55,7 +55,7 @@ class Damage(models.Model):
 
 
     def __str__(self):
-        return f'Damages for {self.product.product.product.name}{self.product.qty_to_be_produced}'       
+        return f'Damages for {self.product.product.product.name}'       
 
 
 # class History(models.models):

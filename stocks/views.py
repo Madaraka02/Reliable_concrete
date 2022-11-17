@@ -296,6 +296,7 @@ def stock_home(request):
         # DispatchStockToBranch
         # DispatchStockToSite
         return render(request, 'stock_home.html', context)
+        
 
 @login_required 
 def store_home(request):

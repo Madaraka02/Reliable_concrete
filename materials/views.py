@@ -127,15 +127,21 @@ def dispatch_material_to_branch(request):
     
             material_count = get_object_or_404(MaterialCounts, material=r_material)
             count_qty=material_count.quantity
+            availquantity=r_material.available_qty
             updated_qty=0
+            availquantity_w=0
             if count_qty > qty:
                 updated_qty=count_qty-qty
+                availquantity_w=availquantity-qty
             else:
                 return redirect('store_home')    
 
                 
             material_count.quantity=updated_qty
+            
             material_count.save()
+            r_material.available_qty=availquantity_w
+            r_material.save()
 
             
 
@@ -180,15 +186,20 @@ def dispatch_material_to_site(request):
     
             material_count = get_object_or_404(MaterialCounts, material=r_material)
             count_qty=material_count.quantity
+            availquantity=r_material.available_qty
             updated_qty=0
+            availquantity_w=0
             if count_qty > qty:
                 updated_qty=count_qty-qty
+                availquantity_w=availquantity-qty
             else:
                 return redirect('store_home')    
                 
             material_count.quantity=updated_qty
             print(material_count)
             material_count.save()
+            r_material.available_qty=availquantity_w
+            r_material.save()
 
             site = get_object_or_404(Site, id=to_site) #get site
             site_material = SiteMaterialCounts.objects.get(material=r_material, site=site) #get branch material to get available material

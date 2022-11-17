@@ -1068,7 +1068,7 @@ def production_damage(request,id):
 
 def curing_damage(request,id):
     product = get_object_or_404(CuringStock, id=id)
-    available_qty = product.product.qty_to_be_produced
+    available_qty = product.product.qty_transfered
     name = product.product.product.product.name
 
 
