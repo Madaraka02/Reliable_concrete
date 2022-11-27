@@ -559,8 +559,8 @@ def sale_stock(request, id):
     if request.method == 'POST':
         form = SaleStockForm(request.POST,request.FILES, instance=ready)
         if form.is_valid():
-            user_qty = int(form.data['quantity'])
-            sale_amt = int(form.data['amount'])
+            user_qty = int(float(form.data['quantity']))
+            sale_amt = int(float(form.data['amount']))
 
             # 10
             if user_qty > avail_qty:
@@ -1044,7 +1044,8 @@ def production_damage(request,id):
     if request.method == 'POST':
         form = ProductionDamageForm(request.POST,request.FILES)
         if form.is_valid():
-            dam = int(form.data['quantity_damaged'])
+            dam =int(float(form.data['quantity_damaged']))
+
             proddamage = form.save(commit=False)
             transfered = available_qty-dam
             proddamage.product = product
@@ -1076,7 +1077,7 @@ def curing_damage(request,id):
     if request.method == 'POST':
         form = curingDamageForm(request.POST,request.FILES)
         if form.is_valid():
-            dam = int(form.data['quantity_damaged'])
+            dam = int(float(form.data['quantity_damaged']))
             proddamage = form.save(commit=False)
             transfered = available_qty-dam
             proddamage.product = product.product
