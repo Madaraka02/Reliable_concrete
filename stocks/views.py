@@ -272,7 +272,7 @@ def site_stock_use(request, id):
 
 @login_required 
 def stock_home(request):
-    if request.user.is_staff or request.user.is_sales_staff:
+    if request.user.is_staff or request.user.is_sales_staff or request.user.is_store_staff or request.user.is_dispatch_staff:
         user=request.user
 
         stocks_list = StockCounts.objects.all().order_by('-id')
