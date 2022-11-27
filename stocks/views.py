@@ -323,7 +323,9 @@ def store_home(request):
         # DispatchMaterialToSite
         # MaterialCounts
         # MaterialSale 
-    return render(request, 'store_home.html', context)
+        return render(request, 'store_home.html', context)
+    return redirect('home')    
+
 
 
 @login_required 
@@ -366,7 +368,9 @@ def site_home(request):
         # SiteMaterialUse
         # SiteStockCounts
         # SiteStockUse
-    return render(request, 'site_home.html', context)
+        return render(request, 'site_home.html', context)
+    return redirect('home')    
+
 @login_required 
 def branch_home(request):
     if request.user.is_staff or request.user.is_branch_staff:
@@ -407,7 +411,8 @@ def branch_home(request):
         # Branch
         # BranchMaterialCounts
         # BranchMaterialSale    
-    return render(request, 'branch_home.html',context)
+        return render(request, 'branch_home.html',context)
+    return redirect('home')    
 
 
 def material_sales_report(request):
