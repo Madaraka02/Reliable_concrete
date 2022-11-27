@@ -55,6 +55,12 @@
 
       {% endif %}
 
+      {% if request.user.is_authenticated and request.user.is_store_staff %}
+      <a href="{% url 'stock_home' %}">Stocks dashboard</a>
+      <a href="{% url 'store_home' %}">Store dashboard</a>
+
+      {% endif %}
+
 
 
 

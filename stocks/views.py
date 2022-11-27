@@ -300,7 +300,7 @@ def stock_home(request):
 
 @login_required 
 def store_home(request):
-    if request.user.is_staff or request.user.is_store_staff:
+    if request.user.is_staff or request.user.is_store_staff or request.user.is_dispatch_staff:
         user=request.user
 
         raw_materials = Moulding.objects.all() 
