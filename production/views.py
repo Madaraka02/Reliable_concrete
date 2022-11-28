@@ -850,7 +850,7 @@ def moulding(request):
                         messages.warning(request, f"No enough River Sand")
                         return redirect('production_report')
 
-                mould = form.save()
+            mould = form.save()
 
             semi_material_receipt = SemiReleaseQty.objects.create(
             product =mould,
