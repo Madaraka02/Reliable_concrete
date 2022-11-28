@@ -86,6 +86,7 @@ def update_material(request, id):
 
 
 def add_material(request):
+    # branches = Branch.objects.all()
     form = MaterialForm()
     if request.method == 'POST':
         form = MaterialForm(request.POST)
@@ -209,7 +210,7 @@ def dispatch_material_to_site(request):
             qqty=site_material.quantity
             upqty=qqty+qty
             site_material.quantity=upqty
-            r_material.quantity=rqty
+            # r_material.quantity=rqty
 
             site_material.save()
             rqty=r_material.quantity
